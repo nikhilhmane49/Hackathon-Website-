@@ -1,28 +1,28 @@
 import React from 'react';
-import hack1 from '../assets/hack1.jpg';
-import hack2 from '../assets/hack2.jpg';
-import hack3 from '../assets/hack1.jpg';
-import hack4 from '../assets/hack2.jpg';
+import Build from '../assets/build.jpg';
+import Join from '../assets/join.png';
+import Sign from '../assets/sign.png';
+import Win from '../assets/win.jpg';
 
 const HowToParticipate = () => {
   const steps = [
     {
-      image: hack1,
+      image: Sign,
       title: 'Sign Up & Explore',
       description: 'Create your profile and browse ongoing and upcoming hackathons.',
     },
     {
-      image: hack2,
+      image: Join,
       title: 'Join a Hackathon',
       description: 'Register for a hackathon that excites you and suits your skills.',
     },
     {
-      image: hack3,
+      image: Build,
       title: 'Build & Collaborate',
       description: 'Form teams, brainstorm ideas, and work on your project together.',
     },
     {
-      image: hack4,
+      image: Win,
       title: 'Participate & Win',
       description: 'Participate, present your work, and stand a chance to win!',
     },
