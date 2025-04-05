@@ -10,8 +10,12 @@ import {
 import Home from "./components/Home";
 import OrganiserSideBar from './Organiser/OrganiserSideBar'
 import ParticipantSideBar from "./participant/ParticipantSideBar";
+<<<<<<< HEAD
 import ParticipantLogin from "./participant/ParticipantLogin";
 import OrganiserLogin from "./Organiser/OrganiserLogin";
+=======
+import HackthonInfo from "./components/HackthonInfo";
+>>>>>>> 758fa6f42f3f0468e990e5b777a2bb400b5ba862
 
 
 const router = createBrowserRouter([
@@ -43,7 +47,10 @@ const router = createBrowserRouter([
         path: "/OrganiserLogin",
         element: <OrganiserLogin/>
       },
-
+      {
+        path: "/hackinfo",
+        element: <HackthonInfo/>
+      }
     ],
   },
 ]);

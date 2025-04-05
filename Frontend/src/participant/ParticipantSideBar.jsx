@@ -12,19 +12,18 @@ import {
 import Home from "./Home";
 import Profile from "./Profile";
 import Settings from "./Setting";
+// import HackathonInfo from "../components/HackthonInfo";
 
 const ParticipantSideBar = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [currentPage, setCurrentPage] = useState("profile");
   const [isMobile, setIsMobile] = useState(window.innerWidth < 1024);
   const sidebarRef = useRef(null);
-  
+
   useEffect(() => {
     const handleResize = () => {
-      const isDesktop = window.innerWidth >= 1024;
-      setIsMobile(!isDesktop);
+      setIsMobile(window.innerWidth < 1024);
     };
-
     window.addEventListener("resize", handleResize);
     return () => window.removeEventListener("resize", handleResize);
   }, []);
@@ -33,12 +32,13 @@ const ParticipantSideBar = () => {
 
   const sidebarVariants = {
     open: { width: "16rem", transition: { duration: 0.3 } },
-    closed: { width: "4rem", transition: { duration: 0.3 } }
+    closed: { width: "4rem", transition: { duration: 0.3 } },
   };
 
   const menuItems = [
     { icon: UserIcon, text: "Profile", id: "profile" },
     { icon: HomeIcon, text: "Home", id: "home" },
+    { icon: HomeIcon, text: "Hackthon", id: "hackcard" },
     { icon: CogIcon, text: "Settings", id: "settings" },
   ];
 
@@ -48,17 +48,23 @@ const ParticipantSideBar = () => {
         return <Profile />;
       case "home":
         return <Home />;
+        case "hackcard":
+          return <Hackcard />;
       case "settings":
         return <Settings />;
+      
       default:
         return <div>Page not found</div>;
     }
   };
 
   return (
-    <div className="flex flex-col h-screen bg-gradient-to-tr from-gray-100 to-white">
-      <div className="flex flex-1 overflow-hidden">
-        {/* Mobile Toggle Button */}
+    <div className="flex flex-col h-screen overflow-hidden">
+      
+
+      {/* Content below header with top padding */}
+      <div className="flex flex-1 overflow-hidden relative pt-16">
+        {/* Mobile Sidebar Toggle */}
         {isMobile && (
           <button
             onClick={toggleSidebar}
@@ -76,15 +82,15 @@ const ParticipantSideBar = () => {
         <motion.div
           ref={sidebarRef}
           initial="closed"
-          animate={isOpen ? "open" : "closed"}
+          animate={isMobile ? (isOpen ? "open" : "closed") : isOpen ? "open" : "closed"}
           variants={sidebarVariants}
           onMouseEnter={() => !isMobile && setIsOpen(true)}
           onMouseLeave={() => !isMobile && setIsOpen(false)}
-          className={`fixed top-0 left-0 h-full bg-gradient-to-b from-[#3498db] to-[#2c3e50] text-white z-40 shadow-lg overflow-hidden ${
+          className={`fixed top-16 left-0 h-[calc(100vh-4rem)] bg-gradient-to-b from-[#3498db] to-[#2c3e50] text-white z-40 shadow-lg overflow-hidden ${
             isMobile && !isOpen ? "hidden" : "flex flex-col"
           }`}
         >
-          <nav className="mt-12">
+          <nav className="mt-8">
             <ul>
               {menuItems.map((item, index) => {
                 const isActive = currentPage === item.id;
@@ -95,7 +101,9 @@ const ParticipantSideBar = () => {
                         setCurrentPage(item.id);
                         if (isMobile) toggleSidebar();
                       }}
-                      className={`flex items-center w-full ${isOpen ? "px-4" : "justify-center"} py-3 rounded-lg transition duration-300 font-medium text-lg ${
+                      className={`flex items-center w-full ${
+                        isOpen ? "px-4" : "justify-center"
+                      } py-3 rounded-lg transition duration-300 font-medium text-lg ${
                         isActive
                           ? "bg-white text-[#3498db] shadow-md transform scale-105"
                           : "hover:bg-[#ffffff1a] text-white"
@@ -124,7 +132,7 @@ const ParticipantSideBar = () => {
         </motion.div>
 
         {/* Main content */}
-        <main 
+        <main
           className={`flex-1 p-6 overflow-auto bg-gray-50 transition-all duration-300 ${
             !isMobile ? (isOpen ? "ml-64" : "ml-16") : ""
           }`}
