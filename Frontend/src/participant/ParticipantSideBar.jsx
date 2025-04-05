@@ -12,8 +12,7 @@ import {
 import Home from "./Home";
 import Profile from "./Profile";
 import Settings from "./Setting";
-import Hackcard from "./Hackcard";
- // Make sure this path is correct
+// import HackathonInfo from "../components/HackthonInfo";
 
 const ParticipantSideBar = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -53,6 +52,7 @@ const ParticipantSideBar = () => {
           return <Hackcard />;
       case "settings":
         return <Settings />;
+      
       default:
         return <div>Page not found</div>;
     }
