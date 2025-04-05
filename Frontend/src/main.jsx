@@ -10,6 +10,7 @@ import {
 import Home from "./components/Home";
 import OrganiserSideBar from './Organiser/OrganiserSideBar'
 import ParticipantSideBar from "./participant/ParticipantSideBar";
+import HackthonInfo from "./components/HackthonInfo";
 
 
 const router = createBrowserRouter([
@@ -32,6 +33,10 @@ const router = createBrowserRouter([
       {
         path: "/participant",
         element: <ParticipantSideBar/>
+      },
+      {
+        path: "/hackinfo",
+        element: <HackthonInfo/>
       },
 
     ],
