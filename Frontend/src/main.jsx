@@ -12,15 +12,7 @@ import OrganiserSideBar from './Organiser/OrganiserSideBar'
 import ParticipantSideBar from "./participant/ParticipantSideBar";
 import ParticipantLogin from "./participant/ParticipantLogin";
 import OrganiserLogin from "./Organiser/OrganiserLogin";
-<<<<<<< HEAD
 import HackathonInfo from "./components/HackthonInfo";
-import ChatBotButton from "./components/ChatBotButton";
-=======
-import HackthonInfo from "./components/HackthonInfo";
-import CandidateDetails from "./components/CandidateDetails";
-
-
->>>>>>> 619df11e4d3a12d7fe84e669c0f30428ccf00884
 
 const router = createBrowserRouter([
   {
