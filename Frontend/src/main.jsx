@@ -10,6 +10,8 @@ import {
 import Home from "./components/Home";
 import OrganiserSideBar from './Organiser/OrganiserSideBar'
 import ParticipantSideBar from "./participant/ParticipantSideBar";
+import ParticipantLogin from "./participant/ParticipantLogin";
+import OrganiserLogin from "./Organiser/OrganiserLogin";
 
 
 const router = createBrowserRouter([
@@ -32,6 +34,14 @@ const router = createBrowserRouter([
       {
         path: "/participant",
         element: <ParticipantSideBar/>
+      },
+      {
+        path: "/participantLogin",
+        element: <ParticipantLogin/>
+      },
+      {
+        path: "/OrganiserLogin",
+        element: <OrganiserLogin/>
       },
 
     ],
