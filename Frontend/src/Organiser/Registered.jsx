@@ -4,7 +4,7 @@ import { HiOutlineMail } from 'react-icons/hi';
 import { IoMdDocument } from 'react-icons/io';
 import { RiFileDownloadLine } from 'react-icons/ri';
 import { BsCheckCircleFill, BsXCircleFill } from 'react-icons/bs';
-import { motion, AnimatePresence } from 'framer-motion';
+// import { motion, AnimatePresence } from 'framer-motion';
 import React from 'react';
 
 function ParticipantList() {

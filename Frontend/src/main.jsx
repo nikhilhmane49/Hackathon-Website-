@@ -13,7 +13,7 @@ import ParticipantSideBar from "./participant/ParticipantSideBar";
 import ParticipantLogin from "./participant/ParticipantLogin";
 import OrganiserLogin from "./Organiser/OrganiserLogin";
 import HackathonInfo from "./components/HackthonInfo";
-import CandidateDetails from "./components/CandidateDetails"
+import CandidateDetails from "./components/CandidateDetails";
 
 const router = createBrowserRouter([
   {
