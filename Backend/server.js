@@ -15,6 +15,9 @@ const app = express();
 
 //midleware
 app.use(express.json());
+app.use(cors({
+    origin:process.env.FORNT_END
+}))
 
 
 const port = process.env.PORT || 4000;
@@ -29,7 +32,9 @@ connectcloudinary();
 app.use('/api/user',userroutes);
 app.use('/api/orgnizer',orgnizerroutes);
 
-
+app.get('/', (req,res)=> {
+  res.send("<h1>Running.......</h1>")
+})
 
 app.listen(port, () => {
     console.log(`Server running on port ${port}`)
