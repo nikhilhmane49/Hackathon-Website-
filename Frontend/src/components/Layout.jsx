@@ -1,7 +1,10 @@
 import React from 'react'
 import { Outlet } from 'react-router-dom'
-import Header from './Header'
 import Footer from './Footer'
+import ChatBotButton from './ChatBotButton'
+import Header from './Header'
+
+
 
 
 export default function Layout() {
@@ -9,6 +12,7 @@ export default function Layout() {
     <>
       <Header/>
       <Outlet/>
+      <ChatBotButton/>
       <Footer/>
     </>
   )

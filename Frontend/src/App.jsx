@@ -1,9 +1,16 @@
-import React from 'react'
+// src/App.jsx
+import React from 'react';
 
-export default function App() {
+import Login from './components/login';
+
+
+function App() {
   return (
     <div>
       
+      
     </div>
-  )
+  );
 }
+
+export default App;
