@@ -1,4 +1,6 @@
+// Frontend - Profile.jsx
 import React, { useState } from "react";
+import axios from "axios";
 import {
   FaUser,
   FaEnvelope,
@@ -20,11 +22,14 @@ const Profile = () => {
     linkedinLink: "",
     technicalSkills: "",
     projectLinks: "",
-    education: { college: "", degree: "", year: "", type: "" },
+    education: { college: "", degree: "", year: "" }, // Removed 'type' field
     contactNumber: "",
   });
 
   const [resumeName, setResumeName] = useState("");
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
+  const [success, setSuccess] = useState(false);
 
   const handleChange = (e) => {
     const { id, value } = e.target;
@@ -48,9 +53,88 @@ const Profile = () => {
     }
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log(formData);
+    setLoading(true);
+    setError("");
+    setSuccess(false);
+    
+    try {
+      // Format data for API
+      const userData = new FormData();
+      
+      // Add basic fields
+      userData.append("name", formData.name);
+      userData.append("email", formData.email);
+      userData.append("bio", formData.bio);
+      userData.append("githubLink", formData.githubLink);
+      userData.append("linkedinLink", formData.linkedinLink);
+      userData.append("contactNumber", formData.contactNumber);
+      
+      // Fix for arrays - convert to JSON strings
+      const technicalSkills = formData.technicalSkills
+        .split(",")
+        .map(skill => skill.trim())
+        .filter(Boolean);
+      
+      const projectLinks = formData.projectLinks
+        .split(",")
+        .map(link => link.trim())
+        .filter(Boolean);
+      
+      userData.append("technicalSkills", JSON.stringify(technicalSkills));
+      userData.append("projectLinks", JSON.stringify(projectLinks));
+      
+      // Fix for education - send as JSON string
+      const education = {
+        college: formData.education.college,
+        degree: formData.education.degree,
+        year: formData.education.year ? Number(formData.education.year) : undefined
+      };
+      
+      userData.append("education", JSON.stringify(education));
+      
+      // Handle file upload
+      if (formData.resume) {
+        userData.append("resume", formData.resume);
+      }
+
+      const token = localStorage.getItem('token');
+      // Send to API
+      const response = await axios.post(`${import.meta.env.VITE_BACKEND_URL}/api/user/user-update`, userData, {
+        headers: {
+          token: token,
+          'Content-Type': 'multipart/form-data'
+        }
+      });
+      
+      console.log("API Response:", response.data);
+      setSuccess(true);
+      
+    } catch (err) {
+      console.error("Error submitting form:", err);
+      setError(err.response?.data?.message || "Something went wrong. Please try again.");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleReset = () => {
+    setFormData({
+      name: "",
+      email: "",
+      bio: "",
+      resume: "",
+      githubLink: "",
+      linkedinLink: "",
+      technicalSkills: "",
+      projectLinks: "",
+      education: { college: "", degree: "", year: "" },
+      contactNumber: "",
+    });
+    setResumeName("");
+    setError("");
+    setSuccess(false);
   };
 
   return (
@@ -62,6 +146,18 @@ const Profile = () => {
         <p className="text-gray-600 mb-8 text-lg">
           Boost your presence with a professional-looking profile.
         </p>
+
+        {error && (
+          <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mb-4">
+            {error}
+          </div>
+        )}
+
+        {success && (
+          <div className="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded mb-4">
+            Profile updated successfully!
+          </div>
+        )}
 
         <form onSubmit={handleSubmit} className="space-y-10">
           {/* Basic Info */}
@@ -78,12 +174,6 @@ const Profile = () => {
                 icon: <FaEnvelope />,
                 label: "Email",
                 type: "email",
-              },
-              {
-                id: "password",
-                icon: <FaLock />,
-                label: "Password",
-                type: "password",
               },
               {
                 id: "contactNumber",
@@ -133,18 +223,40 @@ const Profile = () => {
             <h2 className="text-xl font-bold text-gray-800 border-b pb-1 mb-4">
               Education
             </h2>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              {["college", "degree", "year", "type"].map((field) => (
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+              <div>
+                <label htmlFor="college" className="text-sm font-semibold text-gray-700 mb-1">College/University</label>
                 <input
-                  key={field}
-                  type={field === "year" ? "number" : "text"}
-                  id={field}
-                  value={formData.education[field]}
+                  type="text"
+                  id="college"
+                  value={formData.education.college}
                   onChange={handleChange}
-                  placeholder={field[0].toUpperCase() + field.slice(1)}
+                  placeholder="College Name"
                   className="w-full px-4 py-3 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-400 transition"
                 />
-              ))}
+              </div>
+              <div>
+                <label htmlFor="degree" className="text-sm font-semibold text-gray-700 mb-1">Degree</label>
+                <input
+                  type="text"
+                  id="degree"
+                  value={formData.education.degree}
+                  onChange={handleChange}
+                  placeholder="e.g. B.Tech, MBA"
+                  className="w-full px-4 py-3 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-400 transition"
+                />
+              </div>
+              <div>
+                <label htmlFor="year" className="text-sm font-semibold text-gray-700 mb-1">Graduation Year</label>
+                <input
+                  type="number"
+                  id="year"
+                  value={formData.education.year}
+                  onChange={handleChange}
+                  placeholder="Year"
+                  className="w-full px-4 py-3 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-400 transition"
+                />
+              </div>
             </div>
           </div>
 
@@ -241,29 +353,15 @@ const Profile = () => {
           <div className="flex flex-col md:flex-row items-center justify-between gap-4 mt-6">
             <button
               type="submit"
-              className="bg-blue-600 text-white px-6 py-3 rounded-lg hover:bg-blue-700 transition font-semibold w-full md:w-auto"
+              disabled={loading}
+              className="bg-blue-600 text-white px-6 py-3 rounded-lg hover:bg-blue-700 transition font-semibold w-full md:w-auto disabled:bg-blue-400"
             >
-              Create Profile
+              {loading ? "Updating..." : "Update Profile"}
             </button>
             <button
               type="button"
-              onClick={() => {
-                setFormData({
-                  name: "",
-                  email: "",
-                  password: "",
-                  bio: "",
-                  resume: "",
-                  githubLink: "",
-                  linkedinLink: "",
-                  technicalSkills: "",
-                  projectLinks: "",
-                  education: { college: "", degree: "", year: "", type: "" },
-                  contactNumber: "",
-                });
-                setResumeName("");
-              }}
-              className="text-blue-600 hover:text-blue-800 font-medium transition"
+              onClick={handleReset}
+              className="bg-gray-200 text-gray-800 px-6 py-3 rounded-lg hover:bg-gray-300 transition font-semibold w-full md:w-auto"
             >
               Reset Form
             </button>

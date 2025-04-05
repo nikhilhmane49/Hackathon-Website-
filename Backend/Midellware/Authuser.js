@@ -4,6 +4,7 @@ const jwt = require('jsonwebtoken');
 const authuser = (req, res, next) => { 
 
     const { token } = req.headers;
+    console.log(token);
 
     try {
         

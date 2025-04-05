@@ -1,26 +1,25 @@
+// Backend - User Model
 const mongoose = require('mongoose');
 
 const userschema = new mongoose.Schema({
-        name: {
+    name: {
         type: String,
-        required:true
+        required: true
     },
-     email: {
+    email: {
         type: String,
-         required: true,
-        unique:true
+        required: true,
+        unique: true
     },
-      password: {
+    password: {
         type: String,
-        required:true
+        required: true
     },
-      
-      
     bio: {
         type: String
     },
     resume: {
-        type: String// You can store a URL or file path
+        type: String // You can store a URL or file path
     },
     githubLink: {
         type: String
@@ -43,18 +42,13 @@ const userschema = new mongoose.Schema({
         },
         year: {
             type: Number
-         },
-        type: String
-
+        }
     },
-        contactNumber: {
+    contactNumber: {
         type: String
     }
-      
-    
+});
 
-})
-
-const userModel = mongoose.model('user',userschema);
+const userModel = mongoose.model('user', userschema);
 
 module.exports = userModel;
