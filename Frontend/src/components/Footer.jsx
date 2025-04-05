@@ -1,59 +1,76 @@
-import { GlobeIcon, MailIcon, PhoneIcon } from "@heroicons/react/outline";
 import React from "react";
-
+import { FaFacebookF, FaTwitter, FaInstagram } from "react-icons/fa";
 
 const Footer = () => {
-  const currentYear = new Date().getFullYear();
-  
   return (
-    <footer className="bg-white shadow-xl">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="py-4">
-          <div className="flex flex-col md:flex-row justify-between items-center gap-4">
-            <div className="flex items-center">
-              <svg width="32" height="32" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <rect width="40" height="40" rx="8" fill="#3498db"/>
-                <path d="M20 8L28.2846 12V20L20 24L11.7154 20V12L20 8Z" fill="white"/>
-                <path d="M20 24V32L11.7154 28V20L20 24Z" fill="#85c1e9"/>
-                <path d="M28.2846 20V28L20 32V24L28.2846 20Z" fill="#85c1e9"/>
-              </svg>
-              <p className="ml-3 text-gray-600 font-medium">© {currentYear} My App. All rights reserved.</p>
-            </div>
-            
-            <div className="flex items-center space-x-6">
-              <a 
-                href="#" 
-                className="text-gray-600 hover:text-[#3498db] transition-colors duration-200 flex items-center group"
-                aria-label="Website"
+    <footer className="bg-[#2176FF] text-white text-sm">
+      <div className="max-w-7xl mx-auto px-6 py-12 grid grid-cols-1 md:grid-cols-4 gap-8">
+        {/* Brand Section */}
+        <div>
+          <h2 className="text-lg font-semibold mb-2">HackHost</h2>
+          <p className="mb-4">Empowering innovation, one hackathon at a time.</p>
+          <div className="flex space-x-4">
+            {[FaFacebookF, FaTwitter, FaInstagram].map((Icon, index) => (
+              <div
+                key={index}
+                className="w-9 h-9 border border-white rounded-full flex items-center justify-center hover:bg-white hover:text-[#2176FF] transition"
               >
-                <GlobeIcon className="w-5 h-5" />
-                <span className="ml-2 group-hover:underline">Website</span>
-              </a>
-              
-              <a 
-                href="mailto:contact@myapp.com" 
-                className="text-gray-600 hover:text-[#3498db] transition-colors duration-200 flex items-center group"
-                aria-label="Email"
-              >
-                <MailIcon className="w-5 h-5" />
-                <span className="ml-2 group-hover:underline">Contact</span>
-              </a>
-              
-              <a 
-                href="#" 
-                className="text-gray-600 hover:text-[#3498db] transition-colors duration-200 hidden sm:flex items-center group"
-                aria-label="Help"
-              >
-                <PhoneIcon className="w-5 h-5" />
-                <span className="ml-2 group-hover:underline">Support</span>
-              </a>
-            </div>
+                <Icon size={16} />
+              </div>
+            ))}
           </div>
+        </div>
+
+        {/* Platform Links */}
+        <div>
+          <h2 className="text-lg font-semibold mb-4">Platform</h2>
+          <ul className="space-y-2">
+            <li><a href="#">Organize a Hackathon</a></li>
+            <li><a href="#">Browse Events</a></li>
+            <li><a href="#">Join as a Participant</a></li>
+            <li><a href="#">Sponsorships</a></li>
+            <li><a href="#">Our Mission</a></li>
+          </ul>
+        </div>
+
+        {/* Help & Support */}
+        <div>
+          <h2 className="text-lg font-semibold mb-4">Support</h2>
+          <ul className="space-y-2">
+            <li><a href="#">Help Center</a></li>
+            <li><a href="#">Community Guidelines</a></li>
+            <li><a href="#">Contact Support</a></li>
+            <li><a href="#">Hosting Policies</a></li>
+            <li><a href="#">FAQs</a></li>
+          </ul>
+        </div>
+
+        {/* Contact Info */}
+        <div>
+          <h2 className="text-lg font-semibold mb-4">Contact</h2>
+          <ul className="space-y-2">
+            <li>+92 304 1234567</li>
+            <li>support@hackhost.com</li>
+            <li>HackHub HQ,<br />Innovators Ave, Silicon District</li>
+          </ul>
+        </div>
+      </div>
+
+      {/* Footer Bottom */}
+      <div className="border-t border-white/20">
+        <div className="max-w-7xl mx-auto px-6 py-4 flex flex-col md:flex-row justify-between items-center text-white/80 text-xs gap-2">
+          <div className="flex flex-wrap justify-center md:justify-start gap-4">
+            <a href="#">Privacy Policy</a>
+            <a href="#">Terms of Use</a>
+            <a href="#">Code of Conduct</a>
+            <a href="#">Legal</a>
+            <a href="#">Site Map</a>
+          </div>
+          <p>© {new Date().getFullYear()} HackHost. All Rights Reserved.</p>
         </div>
       </div>
     </footer>
   );
 };
 
-
-export default Footer
+export default Footer;
