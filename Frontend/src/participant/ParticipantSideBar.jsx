@@ -2,8 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { HomeIcon, UserIcon, CogIcon, MenuIcon, XIcon } from '@heroicons/react/outline';
 
-
-// Import page components
+// Page components
 import Home from './Home';
 import Profile from './Profile';
 import Settings from './Setting';
@@ -50,16 +49,19 @@ const ParticipantSideBar = () => {
   };
 
   return (
-    <div className="flex flex-col h-screen bg-gray-100">
+    <div className="flex flex-col h-screen bg-gradient-to-tr from-gray-100 to-white">
       <div className="flex flex-1 overflow-hidden">
+        {/* Mobile Toggle Button */}
         {isMobile && (
           <button
             onClick={toggleSidebar}
-            className="fixed top-4 left-4 z-50 p-2 bg-[#3498db] text-white rounded-md shadow-lg hover:bg-[#2980b9] transition-colors duration-200"
+            className="fixed top-4 left-4 z-50 p-2 bg-[#3498db] text-white rounded-full shadow-lg hover:bg-[#2980b9] transition duration-300"
           >
             {isOpen ? <XIcon className="w-6 h-6" /> : <MenuIcon className="w-6 h-6" />}
           </button>
         )}
+
+        {/* Sidebar */}
         <AnimatePresence>
           {(isOpen || !isMobile) && (
             <motion.div
@@ -68,54 +70,53 @@ const ParticipantSideBar = () => {
               exit="closed"
               variants={sidebarVariants}
               transition={{ duration: 0.3, type: 'tween' }}
-              className={`fixed top-0 left-0 h-full w-64 bg-white text-gray-800 p-4 z-40 shadow-xl ${
+              className={`fixed top-0 left-0 h-full w-64 bg-gradient-to-b from-[#3498db] to-[#2c3e50] text-white p-6 z-40 shadow-lg ${
                 isMobile ? '' : 'relative'
               }`}
             >
-              <h2 className="text-3xl font-bold mb-8 text-center text-[#3498db]">My App</h2>
               <nav>
                 <ul>
-                  {menuItems.map((item, index) => (
-                    <li key={index} className="mb-4">
-                      <button
-                        onClick={() => {
-                          setCurrentPage(item.id);
-                          if (isMobile) {
-                            toggleSidebar();
-                          }
-                        }}
-                        className={`flex items-center p-3 rounded-md transition-colors duration-200 w-full text-left ${
-                          currentPage === item.id
-                            ? 'bg-[#3498db] text-white'
-                            : 'text-gray-600 hover:bg-gray-100'
-                        }`}
-                      >
-                        <item.icon className="w-6 h-6 mr-3" />
-                        <span className="text-lg">{item.text}</span>
-                      </button>
-                    </li>
-                  ))}
+                  {menuItems.map((item, index) => {
+                    const isActive = currentPage === item.id;
+                    return (
+                      <li key={index} className="mb-4">
+                        <button
+                          onClick={() => {
+                            setCurrentPage(item.id);
+                            if (isMobile) toggleSidebar();
+                          }}
+                          className={`flex items-center gap-4 w-full px-4 py-3 rounded-lg transition duration-300 font-medium text-lg ${
+                            isActive
+                              ? 'bg-white text-[#3498db] shadow-md transform scale-105'
+                              : 'hover:bg-[#ffffff1a] text-white'
+                          }`}
+                        >
+                          <item.icon className={`w-6 h-6 ${isActive ? 'text-[#3498db]' : 'text-white'}`} />
+                          <span className={`${isActive ? 'font-semibold' : 'font-medium'}`}>{item.text}</span>
+                        </button>
+                      </li>
+                    );
+                  })}
                 </ul>
               </nav>
             </motion.div>
           )}
         </AnimatePresence>
-        <main className={`flex-1 p-6 ${isMobile ? '' : ''} flex flex-col`}>
-          <div className="flex-1">
-            <AnimatePresence mode="wait">
-              <motion.div
-                key={currentPage}
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: -20 }}
-                transition={{ duration: 0.3 }}
-                className="bg-white rounded-lg shadow-xl p-6 mb-4"
-              >
-                {renderContent()}
-              </motion.div>
-            </AnimatePresence>
-          </div>
-          {/* <Footer /> */}
+
+        {/* Main content */}
+        <main className="flex-1 p-6 overflow-auto bg-gray-50">
+          <AnimatePresence mode="wait">
+            <motion.div
+              key={currentPage}
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -20 }}
+              transition={{ duration: 0.3 }}
+              className="bg-white rounded-2xl shadow-xl p-8 transition-all duration-300"
+            >
+              {renderContent()}
+            </motion.div>
+          </AnimatePresence>
         </main>
       </div>
     </div>

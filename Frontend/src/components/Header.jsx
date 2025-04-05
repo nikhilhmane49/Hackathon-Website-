@@ -1,8 +1,12 @@
 // Header.js
 import React from 'react';
 import { BellIcon, UserCircleIcon } from '@heroicons/react/outline';
+import { useNavigate } from "react-router-dom"
 
-const Header = () => (
+const Header = () => {
+   
+  const navigate = useNavigate();
+  return (
   <header className="bg-white shadow-md">
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
       <div className="flex justify-between items-center py-4">
@@ -13,7 +17,7 @@ const Header = () => (
             <path d="M20 24V32L11.7154 28V20L20 24Z" fill="#85c1e9"/>
             <path d="M28.2846 20V28L20 32V24L28.2846 20Z" fill="#85c1e9"/>
           </svg>
-          <h1 className="ml-3 text-2xl font-bold text-[#3498db]">HackthonX</h1>
+          <h1 className="ml-3 text-2xl font-bold text-[#3498db] cursor-pointer" onClick={() => navigate("/")}>HackthonX</h1>
         </div>
         <div className="flex items-center space-x-4">
           <button className="text-gray-600 hover:text-[#3498db] transition-colors duration-200">
@@ -26,6 +30,6 @@ const Header = () => (
       </div>
     </div>
   </header>
-);
+)};
 
 export default Header;
