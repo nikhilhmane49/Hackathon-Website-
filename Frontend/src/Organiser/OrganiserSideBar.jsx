@@ -5,7 +5,8 @@ import { HomeIcon, UserIcon, CogIcon, MenuIcon, XIcon, ChartBarIcon } from '@her
 import Home from './Home';
 import Profile from './Profile';
 import Settings from './Setting';
- // Make sure you import Header
+import Registered from './Registered';
+// Make sure you import Header
 
 const OrganiserSideBar = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -33,6 +34,7 @@ const OrganiserSideBar = () => {
   const menuItems = [
     { icon: HomeIcon, text: 'Home', id: 'home' },
     { icon: UserIcon, text: 'Profile', id: 'profile' },
+    { icon: UserIcon, text: 'Candidates', id: 'registered' },
     { icon: CogIcon, text: 'Settings', id: 'settings' },
   ];
 
@@ -42,6 +44,8 @@ const OrganiserSideBar = () => {
         return <Home />;
       case 'profile':
         return <Profile />;
+      case 'registered':
+        return <Registered />;
       case 'settings':
         return <Settings />;
       default:
@@ -96,11 +100,10 @@ const OrganiserSideBar = () => {
                       setCurrentPage(item.id);
                       if (isMobile) toggleSidebar();
                     }}
-                    className={`flex ${!isOpen && !isMobile ? 'justify-center' : 'items-center'} p-3 rounded-lg transition-all duration-300 w-full text-left ${
-                      currentPage === item.id
-                        ? 'bg-gradient-to-r from-purple-600 to-indigo-600 text-white shadow-lg'
-                        : 'text-gray-300 hover:bg-indigo-800/50'
-                    }`}
+                    className={`flex ${!isOpen && !isMobile ? 'justify-center' : 'items-center'} p-3 rounded-lg transition-all duration-300 w-full text-left ${currentPage === item.id
+                      ? 'bg-gradient-to-r from-purple-600 to-indigo-600 text-white shadow-lg'
+                      : 'text-gray-300 hover:bg-indigo-800/50'
+                      }`}
                   >
                     <item.icon className={`${!isOpen && !isMobile ? 'w-7 h-7' : 'w-5 h-5 mr-3'}`} />
                     {(isOpen || isMobile) && <span className="text-md font-medium">{item.text}</span>}
@@ -133,9 +136,8 @@ const OrganiserSideBar = () => {
 
         {/* Main Content Area */}
         <main
-          className={`flex-1 p-6 transition-all duration-300 flex flex-col overflow-y-auto ${
-            isMobile ? '' : !isOpen ? 'ml-20' : 'ml-64'
-          }`}
+          className={`flex-1 p-6 transition-all duration-300 flex flex-col overflow-y-auto ${isMobile ? '' : !isOpen ? 'ml-20' : 'ml-64'
+            }`}
         >
           <div className="flex-1 min-h-0">
             <AnimatePresence mode="wait">
