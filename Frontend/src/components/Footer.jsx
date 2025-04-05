@@ -5,10 +5,10 @@ const Footer = () => {
   return (
     <footer className="bg-[#2176FF] text-white text-sm">
       <div className="max-w-7xl mx-auto px-6 py-12 grid grid-cols-1 md:grid-cols-4 gap-8">
-        {/* BookMe Section */}
+        {/* Brand Section */}
         <div>
-          <h2 className="text-lg font-semibold mb-2">BookMe</h2>
-          <p className="mb-4">Find Your Perfect Place to Stay</p>
+          <h2 className="text-lg font-semibold mb-2">HackHost</h2>
+          <p className="mb-4">Empowering innovation, one hackathon at a time.</p>
           <div className="flex space-x-4">
             {[FaFacebookF, FaTwitter, FaInstagram].map((Icon, index) => (
               <div
@@ -21,52 +21,52 @@ const Footer = () => {
           </div>
         </div>
 
-        {/* Resources */}
+        {/* Platform Links */}
         <div>
-          <h2 className="text-lg font-semibold mb-4">Resources</h2>
+          <h2 className="text-lg font-semibold mb-4">Platform</h2>
           <ul className="space-y-2">
-            <li><a href="#">About Us</a></li>
-            <li><a href="#">Contact Us</a></li>
-            <li><a href="#">Book your stay</a></li>
-            <li><a href="#">Become a Host</a></li>
-            <li><a href="#">Careers</a></li>
+            <li><a href="#">Organize a Hackathon</a></li>
+            <li><a href="#">Browse Events</a></li>
+            <li><a href="#">Join as a Participant</a></li>
+            <li><a href="#">Sponsorships</a></li>
+            <li><a href="#">Our Mission</a></li>
           </ul>
         </div>
 
-        {/* Support */}
+        {/* Help & Support */}
         <div>
           <h2 className="text-lg font-semibold mb-4">Support</h2>
           <ul className="space-y-2">
             <li><a href="#">Help Center</a></li>
-            <li><a href="#">Safety Information</a></li>
-            <li><a href="#">Cancellation Option</a></li>
-            <li><a href="#">Our COVID-19 Response</a></li>
+            <li><a href="#">Community Guidelines</a></li>
+            <li><a href="#">Contact Support</a></li>
+            <li><a href="#">Hosting Policies</a></li>
             <li><a href="#">FAQs</a></li>
           </ul>
         </div>
 
-        {/* Contact */}
+        {/* Contact Info */}
         <div>
           <h2 className="text-lg font-semibold mb-4">Contact</h2>
           <ul className="space-y-2">
-            <li>+923041234567</li>
-            <li>muhiris@bookme.com</li>
-            <li>Glassplace, Near<br />Cool Avenue, Boson</li>
+            <li>+92 304 1234567</li>
+            <li>support@hackhost.com</li>
+            <li>HackHub HQ,<br />Innovators Ave, Silicon District</li>
           </ul>
         </div>
       </div>
 
-      {/* Bottom Bar */}
+      {/* Footer Bottom */}
       <div className="border-t border-white/20">
         <div className="max-w-7xl mx-auto px-6 py-4 flex flex-col md:flex-row justify-between items-center text-white/80 text-xs gap-2">
           <div className="flex flex-wrap justify-center md:justify-start gap-4">
             <a href="#">Privacy Policy</a>
             <a href="#">Terms of Use</a>
-            <a href="#">Sales and refund</a>
+            <a href="#">Code of Conduct</a>
             <a href="#">Legal</a>
             <a href="#">Site Map</a>
           </div>
-          <p>Copyright 2024 BookMe, All Rights Reserved</p>
+          <p>© {new Date().getFullYear()} HackHost. All Rights Reserved.</p>
         </div>
       </div>
     </footer>
@@ -74,4 +74,3 @@ const Footer = () => {
 };
 
 export default Footer;
-  

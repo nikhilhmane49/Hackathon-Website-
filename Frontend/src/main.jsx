@@ -8,6 +8,8 @@ import {
   RouterProvider,
 } from "react-router";
 import Home from "./components/Home";
+import OrganiserSideBar from './Organiser/OrganiserSideBar'
+import ParticipantSideBar from "./participant/ParticipantSideBar";
 
 
 const router = createBrowserRouter([
@@ -22,6 +24,14 @@ const router = createBrowserRouter([
       {
         path: "/test",
         element: <h1>Test</h1>,
+      },
+      {
+        path: "/organiser",
+        element: <OrganiserSideBar/>
+      },
+      {
+        path: "/participant",
+        element: <ParticipantSideBar/>
       }
       
     ],
