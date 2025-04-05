@@ -24,6 +24,9 @@ mongoDB();
 //*cloudinary
 connectcloudinary();
 
+app.use(cors({
+    origin: '*', // Allows requests from any origin
+}));
 
 //APi end point
 app.use('/api/user',userroutes);

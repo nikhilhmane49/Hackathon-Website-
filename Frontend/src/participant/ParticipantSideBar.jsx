@@ -12,6 +12,7 @@ import {
 import Home from "./Home";
 import Profile from "./Profile";
 import Settings from "./Setting";
+import Hackcard from "./Hackcard";
 // import HackathonInfo from "../components/HackthonInfo";
 
 const ParticipantSideBar = () => {

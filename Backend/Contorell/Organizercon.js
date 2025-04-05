@@ -277,28 +277,22 @@ const newHackathon = await HackathonModel.create({
 };
 
 
-const gethackton= async(req,res)=>{
+const gethackton = async (req, res) => {
+  try {
+    const allHackathons = await HackathonModel.find().select('-password');
+    res.json({
+      success: true,
+      data: allHackathons,
+      message: "Hackathons fetched successfully",
+    });
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({
+      success: false,
+      message: "Internal server error",
+    });
+  }
+};
 
-    try {
-        
-const {_id}=req.body;
-
-const Hackathondata = await HackathonModel.findById(_id).select('-password');;
-
-res.json({
-    success:true,
-    data:Hackathondata,
-    message:"The user hackton  is fetch properly"
-})
-
-
-    } catch (error) {
-        console.log(error);
-        return res.status(500).json({
-            success: false,
-            message: "Internal server error"
-        })  
-    }
-}
 
 module.exports={organizerregester,organizerlogin , createHackathon ,gethackton};

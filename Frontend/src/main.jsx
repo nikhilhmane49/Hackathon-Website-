@@ -7,6 +7,7 @@ import {
   createBrowserRouter,
   RouterProvider,
 } from "react-router";
+import AppProvider from "./context/contextpra";
 import Home from "./components/Home";
 import OrganiserSideBar from './Organiser/OrganiserSideBar'
 import ParticipantSideBar from "./participant/ParticipantSideBar";
@@ -16,11 +17,11 @@ import HackthonInfo from "./components/HackthonInfo";
 const router = createBrowserRouter([
   {
     path: "/",
-    element: <Layout/>,
+    element: <Layout />,
     children: [
       {
         path: "/",
-        element: <Home/>,
+        element: <Home />,
       },
       {
         path: "/test",
@@ -28,23 +29,25 @@ const router = createBrowserRouter([
       },
       {
         path: "/organiser",
-        element: <OrganiserSideBar/>
+        element: <OrganiserSideBar />,
       },
       {
         path: "/participant",
-        element: <ParticipantSideBar/>
+        element: <ParticipantSideBar />,
       },
       {
-        path: "/hackinfo",
-        element: <HackthonInfo/>
+        path: "/hackathon/:hackathon_id",
+        element: <HackthonInfo />,
       },
-
     ],
   },
 ]);
 
 createRoot(document.getElementById('root')).render(
   <StrictMode>
+  <AppProvider>
     <RouterProvider router={router} />
-  </StrictMode>,
+  </AppProvider>
+</StrictMode>
+
 )

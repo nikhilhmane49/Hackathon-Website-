@@ -1,5 +1,8 @@
 {
   "dependencies": {
-    "date-fns": "^4.1.0"
+    "axios": "^1.8.4",
+    "date-fns": "^4.1.0",
+    "react-confetti": "^6.4.0",
+    "react-toastify": "^11.0.5"
   }
 }

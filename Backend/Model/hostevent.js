@@ -33,7 +33,7 @@ const hackathonSchema = new mongoose.Schema({
     },
 
     // Team size configuration: min and max allowed
-    // teamSize: {
+     teamSize: {
         min: {
             type: Number,
             required: true
@@ -42,10 +42,10 @@ const hackathonSchema = new mongoose.Schema({
             type: Number,
             required: true
         },
-    // },
+ },
 
     // Registration period
-    // registration: {
+ registration: {
         startDate: {
             type: Date,
             required: true
@@ -54,11 +54,11 @@ const hackathonSchema = new mongoose.Schema({
             type: Date,
             required: true
         },
-    // },
+ },
 
     // Stages/Rounds in the hackathon
-    // stages: [
-    //     {
+     stages: [
+     {
             roundTitle: {
                 type: String,
                 required: true
@@ -75,7 +75,7 @@ const hackathonSchema = new mongoose.Schema({
                 type: String,
                 required: true
             },
-            // timeline: {
+             timeline: {
                 stageStartDate: {
                     type: Date,
                     required: true
@@ -84,12 +84,12 @@ const hackathonSchema = new mongoose.Schema({
                     type: Date,
                     required: true
                 },
-            // }
-    //     }
-    // ],
+            }
+        }
+    ],
 
     // Organizer contact information
-    // contactDetails: {
+    contactDetails: {
         name: {
             type: String,
             required: true
@@ -102,7 +102,7 @@ const hackathonSchema = new mongoose.Schema({
             type: String,
             required: true
         },
-    // },
+    },
 
     // List of rules participants must follow
     rules: {
