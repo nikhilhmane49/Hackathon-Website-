@@ -1,9 +1,17 @@
 import React from "react";
 import { FaFacebookF, FaTwitter, FaInstagram } from "react-icons/fa";
+import { useLocation } from "react-router-dom";
 
 const Footer = () => {
+  // Get the current pathname using useLocation hook
+  const { pathname } = useLocation();
+
   return (
-    <footer className="bg-[#2176FF] text-white text-sm">
+    <footer
+      className={`bg-[#2176FF] text-white text-sm ${
+        pathname === "/participant" || pathname === "/organiser" ? "hidden" : ""
+      }`}
+    >
       <div className="max-w-7xl mx-auto px-6 py-12 grid grid-cols-1 md:grid-cols-4 gap-8">
         {/* Brand Section */}
         <div>
@@ -51,7 +59,11 @@ const Footer = () => {
           <ul className="space-y-2">
             <li>+92 304 1234567</li>
             <li>support@hackhost.com</li>
-            <li>HackHub HQ,<br />Innovators Ave, Silicon District</li>
+            <li>
+              HackHub HQ,
+              <br />
+              Innovators Ave, Silicon District
+            </li>
           </ul>
         </div>
       </div>
