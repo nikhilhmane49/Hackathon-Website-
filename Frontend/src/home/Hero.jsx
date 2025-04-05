@@ -10,26 +10,16 @@ const Hero = () => {
     <>
       <section className="relative overflow-hidden pb-20 bg-[#b8d6f7] mb-20">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8 pt-6 relative z-10">
-          {/* Navigation */}
+          {/* Navigation
           <nav className="flex justify-between items-center">
             <div className="text-3xl font-bold text-[#2176FF]">
               Book<span className="text-black">Me</span>
             </div>
-            <div className="flex space-x-4 items-center">
-              <button className="text-base font-medium text-gray-700 hover:text-[#2176FF] px-4 py-2">
-                Organize a Hackthon
-              </button>
-              <button
-                className="text-base font-medium text-gray-700 border border-gray-400 rounded-md px-5 py-2.5 hover:bg-gray-100"
-                onClick={() => navigate("/login")}
-              >
-                Login
-              </button>
-            </div>
-          </nav>
+            
+          </nav> */}
 
           {/* Hero Content */}
-          <div className="flex flex-col lg:flex-row items-center mt-16 lg:mt-24">
+          <div className="flex flex-col lg:flex-row items-center mt-16 lg:mt-20">
             {/* Left Side */}
             <div className="lg:w-1/2 text-center lg:text-left pr-8 ml-[100px] mt-[-80px]">
               <h1 className="text-5xl md:text-6xl font-bold text-black leading-tight">

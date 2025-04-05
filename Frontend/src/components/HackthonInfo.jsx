@@ -175,7 +175,7 @@ function HackathonInfo() {
   return (
     <div className="min-h-screen bg-gradient-to-br from-indigo-50 to-purple-50 font-sans">
       {showConfetti && <Confetti />}
-      
+
       {/* Hero Section */}
       <div className="relative overflow-hidden bg-gradient-to-r bg-[#3498db] text-white w-[1400px] ml-16">
         <div className="absolute inset-0 opacity-20">
@@ -188,21 +188,21 @@ function HackathonInfo() {
             </pattern>
           </defs>
         </div>
-        
+
         <div className="max-w-6xl mx-auto px-6 py-12 relative z-10">
           <div className="flex flex-col md:flex-row items-center justify-between">
             <div className="flex items-center mb-6 md:mb-0">
               <div className="bg-white p-3 rounded-xl mr-6 shadow-lg">
-                <img src={hackathon.logo} alt={`${hackathon.hackathonName} Logo`} 
-                     className="w-16 h-16 object-contain" />
+                <img src={hackathon.logo} alt={`${hackathon.hackathonName} Logo`}
+                  className="w-16 h-16 object-contain" />
               </div>
               <div>
                 <h1 className="text-3xl md:text-4xl font-extrabold">{hackathon.hackathonName}</h1>
                 <h3 className="text-xl text-indigo-200 mt-1">{hackathon.collegeName}</h3>
               </div>
             </div>
-            
-            <motion.div 
+
+            <motion.div
               initial={{ scale: 0.8, opacity: 0 }}
               animate={{ scale: 1, opacity: 1 }}
               transition={{ duration: 0.5 }}
@@ -215,7 +215,7 @@ function HackathonInfo() {
               </div>
             </motion.div>
           </div>
-          
+
           <div className="mt-8 flex flex-wrap gap-3">
             <div className="bg-white/10 backdrop-blur-sm border border-white/20 px-4 py-2 rounded-full text-sm font-medium">
               {hackathon.mode.charAt(0).toUpperCase() + hackathon.mode.slice(1)} Hackathon
@@ -235,7 +235,7 @@ function HackathonInfo() {
           </div>
         </div>
       </div>
-      
+
       {/* Countdown Timer */}
       <div className="bg-white shadow-md border-b">
         <div className="max-w-6xl mx-auto px-6 py-4">
@@ -250,7 +250,7 @@ function HackathonInfo() {
           </div>
         </div>
       </div>
-      
+
       <div className="max-w-6xl mx-auto px-6 py-8">
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
           {/* Main Content */}
@@ -262,11 +262,10 @@ function HackathonInfo() {
                   {['stages', 'prizes', 'details', 'rules', 'contact'].map((tab) => (
                     <button
                       key={tab}
-                      className={`px-6 py-4 text-sm font-medium whitespace-nowrap transition-colors ${
-                        activeTab === tab
+                      className={`px-6 py-4 text-sm font-medium whitespace-nowrap transition-colors ${activeTab === tab
                           ? 'text-indigo-600 border-b-2 border-indigo-600'
                           : 'text-gray-500 hover:text-gray-900'
-                      }`}
+                        }`}
                       onClick={() => setActiveTab(tab)}
                     >
                       {tab.charAt(0).toUpperCase() + tab.slice(1)}
@@ -274,7 +273,7 @@ function HackathonInfo() {
                   ))}
                 </div>
               </div>
-              
+
               <div className="p-6">
                 {/* Stages Tab */}
                 {activeTab === 'stages' && (
@@ -287,14 +286,14 @@ function HackathonInfo() {
                       </div>
                       <h2 className="text-2xl font-bold text-gray-800">Hackathon Timeline</h2>
                     </div>
-                    
+
                     <div className="relative">
                       {/* Timeline vertical line */}
                       <div className="absolute left-6 top-0 bottom-0 w-0.5 bg-indigo-200"></div>
-                      
+
                       <div className="space-y-10">
                         {hackathon.stages.map((stage, index) => (
-                          <motion.div 
+                          <motion.div
                             key={index}
                             initial={{ x: -20, opacity: 0 }}
                             animate={{ x: 0, opacity: 1 }}
@@ -303,31 +302,31 @@ function HackathonInfo() {
                           >
                             {/* Timeline dot */}
                             <div className="absolute left-6 transform -translate-x-1/2 w-3 h-3 bg-white border-4 border-indigo-500 rounded-full z-10"></div>
-                            
+
                             {/* Date block */}
                             <div className="min-w-[90px] pr-6 pt-1">
                               <div className="text-center w-16 py-1 px-2 bg-indigo-100 text-indigo-800 rounded-lg text-sm font-medium">
                                 {formatSimpleDate(stage.timeline.startDate)}
                               </div>
                             </div>
-                            
+
                             {/* Content */}
                             <div className="flex-1 bg-white border border-gray-100 rounded-xl p-5 shadow-sm hover:shadow-md transition-shadow">
                               <h3 className="font-bold text-lg text-gray-900 mb-2">{stage.roundTitle}</h3>
                               <p className="text-gray-600 mb-4">{stage.description}</p>
-                              
+
                               <div className="grid sm:grid-cols-2 gap-4 text-sm">
                                 <div className="bg-gray-50 p-3 rounded-lg">
                                   <p className="font-medium text-gray-700">Your Task:</p>
                                   <p className="mt-1 text-gray-600">{stage.participantTask}</p>
                                 </div>
-                                
+
                                 <div className="bg-gray-50 p-3 rounded-lg">
                                   <p className="font-medium text-gray-700">Evaluation Criteria:</p>
                                   <p className="mt-1 text-gray-600">{stage.impact}</p>
                                 </div>
                               </div>
-                              
+
                               <div className="mt-4 text-xs text-gray-500">
                                 <span className="font-medium">Timeline:</span> {formatDate(stage.timeline.startDate)} to {formatDate(stage.timeline.endDate)}
                               </div>
@@ -338,7 +337,7 @@ function HackathonInfo() {
                     </div>
                   </div>
                 )}
-                
+
                 {/* Prizes Tab */}
                 {activeTab === 'prizes' && (
                   <div>
@@ -350,7 +349,7 @@ function HackathonInfo() {
                       </div>
                       <h2 className="text-2xl font-bold text-gray-800">Awards & Prizes</h2>
                     </div>
-                    
+
                     <div className="grid gap-6 md:grid-cols-2">
                       {hackathon.winners.prizes.map((prize, index) => (
                         <motion.div
@@ -367,13 +366,12 @@ function HackathonInfo() {
                               </div>
                             </div>
                           )}
-                          
+
                           <div className="flex items-center">
-                            <div className={`text-3xl mr-4 ${
-                              index === 0 ? 'text-yellow-500' :
-                              index === 1 ? 'text-gray-400' :
-                              index === 2 ? 'text-yellow-700' : 'text-indigo-500'
-                            }`}>
+                            <div className={`text-3xl mr-4 ${index === 0 ? 'text-yellow-500' :
+                                index === 1 ? 'text-gray-400' :
+                                  index === 2 ? 'text-yellow-700' : 'text-indigo-500'
+                              }`}>
                               {index === 0 ? '🏆' : index === 1 ? '🥈' : index === 2 ? '🥉' : '🎖️'}
                             </div>
                             <div>
@@ -381,12 +379,12 @@ function HackathonInfo() {
                               <p className="text-gray-500 text-sm">{prize.perks}</p>
                             </div>
                           </div>
-                          
+
                           <div className="mt-4 text-3xl font-bold text-indigo-600">{prize.amount}</div>
                         </motion.div>
                       ))}
                     </div>
-                    
+
                     <div className="mt-8 bg-indigo-50 rounded-xl p-6">
                       <h3 className="text-lg font-semibold text-indigo-800 mb-3">Additional Benefits</h3>
                       <div className="grid md:grid-cols-2 gap-3">
@@ -402,7 +400,7 @@ function HackathonInfo() {
                     </div>
                   </div>
                 )}
-                
+
                 {/* Details Tab */}
                 {activeTab === 'details' && (
                   <div>
@@ -414,7 +412,7 @@ function HackathonInfo() {
                       </div>
                       <h2 className="text-2xl font-bold text-gray-800">Hackathon Details</h2>
                     </div>
-                    
+
                     <div className="grid md:grid-cols-2 gap-6">
                       <div className="space-y-5">
                         <DetailItem icon="🏫" label="Organizing Institution" value={hackathon.collegeName} />
@@ -422,22 +420,22 @@ function HackathonInfo() {
                         <DetailItem icon="🖥️" label="Mode" value={hackathon.mode.charAt(0).toUpperCase() + hackathon.mode.slice(1)} />
                         <DetailItem icon="👥" label="Team Size" value={`${hackathon.teamSize.min} - ${hackathon.teamSize.max} members`} />
                       </div>
-                      
+
                       <div className="space-y-5">
                         <DetailItem icon="🏆" label="Prize Pool" value={hackathon.prizePool} />
-                        <DetailItem icon="📅" label="Registration Period" 
+                        <DetailItem icon="📅" label="Registration Period"
                           value={`${formatDate(hackathon.registration.startDate)} to ${formatDate(hackathon.registration.endDate)}`} />
                         <DetailItem icon="🌎" label="Countries Represented" value={hackathon.stats.countries.toString()} />
                         <DetailItem icon="🤝" label="Industry Partners" value={hackathon.stats.partners.toString()} />
                       </div>
                     </div>
-                    
+
                     <div className="mt-8 flex items-center justify-between bg-gray-50 rounded-xl p-5 border border-gray-200">
                       <div>
                         <h3 className="font-medium text-gray-800">Hackathon Brochure</h3>
                         <p className="text-sm text-gray-500 mt-1">Download the complete information package</p>
                       </div>
-                      <a 
+                      <a
                         href={hackathon.brochure}
                         target="_blank"
                         rel="noopener noreferrer"
@@ -451,7 +449,7 @@ function HackathonInfo() {
                     </div>
                   </div>
                 )}
-                
+
                 {/* Rules Tab */}
                 {activeTab === 'rules' && (
                   <div>
@@ -463,15 +461,15 @@ function HackathonInfo() {
                       </div>
                       <h2 className="text-2xl font-bold text-gray-800">Rules & Guidelines</h2>
                     </div>
-                    
+
                     <div className="bg-gray-50 rounded-xl p-6 border border-gray-200">
                       <p className="text-gray-600 mb-4">
                         To ensure a fair and productive event for all participants, please adhere to the following rules:
                       </p>
-                      
+
                       <div className="space-y-3">
                         {hackathon.rules.map((rule, index) => (
-                          <motion.div 
+                          <motion.div
                             key={index}
                             initial={{ opacity: 0, x: -10 }}
                             animate={{ opacity: 1, x: 0 }}
@@ -485,7 +483,7 @@ function HackathonInfo() {
                           </motion.div>
                         ))}
                       </div>
-                      
+
                       <div className="mt-6 bg-yellow-50 border border-yellow-100 rounded-lg p-4 text-sm text-yellow-800">
                         <div className="flex">
                           <svg className="w-5 h-5 text-yellow-400 mr-2 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
@@ -500,7 +498,7 @@ function HackathonInfo() {
                     </div>
                   </div>
                 )}
-                
+
                 {/* Contact Tab */}
                 {activeTab === 'contact' && (
                   <div>
@@ -512,7 +510,7 @@ function HackathonInfo() {
                       </div>
                       <h2 className="text-2xl font-bold text-gray-800">Contact Information</h2>
                     </div>
-                    
+
                     <div className="grid md:grid-cols-2 gap-6">
                       <div className="bg-white rounded-xl overflow-hidden shadow-sm border border-gray-100">
                         <div className="bg-gradient-to-r from-green-500 to-emerald-600 py-4 px-6 text-white">
@@ -528,7 +526,7 @@ function HackathonInfo() {
                               <p className="font-medium">{hackathon.contactDetails.name}</p>
                             </div>
                           </div>
-                          
+
                           <div className="flex items-center">
                             <svg className="w-5 h-5 text-gray-500 mr-3" fill="currentColor" viewBox="0 0 20 20">
                               <path d="M2.003 5.884L10 9.882l7.997-3.998A2 2 0 0016 4H4a2 2 0 00-1.997 1.884z" />
@@ -539,7 +537,7 @@ function HackathonInfo() {
                               <p className="font-medium">{hackathon.contactDetails.email}</p>
                             </div>
                           </div>
-                          
+
                           <div className="flex items-center">
                             <svg className="w-5 h-5 text-gray-500 mr-3" fill="currentColor" viewBox="0 0 20 20">
                               <path d="M2 3a1 1 0 011-1h2.153a1 1 0 01.986.836l.74 4.435a1 1 0 01-.54 1.06l-1.548.773a11.037 11.037 0 006.105 6.105l.774-1.548a1 1 0 011.059-.54l4.435.74a1 1 0 01.836.986V17a1 1 0 01-1 1h-2C7.82 18 2 12.18 2 5V3z" />
@@ -551,7 +549,7 @@ function HackathonInfo() {
                           </div>
                         </div>
                       </div>
-                      
+
                       <div className="bg-white rounded-xl overflow-hidden shadow-sm border border-gray-100">
                         <div className="bg-gradient-to-r from-indigo-500 to-purple-600 py-4 px-6 text-white">
                           <h3 className="font-medium">Quick Inquiry</h3>
@@ -560,29 +558,29 @@ function HackathonInfo() {
                           <form className="space-y-4">
                             <div>
                               <label className="block text-sm font-medium text-gray-700 mb-1">Your Email</label>
-                              <input 
-                                type="email" 
+                              <input
+                                type="email"
                                 className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
                                 placeholder="you@example.com"
                               />
                             </div>
                             <div>
                               <label className="block text-sm font-medium text-gray-700 mb-1">Subject</label>
-                              <input 
-                                type="text" 
+                              <input
+                                type="text"
                                 className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
                                 placeholder="Question about registration"
                               />
                             </div>
                             <div>
                               <label className="block text-sm font-medium text-gray-700 mb-1">Message</label>
-                              <textarea 
+                              <textarea
                                 className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
                                 rows="3"
                                 placeholder="Your question or comment"
                               ></textarea>
                             </div>
-                            <button 
+                            <button
                               type="button"
                               className="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-medium py-2 px-4 rounded-md shadow-sm transition-colors"
                             >
@@ -596,28 +594,26 @@ function HackathonInfo() {
                 )}
               </div>
             </div>
-            
+
             {/* Sponsors */}
             <div className="bg-white rounded-2xl shadow-lg p-6 overflow-hidden">
               <h2 className="text-xl font-bold text-gray-800 mb-6">Our Sponsors</h2>
-              
+
               <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
                 {hackathon.sponsors.map((sponsor, index) => (
-                  <div 
+                  <div
                     key={index}
-                    className={`flex items-center justify-center py-4 px-6 bg-gray-50 rounded-lg border ${
-                      sponsor.tier === 'platinum' ? 'border-yellow-300' : 
-                      sponsor.tier === 'gold' ? 'border-gray-300' :
-                      'border-gray-200'
-                    }`}
+                    className={`flex items-center justify-center py-4 px-6 bg-gray-50 rounded-lg border ${sponsor.tier === 'platinum' ? 'border-yellow-300' :
+                        sponsor.tier === 'gold' ? 'border-gray-300' :
+                          'border-gray-200'
+                      }`}
                   >
                     <div className="text-center">
                       <div className="text-gray-700 font-medium">{sponsor.name}</div>
-                      <div className={`text-xs mt-1 ${
-                        sponsor.tier === 'platinum' ? 'text-yellow-600' : 
-                        sponsor.tier === 'gold' ? 'text-yellow-700' :
-                        'text-gray-600'
-                      }`}>
+                      <div className={`text-xs mt-1 ${sponsor.tier === 'platinum' ? 'text-yellow-600' :
+                          sponsor.tier === 'gold' ? 'text-yellow-700' :
+                            'text-gray-600'
+                        }`}>
                         {sponsor.tier.toUpperCase()} SPONSOR
                       </div>
                     </div>
@@ -626,7 +622,7 @@ function HackathonInfo() {
               </div>
             </div>
           </div>
-          
+
           {/* Sidebar */}
           <div className="space-y-6">
             <div className="bg-white rounded-2xl shadow-lg overflow-hidden">
@@ -634,45 +630,45 @@ function HackathonInfo() {
                 <h3 className="text-xl font-bold">Join the Challenge</h3>
                 <p className="mt-1 text-indigo-100">Showcase your skills and win amazing prizes</p>
               </div>
-              
+
               <div className="p-6">
-                <button 
+                <button
                   onClick={handleRegisterClick}
                   className="w-full bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700 text-white font-bold py-3 px-4 rounded-xl shadow-md hover:shadow-lg transition-all transform hover:-translate-y-0.5"
                 >
                   Register Now
                 </button>
-                
+
                 <div className="mt-6 space-y-4">
                   {/* Stats */}
-                  <StatsItem 
-                    icon="👥" 
-                    label="Teams Registered" 
-                    value={hackathon.stats.registered} 
+                  <StatsItem
+                    icon="👥"
+                    label="Teams Registered"
+                    value={hackathon.stats.registered}
                     color="bg-blue-50"
                     textColor="text-blue-700"
                   />
-                  
-                  <StatsItem 
-                    icon="🌎" 
-                    label="Countries Represented" 
-                    value={hackathon.stats.countries} 
+
+                  <StatsItem
+                    icon="🌎"
+                    label="Countries Represented"
+                    value={hackathon.stats.countries}
                     color="bg-green-50"
                     textColor="text-green-700"
                   />
-                  
-                  <StatsItem 
-                    icon="👁️" 
-                    label="Page Views" 
-                    value={hackathon.stats.impressions.toLocaleString()} 
+
+                  <StatsItem
+                    icon="👁️"
+                    label="Page Views"
+                    value={hackathon.stats.impressions.toLocaleString()}
                     color="bg-purple-50"
                     textColor="text-purple-700"
                   />
-                  
-                  <StatsItem 
-                    icon="📅" 
-                    label="Registration Deadline" 
-                    value={formatDate(hackathon.registration.endDate)} 
+
+                  <StatsItem
+                    icon="📅"
+                    label="Registration Deadline"
+                    value={formatDate(hackathon.registration.endDate)}
                     color="bg-red-50"
                     textColor="text-red-700"
                     isDate={true}
@@ -680,10 +676,10 @@ function HackathonInfo() {
                 </div>
               </div>
             </div>
-            
+
             <div className="bg-gradient-to-br from-indigo-900 to-purple-900 rounded-2xl shadow-lg p-6 text-white">
               <h3 className="text-xl font-bold mb-4">Why Participate?</h3>
-              
+
               <div className="space-y-3">
                 {[
                   { icon: "💡", text: "Develop innovative solutions to real-world problems" },
@@ -697,7 +693,7 @@ function HackathonInfo() {
                   </div>
                 ))}
               </div>
-              
+
               <div className="mt-6 pt-6 border-t border-white/20">
                 <div className="flex items-center">
                   <svg className="w-5 h-5 text-yellow-300 mr-2" fill="currentColor" viewBox="0 0 20 20">
@@ -708,10 +704,10 @@ function HackathonInfo() {
                 <p className="mt-2 text-sm text-indigo-200">Top-performing teams will be invited to exclusive mentorship programs and potential internship opportunities with our sponsor companies.</p>
               </div>
             </div>
-            
+
             <div className="bg-white rounded-2xl shadow-lg p-6">
               <h3 className="text-xl font-bold text-gray-800 mb-4">Resources</h3>
-              
+
               <div className="space-y-3">
                 {[
                   { icon: "📝", text: "Preparation Guide", link: "#" },
@@ -719,8 +715,8 @@ function HackathonInfo() {
                   { icon: "📚", text: "Learning Materials", link: "#" },
                   { icon: "❓", text: "FAQs", link: "#" }
                 ].map((item, index) => (
-                  <a 
-                    key={index} 
+                  <a
+                    key={index}
                     href={item.link}
                     className="flex items-center p-3 rounded-lg hover:bg-gray-50 transition-colors"
                   >
