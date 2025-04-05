@@ -32,8 +32,8 @@ const router = createBrowserRouter([
       {
         path: "/participant",
         element: <ParticipantSideBar/>
-      }
-      
+      },
+
     ],
   },
 ]);
