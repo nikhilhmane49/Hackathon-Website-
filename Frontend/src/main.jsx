@@ -12,10 +12,7 @@ import OrganiserSideBar from './Organiser/OrganiserSideBar'
 import ParticipantSideBar from "./participant/ParticipantSideBar";
 import ParticipantLogin from "./participant/ParticipantLogin";
 import OrganiserLogin from "./Organiser/OrganiserLogin";
-import HackthonInfo from "./components/HackthonInfo";
-import CandidateDetails from "./components/CandidateDetails";
-
-
+import HackathonInfo from "./components/HackthonInfo";
 
 const router = createBrowserRouter([
   {
@@ -48,13 +45,12 @@ const router = createBrowserRouter([
       },
       {
         path: "/hackinfo",
-        element: <HackthonInfo/>
+        element: <HackathonInfo/>
       },
       {
         path: "/partinfo",
         element: <CandidateDetails/>
       },
-
     ],
   },
 ]);
