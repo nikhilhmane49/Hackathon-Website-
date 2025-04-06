@@ -222,7 +222,7 @@ const updateProfile = async (req, res) => {
 
 const applyToHackathon = async (req, res) => {
   try {
-    const userId = req.user.id; // using req.user from middleware
+    const userId = req.user.id; // ✅ Now it will work
     const { hackathonId } = req.body;
 
     if (!hackathonId) {
@@ -245,6 +245,7 @@ const applyToHackathon = async (req, res) => {
     res.status(500).json({ message: 'Server Error' });
   }
 };
+
 
 
 
