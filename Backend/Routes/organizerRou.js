@@ -1,4 +1,7 @@
 const express = require('express');
+
+const upload = require('../midellware/Multer');
+
 const upload = require('../midellware/Multer');
 const { organizerregester, organizerlogin, createHackathon ,gethackton } = require('../Contorell/Organizercon');
 
