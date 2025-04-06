@@ -46,6 +46,11 @@ const userschema = new mongoose.Schema({
     },
     contactNumber: {
         type: String
+    },
+
+    hackatonapllyid: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'hostevent'
     }
 });
 

@@ -4,7 +4,51 @@ import { Appcontext } from "../context/contextpra";
 import { useParams } from "react-router-dom";
 
 
+ 
+
+
+
+
+
 function HackathonInfo() {
+
+
+const { hackathon_id } = useParams();
+
+const hackathonapplynow = async () => {
+  try {
+    const token = localStorage.getItem("token"); // or get it from context/auth state
+    const response = await fetch(
+      "http://localhost:3000/api/user/apply-hackathon",
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          token: token, // send it as 'token' in headers
+        },
+        body: JSON.stringify({ hackathonId: hackathon_id }),
+      }
+    );
+
+    const data = await response.json();
+    if (response.ok) {
+      alert("Successfully registered!");
+      // Optional: navigate('/organizer-dashboard')
+    } else {
+      alert(data.message || "Failed to apply");
+    }
+  } catch (err) {
+    console.error(err);
+    alert("Something went wrong!");
+  }
+};
+
+
+
+
+
+
+
   const [activeTab, setActiveTab] = useState('stages');
   const [isLoading, setIsLoading] = useState(true);
   const [hackathon, setHackathon] = useState(null);
@@ -12,7 +56,7 @@ function HackathonInfo() {
   const [showConfetti, setShowConfetti] = useState(false);
 
    const { Hackton } = useContext(Appcontext);
-   const { hackathon_id } = useParams();
+  //  const { hackathon_id } = useParams();
 
   // useEffect(() => {
   //   // Simulate fetching data
@@ -861,13 +905,11 @@ function HackathonInfo() {
 
               <div className="p-6">
                 <button
-                  onClick={handleRegisterClick}
+                  onClick={handleRegisterClick && hackathonapplynow}
                   className="w-full bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700 text-white font-bold py-3 px-4 rounded-xl shadow-md hover:shadow-lg transition-all transform hover:-translate-y-0.5"
                 >
                   Register Now
                 </button>
-
-                
               </div>
             </div>
 

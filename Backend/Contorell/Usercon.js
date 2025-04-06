@@ -220,6 +220,31 @@ const updateProfile = async (req, res) => {
 
 
 
+const applyToHackathon = async (req, res) => {
+  try {
+    const userId = req.user.id; // using req.user from middleware
+    const { hackathonId } = req.body;
+
+    if (!hackathonId) {
+      return res.status(400).json({ message: 'Hackathon ID is required' });
+    }
+
+    const updatedUser = await userModel.findByIdAndUpdate(
+      userId,
+      { hackatonapllyid: hackathonId },
+      { new: true }
+    );
+
+    if (!updatedUser) {
+      return res.status(404).json({ message: 'User not found' });
+    }
+
+    res.status(200).json({ message: 'Successfully applied to hackathon', user: updatedUser });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: 'Server Error' });
+  }
+};
 
 
 
@@ -229,5 +254,7 @@ const updateProfile = async (req, res) => {
 
 
 
-module.exports={regester,userlogin,updateProfile};
+
+
+module.exports={regester,userlogin,updateProfile ,applyToHackathon};
 
