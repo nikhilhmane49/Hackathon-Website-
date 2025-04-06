@@ -132,9 +132,7 @@ token,
         success: false,
         message: "Internal server error"
     })
-}
-
-}
+}}
 
 
 
@@ -172,15 +170,15 @@ const updateProfile = async (req, res) => {
             resumeUrl = resumeUpload.secure_url;
         }
 
-        // let parsedEducation;
-        // try {
-        //     parsedEducation = JSON.parse(education);
-        // } catch (e) {
-        //     return res.status(400).json({
-        //         success: false,
-        //         message: "Invalid education format"
-        //     });
-        // }
+        let parsedEducation;
+        try {
+            parsedEducation = JSON.parse(education);
+        } catch (e) {
+            return res.status(400).json({
+                success: false,
+                message: "Invalid education format"
+            });
+        }
 
         const updateData = await userModel.findByIdAndUpdate(
             userid,
@@ -191,7 +189,7 @@ const updateProfile = async (req, res) => {
                 linkedinLink,
                 technicalSkills,
                 projectLinks,
-                // education: parsedEducation,
+                education: parsedEducation,
                 education,
                 contactNumber
             },

@@ -11,9 +11,10 @@ import AppProvider from "./context/contextpra";
 import Home from "./components/Home";
 import OrganiserSideBar from './Organiser/OrganiserSideBar'
 import ParticipantSideBar from "./participant/ParticipantSideBar";
-import HackthonInfo from "./components/HackthonInfo";
-
-
+import ParticipantLogin from "./participant/ParticipantLogin";
+import OrganiserLogin from "./Organiser/OrganiserLogin";
+import HackathonInfo from "./components/HackthonInfo";
+import CandidateDetails from "./components/CandidateDetails";
 const router = createBrowserRouter([
   {
     path: "/",
@@ -37,7 +38,19 @@ const router = createBrowserRouter([
       },
       {
         path: "/hackathon/:hackathon_id",
-        element: <HackthonInfo />,
+        element: <HackathonInfo />,
+      },
+      {
+        path: "/participantLogin",
+        element: <ParticipantLogin />,
+      },
+      {
+        path: "/OrganiserLogin",
+        element: <OrganiserLogin />,
+      },
+      {
+        path: "/partinfo",
+        element: <CandidateDetails/>,
       },
     ],
   },

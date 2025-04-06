@@ -1,14 +1,14 @@
 const express = require('express');
-
+const upload = require('../Middleware/Multer.js');
 const { organizerregester, organizerlogin, createHackathon ,gethackton } = require('../Contorell/Organizercon');
 
-// const upload=require('../midellware/Multer');
 
- const authadmin = require('../Midellware/Authorg');
+
+const authadmin = require('../Midellware/Authorg');
 
 const orgnizerroutes = express.Router();
 
-const upload = require('../Midellware/Multer');
+
 
 
 
@@ -22,7 +22,6 @@ orgnizerroutes.post('/orgnizer-hackathon', authadmin,  upload.fields([
     , createHackathon);
 
 orgnizerroutes.get('/orgnizer-gethackathon',gethackton );
- 
 
 
 module.exports = orgnizerroutes;

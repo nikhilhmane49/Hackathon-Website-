@@ -35,15 +35,15 @@ const userschema = new mongoose.Schema({
         type: [String]  // Array of links to projects
     },
     education: {
-        // college: {
-        //     type: String
-        // },
-        // degree: {
-        //     type: String
-        // },
-        // year: {
-        //     type: Number
-        //  },
+        college: {
+            type: String
+        },
+        degree: {
+            type: String
+        },
+        year: {
+            type: Number
+         },
         type: String
 
     },
