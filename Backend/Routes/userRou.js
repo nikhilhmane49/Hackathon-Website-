@@ -6,7 +6,7 @@ const authuser = require('../Midellware/Authuser.js');
 
 const userroutes = express.Router();
 
-const upload=require('../midellware/Multer');
+const upload=require('../Midellware/Multer.js');
 
 userroutes.post('/user-resgretration', regester);
 userroutes.post('/user-login', userlogin);

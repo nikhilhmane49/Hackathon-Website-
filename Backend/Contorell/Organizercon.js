@@ -65,12 +65,12 @@ const organizerregester= async (req,res)=>{
         const organizer= await organizermodel.save();
         
         
-        const token = jwt.sign({id:organizer._id},process.env.JWT_SECRET);
+        const atoken = jwt.sign({id:organizer._id},process.env.JWT_SECRET);
 
         if(token){
         res.status(200).json({
             success: true,
-            token: token,
+            atoken: atoken,
             organizer:organizer,
             message: "organizer regester successful"
         })
@@ -111,11 +111,11 @@ try {
 
     if(ismacth){
 
-        const token = jwt.sign({id:organizer._id},process.env.JWT_SECRET);
+        const atoken = jwt.sign({id:organizer._id},process.env.JWT_SECRET);
 
         res.json({
 success:true,
-token,
+atoken,
 
         })
     }
@@ -142,46 +142,46 @@ token,
 
 const createHackathon = async (req, res) => {
     try {
-        // const {
-        //     hackathonName,
-        //     collegeName,
-        //     collegeAddress,
-        //     mode,
-        //     prizePool,
-        //     teamSize,
-        //     registration,
-        //     stages,
-        //     contactDetails,
-        //     rules
-        // } = req.body;
-
         const {
-  hackathonName,
-  collegeName,
-  collegeAddress,
-  mode,
-  prizePool,
-  // Team size fields
-  min,           // minimum team size
-  max,           // maximum team size
-  // Registration dates
-  startDate,     // registration start date
-  endDate,       // registration end date
-  // Stage details (for a single stage, since they're flattened)
-  roundTitle,
-  description,
-  participantTask,
-  impact,
-  // Stage timeline (renamed to avoid conflict with registration dates)
-  stageStartDate,
-  stageEndDate,
-  // Organizer contact details (flattened)
-  name,          // organizer's name
-  email,         // organizer's email
-  phone,         // organizer's phone
-  // Other rules array
-  rules
-} = req.body;
+            hackathonName,
+            collegeName,
+            collegeAddress,
+            mode,
+            prizePool,
+            teamSize,
+            registration,
+            stages,
+            contactDetails,
+            rules
+        } = req.body;
+
+//         const {
+//   hackathonName,
+//   collegeName,
+//   collegeAddress,
+//   mode,
+//   prizePool,
+//   // Team size fields
+//   min,           // minimum team size
+//   max,           // maximum team size
+//   // Registration dates
+//   startDate,     // registration start date
+//   endDate,       // registration end date
+//   // Stage details (for a single stage, since they're flattened)
+//   roundTitle,
+//   description,
+//   participantTask,
+//   impact,
+//   // Stage timeline (renamed to avoid conflict with registration dates)
+//   stageStartDate,
+//   stageEndDate,
+//   // Organizer contact details (flattened)
+//   name,          // organizer's name
+//   email,         // organizer's email
+//   phone,         // organizer's phone
+//   // Other rules array
+//   rules
+// } = req.body;
 
 
         const brochureFile = req.files?.brochure?.[0];
@@ -209,58 +209,58 @@ const createHackathon = async (req, res) => {
         });
 
         // Parse JSON fields (because they'll come in as strings from form-data)
-        // const parsedTeamSize = JSON.parse(teamSize);
-        // const parsedRegistration = JSON.parse(registration);
-        // const parsedStages = JSON.parse(stages);
-        // const parsedContactDetails = JSON.parse(contactDetails);
-        // const parsedRules = JSON.parse(rules);
+        const parsedTeamSize = JSON.parse(teamSize);
+        const parsedRegistration = JSON.parse(registration);
+        const parsedStages = JSON.parse(stages);
+        const parsedContactDetails = JSON.parse(contactDetails);
+        const parsedRules = JSON.parse(rules);
 
         // Save to DB
-        // const newHackathon = await HackathonModel.create({
-        //     hackathonName,
-        //     collegeName,
-        //     collegeAddress,
-        //     mode,
-        //     prizePool,
-        //     teamSize: parsedTeamSize,
-        //     registration: parsedRegistration,
-        //     stages: parsedStages,
-        //     contactDetails: parsedContactDetails,
-        //     rules: parsedRules,
-        //     brochure: brochureUpload.secure_url,
-        //     logo: logoUpload.secure_url,
-        //     banner: bannerUpload.secure_url
-        // });
-const newHackathon = await HackathonModel.create({
- hackathonName,
-  collegeName,
-  collegeAddress,
-  mode,
-  prizePool,
-  // Team size fields
-  min,           // minimum team size
-  max,           // maximum team size
-  // Registration dates
-  startDate,     // registration start date
-  endDate,       // registration end date
-  // Stage details (for a single stage, since they're flattened)
-  roundTitle,
-  description,
-  participantTask,
-  impact,
-  // Stage timeline (renamed to avoid conflict with registration dates)
-  stageStartDate,
-  stageEndDate,
-  // Organizer contact details (flattened)
-  name,          // organizer's name
-  email,         // organizer's email
-  phone,         // organizer's phone
-  // Other rules array
-    rules,
-  brochure: brochureUpload.secure_url,
+        const newHackathon = await HackathonModel.create({
+            hackathonName,
+            collegeName,
+            collegeAddress,
+            mode,
+            prizePool,
+            teamSize: parsedTeamSize,
+            registration: parsedRegistration,
+            stages: parsedStages,
+            contactDetails: parsedContactDetails,
+            rules: parsedRules,
+            brochure: brochureUpload.secure_url,
             logo: logoUpload.secure_url,
             banner: bannerUpload.secure_url
-});
+        });
+// const newHackathon = await HackathonModel.create({
+//  hackathonName,
+//   collegeName,
+//   collegeAddress,
+//   mode,
+//   prizePool,
+//   // Team size fields
+//   min,           // minimum team size
+//   max,           // maximum team size
+//   // Registration dates
+//   startDate,     // registration start date
+//   endDate,       // registration end date
+//   // Stage details (for a single stage, since they're flattened)
+//   roundTitle,
+//   description,
+//   participantTask,
+//   impact,
+//   // Stage timeline (renamed to avoid conflict with registration dates)
+//   stageStartDate,
+//   stageEndDate,
+//   // Organizer contact details (flattened)
+//   name,          // organizer's name
+//   email,         // organizer's email
+//   phone,         // organizer's phone
+//   // Other rules array
+//     rules,
+//   brochure: brochureUpload.secure_url,
+//             logo: logoUpload.secure_url,
+//             banner: bannerUpload.secure_url
+// });
         res.status(201).json({
             success: true,
             message: "Hackathon created successfully",

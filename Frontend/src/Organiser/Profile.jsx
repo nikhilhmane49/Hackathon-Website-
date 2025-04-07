@@ -1,7 +1,12 @@
-import React, { useState } from "react";
+
+import React, { useState , useContext} from "react";
+import axios from "axios";
+import { toast } from "react-toastify";
 import { format } from "date-fns";
 
-const Profile = () => {
+import { Appcontext } from "../context/contextpra";
+
+const Profile =  () => {
   const [activeStep, setActiveStep] = useState(0);
   const [formData, setFormData] = useState({
     hackathonName: "",
@@ -39,6 +44,128 @@ const Profile = () => {
     logo: "",
     banner: "",
   });
+
+  const { backendurl, atoken } = useContext(Appcontext);
+
+  console.log(atoken);
+
+
+// const Onclickhandeler = async (e)=>{
+//     e.preventDefault();
+
+
+//   try {
+
+//     const response = await axios.post(
+//       `${backendurl}/api/orgnizer/orgnizer-hackathon`,
+//       formData,
+//       {
+//         headers: {
+//           atoken: atoken,
+//           "Content-Type": "multipart/form-data",
+//         },
+//       }
+//     );
+
+//     if (response.data.success) {
+//       // Changed from response.success to response.data.success
+//       toast.success(response.data.message); // Changed to response.data.message
+
+//       setFormData({
+//         hackathonName: "",
+//         collegeName: "",
+//         collegeAddress: "",
+//         mode: "online",
+//         prizePool: "",
+//         teamSize: {
+//           min: "",
+//           max: "",
+//         },
+//         registration: {
+//           startDate: null,
+//           endDate: null,
+//         },
+//         stages: [
+//           {
+//             roundTitle: "",
+//             description: "",
+//             participantTask: "",
+//             impact: "",
+//             timeline: {
+//               startDate: null,
+//               endDate: null,
+//             },
+//           },
+//         ],
+//         contactDetails: {
+//           name: "",
+//           email: "",
+//           phone: "",
+//         },
+//         rules: [""],
+//         brochure: "",
+//         logo: "",
+//         banner: "",
+//       });
+//     } else {
+//       toast.error(response.data.message);
+//     }
+// }catch (error) {
+// console.log(error);
+// toast.error(error.response?.data?.message || "Something went wrong"); // Added error handling
+// }
+
+  //   }
+  
+const Onclickhandeler = async (e) => {
+  e.preventDefault();
+
+  try {
+    const form = new FormData();
+
+    form.append("hackathonName", formData.hackathonName);
+    form.append("collegeName", formData.collegeName);
+    form.append("collegeAddress", formData.collegeAddress);
+    form.append("mode", formData.mode);
+    form.append("prizePool", formData.prizePool);
+
+    // Add JSON fields as strings
+    form.append("teamSize", JSON.stringify(formData.teamSize));
+    form.append("registration", JSON.stringify(formData.registration));
+    form.append("stages", JSON.stringify(formData.stages));
+    form.append("contactDetails", JSON.stringify(formData.contactDetails));
+    form.append("rules", JSON.stringify(formData.rules));
+
+    // Append files
+    form.append("brochure", formData.brochure); // should be a File object
+    form.append("logo", formData.logo); // should be a File object
+    form.append("banner", formData.banner); // should be a File object
+
+    const response = await axios.post(
+      `${backendurl}/api/orgnizer/orgnizer-hackathon`,
+      form,
+      {
+        headers: {
+          atoken: atoken,
+        },
+      }
+    );
+
+    if (response.data.success) {
+      toast.success(response.data.message);
+      // Reset form if needed
+    } else {
+      toast.error(response.data.message);
+    }
+  } catch (error) {
+    console.error(error);
+    toast.error(error.response?.data?.message || "Something went wrong");
+  }
+};
+
+
+
+
 
   const [errors, setErrors] = useState({});
   const [preview, setPreview] = useState({
@@ -1286,7 +1413,8 @@ const Profile = () => {
                 </button>
               ) : (
                 <button
-                  type="submit"
+                  type="button"
+                  onClick={Onclickhandeler}
                   className="inline-flex items-center px-5 py-3 border border-transparent text-base font-medium rounded-md shadow-sm text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transform transition-transform hover:scale-105"
                 >
                   <svg

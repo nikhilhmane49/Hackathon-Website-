@@ -29,10 +29,12 @@ export default function OrganiserLogin() {
     try {
       const endpoint = isLogin ? `${import.meta.env.VITE_BACKEND_URL}/api/orgnizer/orgnizer-login` : `${import.meta.env.VITE_BACKEND_URL}/api/orgnizer/orgnizer-resgretration`;
       const response = await axios.post(endpoint, formData);
+
+      console.log("hello"+response.data.data);
       
       if (response.data.success) {
         setSuccess(response.data.message || (isLogin ? 'Login successful!' : 'Registration successful!'));
-        localStorage.setItem('token', response.data.token);
+        localStorage.setItem('atoken', response.data.atoken);
         navigate("/organiser")
       } else {
         setError(response.data.message || 'Something went wrong');

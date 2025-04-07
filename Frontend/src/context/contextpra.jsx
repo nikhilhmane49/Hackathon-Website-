@@ -9,9 +9,13 @@ const AppProvider = (props) => {
   const [token, settoken] = useState(
     localStorage.getItem("token") ? localStorage.getItem("token") : false
   );
+
+  const [atoken, setatoken] = useState(
+    localStorage.getItem("atoken") ? localStorage.getItem("atoken") : false
+  );
   const [Hackton, setHackton] = useState([]);
   const[parhackton,setparhackton] = useState([]);
-    const backendurl = import.meta.env.VITE_BACKEND_URL;
+  const backendurl = import.meta.env.VITE_BACKEND_URL;
     
     
 
@@ -44,6 +48,8 @@ const AppProvider = (props) => {
     listhackton,
     backendurl,
     token,
+    atoken,
+    setatoken,
     settoken,
   };
 
