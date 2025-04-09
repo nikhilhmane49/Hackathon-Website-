@@ -141,140 +141,93 @@ atoken,
 
 
 const createHackathon = async (req, res) => {
-    try {
-        const {
-            hackathonName,
-            collegeName,
-            collegeAddress,
-            mode,
-            prizePool,
-            teamSize,
-            registration,
-            stages,
-            contactDetails,
-            rules
-        } = req.body;
+  try {
+    const {
+      hackathonName,
+      collegeName,
+      collegeAddress,
+      mode,
+      prizePool,
+      teamSize,
+      registration,
+      stages,
+      contactDetails,
+      rules,
+    } = req.body;
 
-//         const {
-//   hackathonName,
-//   collegeName,
-//   collegeAddress,
-//   mode,
-//   prizePool,
-//   // Team size fields
-//   min,           // minimum team size
-//   max,           // maximum team size
-//   // Registration dates
-//   startDate,     // registration start date
-//   endDate,       // registration end date
-//   // Stage details (for a single stage, since they're flattened)
-//   roundTitle,
-//   description,
-//   participantTask,
-//   impact,
-//   // Stage timeline (renamed to avoid conflict with registration dates)
-//   stageStartDate,
-//   stageEndDate,
-//   // Organizer contact details (flattened)
-//   name,          // organizer's name
-//   email,         // organizer's email
-//   phone,         // organizer's phone
-//   // Other rules array
-//   rules
-// } = req.body;
+    const brochureFile = req.files?.brochure?.[0];
+    const logoFile = req.files?.logo?.[0];
+    const bannerFile = req.files?.banner?.[0];
 
-
-        const brochureFile = req.files?.brochure?.[0];
-        const logoFile = req.files?.logo?.[0];
-        const bannerFile = req.files?.banner?.[0];
-
-        if (!brochureFile || !logoFile || !bannerFile) {
-            return res.status(400).json({
-                success: false,
-                message: 'Brochure, logo, and banner files are required.'
-            });
-        }
-
-        // Upload files to Cloudinary
-        const brochureUpload = await cloudinary.uploader.upload(brochureFile.path, {
-            resource_type: "raw"
-        });
-
-        const logoUpload = await cloudinary.uploader.upload(logoFile.path, {
-            resource_type: "image"
-        });
-
-        const bannerUpload = await cloudinary.uploader.upload(bannerFile.path, {
-            resource_type: "image"
-        });
-
-        // Parse JSON fields (because they'll come in as strings from form-data)
-        const parsedTeamSize = JSON.parse(teamSize);
-        const parsedRegistration = JSON.parse(registration);
-        const parsedStages = JSON.parse(stages);
-        const parsedContactDetails = JSON.parse(contactDetails);
-        const parsedRules = JSON.parse(rules);
-
-        // Save to DB
-        const newHackathon = await HackathonModel.create({
-            hackathonName,
-            collegeName,
-            collegeAddress,
-            mode,
-            prizePool,
-            teamSize: parsedTeamSize,
-            registration: parsedRegistration,
-            stages: parsedStages,
-            contactDetails: parsedContactDetails,
-            rules: parsedRules,
-            brochure: brochureUpload.secure_url,
-            logo: logoUpload.secure_url,
-            banner: bannerUpload.secure_url
-        });
-// const newHackathon = await HackathonModel.create({
-//  hackathonName,
-//   collegeName,
-//   collegeAddress,
-//   mode,
-//   prizePool,
-//   // Team size fields
-//   min,           // minimum team size
-//   max,           // maximum team size
-//   // Registration dates
-//   startDate,     // registration start date
-//   endDate,       // registration end date
-//   // Stage details (for a single stage, since they're flattened)
-//   roundTitle,
-//   description,
-//   participantTask,
-//   impact,
-//   // Stage timeline (renamed to avoid conflict with registration dates)
-//   stageStartDate,
-//   stageEndDate,
-//   // Organizer contact details (flattened)
-//   name,          // organizer's name
-//   email,         // organizer's email
-//   phone,         // organizer's phone
-//   // Other rules array
-//     rules,
-//   brochure: brochureUpload.secure_url,
-//             logo: logoUpload.secure_url,
-//             banner: bannerUpload.secure_url
-// });
-        res.status(201).json({
-            success: true,
-            message: "Hackathon created successfully",
-            data: newHackathon
-        });
-
-    } catch (error) {
-        console.error("Error creating hackathon:", error);
-        res.status(500).json({
-            success: false,
-            message: "Server error"
-        });
+    // Check required files
+    if (!brochureFile || !logoFile || !bannerFile) {
+      return res.status(400).json({
+        success: false,
+        message: "Brochure, logo, and banner files are required.",
+      });
     }
+
+    // Upload files to Cloudinary
+    const brochureUpload = await cloudinary.uploader.upload(brochureFile.path, {
+      resource_type: "raw",
+    });
+
+    const logoUpload = await cloudinary.uploader.upload(logoFile.path, {
+      resource_type: "image",
+    });
+
+    const bannerUpload = await cloudinary.uploader.upload(bannerFile.path, {
+      resource_type: "image",
+    });
+
+    // Parse JSON fields
+    let parsedTeamSize, parsedRegistration, parsedStages, parsedContactDetails, parsedRules;
+
+    try {
+      parsedTeamSize = JSON.parse(teamSize);
+      parsedRegistration = JSON.parse(registration);
+      parsedStages = JSON.parse(stages);
+      parsedContactDetails = JSON.parse(contactDetails);
+      parsedRules = JSON.parse(rules);
+    } catch (error) {
+      console.error("Error parsing JSON fields:", error);
+      return res.status(400).json({
+        success: false,
+        message: "Invalid JSON format in one or more fields.",
+      });
+    }
+
+    // Save to DB
+    const newHackathon = await HackathonModel.create({
+      hackathonName,
+      collegeName,
+      collegeAddress,
+      mode,
+      prizePool,
+      teamSize: parsedTeamSize,
+      registration: parsedRegistration,
+      stages: parsedStages,
+      contactDetails: parsedContactDetails,
+      rules: parsedRules,
+      brochure: brochureUpload.secure_url,
+      logo: logoUpload.secure_url,
+      banner: bannerUpload.secure_url,
+    });
+
+    res.status(201).json({
+      success: true,
+      message: "Hackathon created successfully",
+      data: newHackathon,
+    });
+  } catch (error) {
+    console.error("Error creating hackathon:", error);
+    res.status(500).json({
+      success: false,
+      message: "Server error",
+    });
+  }
 };
+
 
 
 const gethackton = async (req, res) => {
