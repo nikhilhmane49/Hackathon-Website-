@@ -895,42 +895,41 @@ const hackathonapplynow = async () => {
             </div>
 
             {/* Sponsors */}
-            {/* <div className="bg-white rounded-2xl shadow-lg p-6 overflow-hidden">
-              <h2 className="text-xl font-bold text-gray-800 mb-6">
-                Our Sponsors
-              </h2>
-
-              <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
-                {hackathon.sponsors.map((sponsor, index) => (
-                  <div
-                    key={index}
-                    className={`flex items-center justify-center py-4 px-6 bg-gray-50 rounded-lg border ${
-                      sponsor.tier === "platinum"
-                        ? "border-yellow-300"
-                        : sponsor.tier === "gold"
-                        ? "border-gray-300"
-                        : "border-gray-200"
-                    }`}
-                  >
-                    <div className="text-center">
-                      <div className="text-gray-700 font-medium">
-                        {sponsor.name}
-                      </div>
-                      <div
-                        className={`text-xs mt-1 ${
-                          sponsor.tier === "platinum"
-                            ? "text-yellow-600"
-                            : sponsor.tier === "gold"
-                            ? "text-yellow-700"
-                            : "text-gray-600"
-                        }`}
-                      >
-                        {sponsor.tier.toUpperCase()} SPONSOR
-                      </div>
+            {/* <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
+              {hackathon.sponsors.map((sponsor, index) => (
+                <div
+                  key={index}
+                  className={`flex flex-col items-center justify-center py-4 px-6 bg-gray-50 rounded-lg border ${
+                    sponsor.tier === "platinum"
+                      ? "border-yellow-300"
+                      : sponsor.tier === "gold"
+                      ? "border-gray-300"
+                      : "border-gray-200"
+                  }`}
+                >
+                  <img
+                    src={sponsor.logo}
+                    alt={`${sponsor.name} logo`}
+                    className="h-12 object-contain mb-2"
+                  />
+                  <div className="text-center">
+                    <div className="text-gray-700 font-medium">
+                      {sponsor.name}
+                    </div>
+                    <div
+                      className={`text-xs mt-1 ${
+                        sponsor.tier === "platinum"
+                          ? "text-yellow-600"
+                          : sponsor.tier === "gold"
+                          ? "text-yellow-700"
+                          : "text-gray-600"
+                      }`}
+                    >
+                      {sponsor.tier.toUpperCase()} SPONSOR
                     </div>
                   </div>
-                ))}
-              </div>
+                </div>
+              ))}
             </div> */}
           </div>
 

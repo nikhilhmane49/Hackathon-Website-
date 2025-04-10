@@ -126,7 +126,14 @@ const hackathonSchema = new mongoose.Schema({
     banner: {
         type: String,
         required: true
-    }
+    },
+    sponsors: {
+         name: { type: String, required: true },
+        tier: { type: String, enum: ['platinum', 'gold', 'silver'], required: true },
+        logo: {  type: String, required: true},
+    },
+
+
 });
 
 const HackathonModel = mongoose.model('Hackathon', hackathonSchema);

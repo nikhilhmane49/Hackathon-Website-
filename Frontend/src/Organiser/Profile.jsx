@@ -42,102 +42,110 @@ const Profile =  () => {
     brochure: "",
     logo: "",
     banner: "",
+    sponsors: [
+      {
+        name: "",
+        tier: "gold",
+        logo: "",
+      },
+    ],
   });
 
   const { backendurl, atoken } = useContext(Appcontext);
 
   console.log(atoken);
 
+  const Onclickhandeler = async (e) => {
+    e.preventDefault();
 
+    try {
+      const form = new FormData();
 
-  
-const Onclickhandeler = async (e) => {
-  e.preventDefault();
+      form.append("hackathonName", formData.hackathonName);
+      form.append("collegeName", formData.collegeName);
+      form.append("collegeAddress", formData.collegeAddress);
+      form.append("mode", formData.mode);
+      form.append("prizePool", formData.prizePool);
 
-  try {
-    const form = new FormData();
+      form.append("teamSize", JSON.stringify(formData.teamSize));
+      form.append("registration", JSON.stringify(formData.registration));
+      form.append("stages", JSON.stringify(formData.stages));
+      form.append("contactDetails", JSON.stringify(formData.contactDetails));
+      form.append("rules", JSON.stringify(formData.rules));
+      form.append("brochure", formData.brochure);
+      form.append("logo", formData.logo);
+      form.append("banner", formData.banner);
+      form.append("sponsors", JSON.stringify(formData.sponsors));
 
-    form.append("hackathonName", formData.hackathonName);
-    form.append("collegeName", formData.collegeName);
-    form.append("collegeAddress", formData.collegeAddress);
-    form.append("mode", formData.mode);
-    form.append("prizePool", formData.prizePool);
-
-    form.append("teamSize", JSON.stringify(formData.teamSize));
-    form.append("registration", JSON.stringify(formData.registration));
-    form.append("stages", JSON.stringify(formData.stages));
-    form.append("contactDetails", JSON.stringify(formData.contactDetails));
-    form.append("rules", JSON.stringify(formData.rules));
-
-    form.append("brochure", formData.brochure);
-    form.append("logo", formData.logo);
-    form.append("banner", formData.banner);
-
-    const response = await axios.post(
-      `${backendurl}/api/orgnizer/orgnizer-hackathon`,
-      form,
-      {
-        headers: {
-          atoken: atoken,
-        },
-      }
-    );
-
-    if (response.data.success) {
-      toast.success("Hackathon created successfully!");
-
-      // 🧹 Reset the form state
-      setFormData({
-        hackathonName: "",
-        collegeName: "",
-        collegeAddress: "",
-        mode: "online",
-        prizePool: "",
-        teamSize: {
-          min: "",
-          max: "",
-        },
-        registration: {
-          startDate: null,
-          endDate: null,
-        },
-        stages: [
-          {
-            roundTitle: "",
-            description: "",
-            participantTask: "",
-            impact: "",
-            timeline: {
-              stageStartDate: null,
-              stageEndDate: null,
-            },
+      const response = await axios.post(
+        `${backendurl}/api/orgnizer/orgnizer-hackathon`,
+        form,
+        {
+          headers: {
+            atoken: atoken,
           },
-        ],
-        contactDetails: {
-          name: "",
-          email: "",
-          phone: "",
-        },
-        rules: [""],
-        brochure: null,
-        logo: null,
-        banner: null,
-      });
+        }
+      );
 
-      // Optional: Reset stepper if using one
-      setActiveStep(0);
-    } else {
-      toast.error(response.data.message);
+      if (response.data.success) {
+        toast.success("Hackathon created successfully!");
+
+        // 🧹 Reset the form state
+        setFormData({
+          hackathonName: "",
+          collegeName: "",
+          collegeAddress: "",
+          mode: "online",
+          prizePool: "",
+          teamSize: {
+            min: "",
+            max: "",
+          },
+          registration: {
+            startDate: null,
+            endDate: null,
+          },
+          stages: [
+            {
+              roundTitle: "",
+              description: "",
+              participantTask: "",
+              impact: "",
+              timeline: {
+                stageStartDate: null,
+                stageEndDate: null,
+              },
+            },
+          ],
+          contactDetails: {
+            name: "",
+            email: "",
+            phone: "",
+          },
+          rules: [""],
+          brochure: null,
+          logo: null,
+          banner: null,
+
+          sponsors: [
+            {
+              name: "",
+              tier: "gold",
+              logo: "",
+            },
+          ],
+        });
+
+        // Optional: Reset stepper if using one
+        setActiveStep(0);
+      } else {
+        toast.error(response.data.message);
+      }
+    } catch (error) {
+      console.error(error);
+      toast.error(error.response?.data?.message || "Something went wrong");
     }
-  } catch (error) {
-    console.error(error);
-    toast.error(error.response?.data?.message || "Something went wrong");
-  }
-};
-
-
-
-
+  };
 
   const [errors, setErrors] = useState({});
   const [preview, setPreview] = useState({
@@ -193,6 +201,24 @@ const Onclickhandeler = async (e) => {
     }
   };
 
+  // Handle sponsor input changes
+  const handleSponsorChange = (index, field, value) => {
+    const updatedSponsors = [...formData.sponsors];
+    updatedSponsors[index][field] = value;
+    setFormData((prev) => ({
+      ...prev,
+      sponsors: updatedSponsors,
+    }));
+  };
+
+  // Add a new sponsor input field
+  const addSponsorField = () => {
+    setFormData((prev) => ({
+      ...prev,
+      sponsors: [...prev.sponsors, { name: "", tier: "gold", logo: "" }],
+    }));
+  };
+
   // Handle stage updates
   const handleStageChange = (index, field, value) => {
     const updatedStages = [...formData.stages];
@@ -242,6 +268,18 @@ const Onclickhandeler = async (e) => {
       }));
     }
   };
+
+  const removeSponsor = (index) => {
+    if (formData.sponsors.length > 1) {
+      const updatedSponsors = [...formData.sponsors];
+      updatedSponsors.splice(index, 1);
+      setFormData((prev) => ({
+        ...prev,
+        sponsors: updatedSponsors,
+      }));
+    }
+  };
+
 
   // Rules change
   const handleRuleChange = (index, value) => {
@@ -329,6 +367,7 @@ const Onclickhandeler = async (e) => {
     "Stages & Timeline",
     "Rules & Contact",
     "Media & Preview",
+    "Add Sponsors",
   ];
 
   return (
@@ -1406,6 +1445,219 @@ const Onclickhandeler = async (e) => {
                       </span>
                     </div>
                   </div>
+                </div>
+              </div>
+            )}
+
+            {/* {activeStep === 4 && (
+              <div>
+                <h2 className="text-2xl font-bold text-gray-800 mb-6 flex items-center">
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    className="h-6 w-6 mr-2 text-indigo-600"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"
+                    />
+                  </svg>
+                  Add Sponsors
+                </h2>
+                <div className="bg-white p-4 rounded-lg shadow-sm space-y-4">
+                  <h3 className="text-lg font-semibold text-gray-800">
+                    Sponsors
+                  </h3>
+
+                  {formData.sponsors.map((sponsor, index) => (
+                    <div
+                      key={index}
+                      className="grid grid-cols-1 md:grid-cols-3 gap-4 items-end border p-4 rounded-lg"
+                    >
+                      <div>
+                        <label className="block text-sm font-medium text-gray-700">
+                          Sponsor Name
+                        </label>
+                        <input
+                          type="text"
+                          value={sponsor.name}
+                          onChange={(e) =>
+                            handleSponsorChange(index, "name", e.target.value)
+                          }
+                          className="mt-1 w-full border border-gray-300 rounded-md px-3 py-2"
+                          required
+                        />
+                      </div>
+
+                      <div>
+                        <label className="block text-sm font-medium text-gray-700">
+                          Tier
+                        </label>
+                        <select
+                          value={sponsor.tier}
+                          onChange={(e) =>
+                            handleSponsorChange(index, "tier", e.target.value)
+                          }
+                          className="mt-1 w-full border border-gray-300 rounded-md px-3 py-2"
+                        >
+                          <option value="platinum">Platinum</option>
+                          <option value="gold">Gold</option>
+                          <option value="silver">Silver</option>
+                        </select>
+                      </div>
+
+                      <div>
+                        <label className="block text-sm font-medium text-gray-700">
+                          Logo URL
+                        </label>
+                        <input
+                          type="text"
+                          value={sponsor.logo}
+                          onChange={(e) =>
+                            handleSponsorChange(index, "logo", e.target.value)
+                          }
+                          className="mt-1 w-full border border-gray-300 rounded-md px-3 py-2"
+                        />
+                      </div>
+                    </div>
+                  ))}
+
+                  <button
+                    type="button"
+                    onClick={addSponsorField}
+                    className="mt-2 text-indigo-600 hover:underline text-sm"
+                  >
+                    + Add another sponsor
+                  </button>
+                </div>
+              </div>
+            )} */}
+
+            {activeStep === 4 && (
+              <div>
+                <h2 className="text-2xl font-bold text-gray-800 mb-6 flex items-center">
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    className="h-6 w-6 mr-2 text-indigo-600"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"
+                    />
+                  </svg>
+                  Add Sponsors
+                </h2>
+
+                <div className="bg-white p-6 rounded-xl shadow space-y-6">
+                  {formData.sponsors.map((sponsor, index) => (
+                    <div
+                      key={index}
+                      className="relative border border-gray-200 rounded-lg p-4 bg-gray-50 space-y-4"
+                    >
+                      {/* Delete Icon - Top Right */}
+                      {formData.sponsors.length > 1 && (
+                        <button
+                          type="button"
+                          onClick={() => removeSponsor(index)}
+                          className="absolute top-3 right-3 text-red-600 hover:text-red-800 focus:outline-none transition-colors"
+                          title="Remove Sponsor"
+                        >
+                          <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            className="h-5 w-5"
+                            viewBox="0 0 20 20"
+                            fill="currentColor"
+                          >
+                            <path
+                              fillRule="evenodd"
+                              d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v6a1 1 0 102 0V8a1 1 0 00-1-1z"
+                              clipRule="evenodd"
+                            />
+                          </svg>
+                        </button>
+                      )}
+
+                      <div className="text-indigo-700 font-semibold mb-2">
+                        Sponsor {index + 1}
+                      </div>
+
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        {/* Sponsor Name */}
+                        <div>
+                          <label className="block text-sm font-medium text-gray-700">
+                            Sponsor Name
+                          </label>
+                          <input
+                            type="text"
+                            value={sponsor.name}
+                            onChange={(e) =>
+                              handleSponsorChange(index, "name", e.target.value)
+                            }
+                            className="mt-1 w-full border border-gray-300 rounded-md px-3 py-2 focus:ring-indigo-500 focus:border-indigo-500"
+                            placeholder="Company Name"
+                            required
+                          />
+                        </div>
+
+                        {/* Sponsor Tier */}
+                        <div>
+                          <label className="block text-sm font-medium text-gray-700">
+                            Sponsor Tier
+                          </label>
+                          <select
+                            value={sponsor.tier}
+                            onChange={(e) =>
+                              handleSponsorChange(index, "tier", e.target.value)
+                            }
+                            className="mt-1 w-full border border-gray-300 rounded-md px-3 py-2 focus:ring-indigo-500 focus:border-indigo-500"
+                          >
+                            <option value="platinum">Platinum</option>
+                            <option value="gold">Gold</option>
+                            <option value="silver">Silver</option>
+                          </select>
+                        </div>
+
+                        {/* Sponsor Logo Upload */}
+                        <div className="md:col-span-2">
+                          <label className="block text-sm font-medium text-gray-700">
+                            Sponsor Logo
+                          </label>
+                          <input
+                            type="file"
+                            accept="image/*"
+                            onChange={(e) =>
+                              handleSponsorFileChange(index, e.target.files[0])
+                            }
+                            className="mt-1 w-full"
+                          />
+                          {sponsor.logo && typeof sponsor.logo === "object" && (
+                            <img
+                              src={URL.createObjectURL(sponsor.logo)}
+                              alt="Logo Preview"
+                              className="mt-2 h-16 object-contain"
+                            />
+                          )}
+                        </div>
+                      </div>
+                    </div>
+                  ))}
+
+                  <button
+                    type="button"
+                    onClick={addSponsorField}
+                    className="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-rose-600 hover:bg-rose-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-rose-500 transition-colors"
+                  >
+                    + Add another sponsor
+                  </button>
                 </div>
               </div>
             )}
