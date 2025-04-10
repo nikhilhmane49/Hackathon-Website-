@@ -67,7 +67,7 @@ const organizerregester= async (req,res)=>{
         
         const atoken = jwt.sign({id:organizer._id},process.env.JWT_SECRET);
 
-        if(token){
+        if(atoken){
         res.status(200).json({
             success: true,
             atoken: atoken,

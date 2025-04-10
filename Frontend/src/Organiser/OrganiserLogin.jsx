@@ -30,7 +30,7 @@ export default function OrganiserLogin() {
       const endpoint = isLogin ? `${import.meta.env.VITE_BACKEND_URL}/api/orgnizer/orgnizer-login` : `${import.meta.env.VITE_BACKEND_URL}/api/orgnizer/orgnizer-resgretration`;
       const response = await axios.post(endpoint, formData);
 
-      console.log("hello"+response.data.data);
+      console.log("hello"+response.data.atoken);
       
       if (response.data.success) {
         setSuccess(response.data.message || (isLogin ? 'Login successful!' : 'Registration successful!'));

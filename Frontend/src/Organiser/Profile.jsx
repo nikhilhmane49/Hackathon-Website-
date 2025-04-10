@@ -2,7 +2,6 @@
 import React, { useState , useContext} from "react";
 import axios from "axios";
 import { toast } from "react-toastify";
-import { format } from "date-fns";
 
 import { Appcontext } from "../context/contextpra";
 
@@ -29,8 +28,8 @@ const Profile =  () => {
         participantTask: "",
         impact: "",
         timeline: {
-          startDate: null,
-          endDate: null,
+          stageStartDate: null,
+          stageEndDate: null,
         },
       },
     ],
@@ -50,72 +49,7 @@ const Profile =  () => {
   console.log(atoken);
 
 
-// const Onclickhandeler = async (e)=>{
-//     e.preventDefault();
 
-
-//   try {
-
-//     const response = await axios.post(
-//       `${backendurl}/api/orgnizer/orgnizer-hackathon`,
-//       formData,
-//       {
-//         headers: {
-//           atoken: atoken,
-//           "Content-Type": "multipart/form-data",
-//         },
-//       }
-//     );
-
-//     if (response.data.success) {
-//       // Changed from response.success to response.data.success
-//       toast.success(response.data.message); // Changed to response.data.message
-
-//       setFormData({
-//         hackathonName: "",
-//         collegeName: "",
-//         collegeAddress: "",
-//         mode: "online",
-//         prizePool: "",
-//         teamSize: {
-//           min: "",
-//           max: "",
-//         },
-//         registration: {
-//           startDate: null,
-//           endDate: null,
-//         },
-//         stages: [
-//           {
-//             roundTitle: "",
-//             description: "",
-//             participantTask: "",
-//             impact: "",
-//             timeline: {
-//               startDate: null,
-//               endDate: null,
-//             },
-//           },
-//         ],
-//         contactDetails: {
-//           name: "",
-//           email: "",
-//           phone: "",
-//         },
-//         rules: [""],
-//         brochure: "",
-//         logo: "",
-//         banner: "",
-//       });
-//     } else {
-//       toast.error(response.data.message);
-//     }
-// }catch (error) {
-// console.log(error);
-// toast.error(error.response?.data?.message || "Something went wrong"); // Added error handling
-// }
-
-  //   }
   
 const Onclickhandeler = async (e) => {
   e.preventDefault();
@@ -129,17 +63,15 @@ const Onclickhandeler = async (e) => {
     form.append("mode", formData.mode);
     form.append("prizePool", formData.prizePool);
 
-    // Add JSON fields as strings
     form.append("teamSize", JSON.stringify(formData.teamSize));
     form.append("registration", JSON.stringify(formData.registration));
     form.append("stages", JSON.stringify(formData.stages));
     form.append("contactDetails", JSON.stringify(formData.contactDetails));
     form.append("rules", JSON.stringify(formData.rules));
 
-    // Append files
-    form.append("brochure", formData.brochure); // should be a File object
-    form.append("logo", formData.logo); // should be a File object
-    form.append("banner", formData.banner); // should be a File object
+    form.append("brochure", formData.brochure);
+    form.append("logo", formData.logo);
+    form.append("banner", formData.banner);
 
     const response = await axios.post(
       `${backendurl}/api/orgnizer/orgnizer-hackathon`,
@@ -152,8 +84,48 @@ const Onclickhandeler = async (e) => {
     );
 
     if (response.data.success) {
-      toast.success(response.data.message);
-      // Reset form if needed
+      toast.success("Hackathon created successfully!");
+
+      // 🧹 Reset the form state
+      setFormData({
+        hackathonName: "",
+        collegeName: "",
+        collegeAddress: "",
+        mode: "online",
+        prizePool: "",
+        teamSize: {
+          min: "",
+          max: "",
+        },
+        registration: {
+          startDate: null,
+          endDate: null,
+        },
+        stages: [
+          {
+            roundTitle: "",
+            description: "",
+            participantTask: "",
+            impact: "",
+            timeline: {
+              stageStartDate: null,
+              stageEndDate: null,
+            },
+          },
+        ],
+        contactDetails: {
+          name: "",
+          email: "",
+          phone: "",
+        },
+        rules: [""],
+        brochure: null,
+        logo: null,
+        banner: null,
+      });
+
+      // Optional: Reset stepper if using one
+      setActiveStep(0);
     } else {
       toast.error(response.data.message);
     }
@@ -888,20 +860,20 @@ const Onclickhandeler = async (e) => {
                           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                             <div>
                               <label
-                                htmlFor={`stageStart-${index}`}
+                                htmlFor={`stageStartDate-${index}`}
                                 className="block text-sm text-gray-500 mb-1"
                               >
                                 Start Date
                               </label>
                               <input
                                 type="date"
-                                id={`stageStart-${index}`}
+                                id={`stageStartDate-${index}`}
                                 className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition duration-150"
-                                value={stage.timeline?.startDate || ""}
+                                value={stage.timeline?.stageStartDate || ""}
                                 onChange={(e) =>
                                   handleStageChange(
                                     index,
-                                    "timeline.startDate",
+                                    "timeline.stageStartDate",
                                     e.target.value
                                   )
                                 }
@@ -910,24 +882,24 @@ const Onclickhandeler = async (e) => {
 
                             <div>
                               <label
-                                htmlFor={`stageEnd-${index}`}
+                                htmlFor={`stageEndDate-${index}`}
                                 className="block text-sm text-gray-500 mb-1"
                               >
                                 End Date
                               </label>
                               <input
                                 type="date"
-                                id={`stageEnd-${index}`}
+                                id={`stageEndDate-${index}`}
                                 className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition duration-150"
-                                value={stage.timeline?.endDate || ""}
+                                value={stage.timeline?.stageEndDate || ""}
                                 onChange={(e) =>
                                   handleStageChange(
                                     index,
-                                    "timeline.endDate",
+                                    "timeline.stageEndDate",
                                     e.target.value
                                   )
                                 }
-                                min={stage.timeline?.startDate}
+                                min={stage.timeline?.stageStartDate}
                               />
                             </div>
                           </div>
@@ -1246,7 +1218,7 @@ const Onclickhandeler = async (e) => {
                   </div>
                 </div>
 
-                <div className="mb-6">
+                {/* <div className="mb-6">
                   <label
                     htmlFor="brochure"
                     className="block text-sm font-medium text-gray-700 mb-1"
@@ -1286,6 +1258,70 @@ const Onclickhandeler = async (e) => {
                       />
                     </label>
                   </div>
+                </div> */}
+
+                <div className="mb-6">
+                  <label
+                    htmlFor="brochure"
+                    className="block text-sm font-medium text-gray-700 mb-1"
+                  >
+                    Brochure PDF URL (or upload PDF)
+                  </label>
+                  <div className="mt-1 flex rounded-md shadow-sm">
+                    {/* Text input for brochure URL (optional) */}
+                    <input
+                      type="text"
+                      name="brochure"
+                      id="brochure"
+                      className="focus:ring-indigo-500 focus:border-indigo-500 flex-1 block w-full rounded-none rounded-l-md sm:text-sm border-gray-300 py-3"
+                      placeholder="https://example.com/your-brochure.pdf"
+                      value={
+                        typeof formData.brochure === "string"
+                          ? formData.brochure
+                          : ""
+                      }
+                      onChange={(e) =>
+                        setFormData({ ...formData, brochure: e.target.value })
+                      }
+                    />
+
+                    {/* Upload button for PDF */}
+                    <label className="inline-flex items-center px-4 rounded-r-md border border-l-0 border-gray-300 bg-gray-50 text-gray-700 text-sm cursor-pointer">
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        className="h-5 w-5 mr-2 text-gray-400"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        stroke="currentColor"
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          strokeWidth={2}
+                          d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"
+                        />
+                      </svg>
+                      Upload PDF
+                      <input
+                        type="file"
+                        accept="application/pdf"
+                        className="sr-only"
+                        onChange={(e) => {
+                          const file = e.target.files[0];
+                          if (file) {
+                            setFormData({ ...formData, brochure: file });
+                          }
+                        }}
+                      />
+                    </label>
+                  </div>
+
+                  {/* Show uploaded file name for clarity */}
+                  {formData.brochure instanceof File && (
+                    <p className="text-sm text-gray-500 mt-2">
+                      Selected file: {formData.brochure.name}
+                    </p>
+                  )}
                 </div>
 
                 {/* Preview section */}

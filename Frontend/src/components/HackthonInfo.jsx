@@ -4,11 +4,6 @@ import { Appcontext } from "../context/contextpra";
 import { useParams } from "react-router-dom";
 
 
- 
-
-
-
-
 
 function HackathonInfo() {
 
@@ -360,6 +355,20 @@ const hackathonapplynow = async () => {
         </div>
       </div>
 
+      <div className="px-4 sm:px-6 lg:px-8">
+        {/* Banner Card */}
+        <div className="relative bg-white/10 backdrop-blur-md border border-white/20 rounded-2xl shadow-xl overflow-hidden mt-10 mb-6">
+          <img
+            src={hackathon.banner}
+            alt={`${hackathon.hackathonName} Banner`}
+            className="w-full h-60 sm:h-72 md:h-80 object-cover rounded-t-2xl"
+          />
+          <div className="absolute top-4 right-4 bg-indigo-600/90 text-white text-sm font-medium px-4 py-1.5 rounded-full shadow-md hover:bg-indigo-700 transition">
+            Apply Now
+          </div>
+        </div>
+      </div>
+
       <div className="max-w-6xl mx-auto px-6 py-8">
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
           {/* Main Content */}
@@ -638,7 +647,7 @@ const hackathonapplynow = async () => {
                             hackathon.registration.startDate
                           )} to ${formatDate(hackathon.registration.endDate)}`}
                         />
-                        <DetailItem
+                        {/* <DetailItem
                           icon="🌎"
                           label="Countries Represented"
                           value={hackathon.stats.countries.toString()}
@@ -647,7 +656,7 @@ const hackathonapplynow = async () => {
                           icon="🤝"
                           label="Industry Partners"
                           value={hackathon.stats.partners.toString()}
-                        />
+                        /> */}
                       </div>
                     </div>
 
@@ -886,11 +895,43 @@ const hackathonapplynow = async () => {
             </div>
 
             {/* Sponsors */}
-            <div className="bg-white rounded-2xl shadow-lg p-6 overflow-hidden">
+            {/* <div className="bg-white rounded-2xl shadow-lg p-6 overflow-hidden">
               <h2 className="text-xl font-bold text-gray-800 mb-6">
                 Our Sponsors
               </h2>
-            </div>
+
+              <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
+                {hackathon.sponsors.map((sponsor, index) => (
+                  <div
+                    key={index}
+                    className={`flex items-center justify-center py-4 px-6 bg-gray-50 rounded-lg border ${
+                      sponsor.tier === "platinum"
+                        ? "border-yellow-300"
+                        : sponsor.tier === "gold"
+                        ? "border-gray-300"
+                        : "border-gray-200"
+                    }`}
+                  >
+                    <div className="text-center">
+                      <div className="text-gray-700 font-medium">
+                        {sponsor.name}
+                      </div>
+                      <div
+                        className={`text-xs mt-1 ${
+                          sponsor.tier === "platinum"
+                            ? "text-yellow-600"
+                            : sponsor.tier === "gold"
+                            ? "text-yellow-700"
+                            : "text-gray-600"
+                        }`}
+                      >
+                        {sponsor.tier.toUpperCase()} SPONSOR
+                      </div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div> */}
           </div>
 
           {/* Sidebar */}
