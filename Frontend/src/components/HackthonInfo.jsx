@@ -931,6 +931,51 @@ const hackathonapplynow = async () => {
                 </div>
               ))}
             </div> */}
+
+            <section className="py-12 bg-white">
+              <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+                <h2 className="text-3xl font-bold text-gray-800 text-center mb-10">
+                  Our <span className="text-yellow-500">Sponsors</span>
+                </h2>
+
+                <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8">
+                  {hackathon.sponsors.map((sponsor, index) => (
+                    <div
+                      key={index}
+                      className={`flex flex-col items-center justify-center py-6 px-4 bg-gray-50 rounded-2xl shadow-md transition duration-300 hover:shadow-lg border ${
+                        sponsor.tier === "platinum"
+                          ? "border-yellow-300"
+                          : sponsor.tier === "gold"
+                          ? "border-amber-300"
+                          : "border-gray-200"
+                      }`}
+                    >
+                      <img
+                        src={sponsor.logo}
+                        alt={`${sponsor.name} logo`}
+                        className="h-16 w-auto object-contain mb-4"
+                      />
+                      <div className="text-center">
+                        <h3 className="text-lg font-semibold text-gray-700">
+                          {sponsor.name}
+                        </h3>
+                        <p
+                          className={`text-sm mt-1 ${
+                            sponsor.tier === "platinum"
+                              ? "text-yellow-600"
+                              : sponsor.tier === "gold"
+                              ? "text-amber-600"
+                              : "text-gray-600"
+                          }`}
+                        >
+                          {sponsor.tier.toUpperCase()} SPONSOR
+                        </p>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </section>
           </div>
 
           {/* Sidebar */}

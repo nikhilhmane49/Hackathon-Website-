@@ -77,6 +77,14 @@ const Profile =  () => {
       form.append("banner", formData.banner);
       form.append("sponsors", JSON.stringify(formData.sponsors));
 
+      // Append each sponsor logo as a file
+      formData.sponsors.forEach((sponsor, index) => {
+        if (sponsor.logo && typeof sponsor.logo === "object") {
+          form.append("sponsorsLogo", sponsor.logo); // name matches multer config
+        }
+      });
+
+
       const response = await axios.post(
         `${backendurl}/api/orgnizer/orgnizer-hackathon`,
         form,
@@ -181,6 +189,25 @@ const Profile =  () => {
       },
     }));
   };
+
+
+  const handleSponsorFileChange = (index, file) => {
+  if (!file) return;
+
+  setFormData((prev) => {
+    const updatedSponsors = [...prev.sponsors];
+    updatedSponsors[index] = {
+      ...updatedSponsors[index],
+      logo: file,
+    };
+
+    return {
+      ...prev,
+      sponsors: updatedSponsors,
+    };
+  });
+};
+
 
   // Handle date inputs
   const handleDateChange = (section, field, e) => {
@@ -1634,6 +1661,7 @@ const Profile =  () => {
                           <input
                             type="file"
                             accept="image/*"
+                            name={`sponsorsLogo`}
                             onChange={(e) =>
                               handleSponsorFileChange(index, e.target.files[0])
                             }

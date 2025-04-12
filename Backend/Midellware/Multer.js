@@ -38,7 +38,7 @@ const storage = multer.diskStorage({
 const upload = multer({ 
     storage,
     fileFilter: (req, file, cb) => {
-        const allowedFields = ['resume', 'brochure', 'logo', 'banner'];
+        const allowedFields = ['resume', 'brochure', 'logo', 'banner','sponsorsLogo'];
         if (!allowedFields.includes(file.fieldname)) {
             return cb(new multer.MulterError("LIMIT_UNEXPECTED_FILE", file.fieldname));
         }

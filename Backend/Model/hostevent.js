@@ -127,11 +127,21 @@ const hackathonSchema = new mongoose.Schema({
         type: String,
         required: true
     },
-    sponsors: {
-         name: { type: String, required: true },
-        tier: { type: String, enum: ['platinum', 'gold', 'silver'], required: true },
-        logo: {  type: String, required: true},
-    },
+   sponsors: [
+  {
+    name: { type: String, required: true },
+    tier: { type: String, enum: ['platinum', 'gold', 'silver'], required: true },
+    logo: { type: String, required: true },
+  }
+    ],
+   
+   
+hackatonorgid: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'Organizer',
+    required: true
+       }
+
 
 
 });

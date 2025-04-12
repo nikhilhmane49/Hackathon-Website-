@@ -102,7 +102,7 @@ const authadmin = (req, res, next) => {
     const decoded = jwt.verify(atoken, process.env.JWT_SECRET);
 
     // ✅ Properly attach the user ID to req.user
-    req.user = { id: decoded.id };
+    req.auth = { id: decoded.id };
 
     next();
   } catch (error) {

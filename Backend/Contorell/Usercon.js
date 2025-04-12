@@ -1,4 +1,5 @@
 const userModel = require('../Model/User');
+const Hackathon = require('../Model/hostevent');
 const bcrypt = require('bcrypt');
 const cloudinary = require('cloudinary').v2;
 const jwt = require('jsonwebtoken');
@@ -228,10 +229,15 @@ const applyToHackathon = async (req, res) => {
     if (!hackathonId) {
       return res.status(400).json({ message: 'Hackathon ID is required' });
     }
-
+  
+      const organizerId = await Hackathon.findById(hackathonId);
+      if (!organizerId) {
+        return res.status(404).json({ message: 'org id  not found' });
+      }
+      
     const updatedUser = await userModel.findByIdAndUpdate(
       userId,
-      { hackatonapllyid: hackathonId },
+      { hackatonapllyid: organizerId.hackatonorgid },
       { new: true }
     );
 
