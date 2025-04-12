@@ -412,7 +412,7 @@ const gethackton = async (req, res) => {
 
 const getprofileforhack = async (req, res) => { 
 
-  // const authId = req.auth.id;
+  const authId = req.auth.id;
 
 
   console.log("auth id", authId); // Debugging line
