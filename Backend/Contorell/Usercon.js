@@ -253,6 +253,36 @@ const applyToHackathon = async (req, res) => {
 };
 
 
+const getprofile= async(req,res)=>{
+
+    try {
+        
+        const userid = req.user.id;
+
+        if (!userid) {
+            return res.status(400).json({
+                success: false,
+                message: "User ID is required"
+            });
+        }
+
+const userdata = await userModel.findById(userid).select('-password');;
+
+res.json({
+    success:true,
+    data:userdata,
+    message:"The user profile is fetch properly"
+})
+
+
+    } catch (error) {
+        console.log(error);
+        return res.status(500).json({
+            success: false,
+            message: "Internal server error"
+        })  
+    }
+}
 
 
 
@@ -263,5 +293,6 @@ const applyToHackathon = async (req, res) => {
 
 
 
-module.exports={regester,userlogin,updateProfile ,applyToHackathon};
+
+module.exports={regester,userlogin,updateProfile ,applyToHackathon, getprofile};
 

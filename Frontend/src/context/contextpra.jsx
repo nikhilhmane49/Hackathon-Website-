@@ -14,7 +14,8 @@ const AppProvider = (props) => {
     localStorage.getItem("atoken") ? localStorage.getItem("atoken") : false
   );
   const [Hackton, setHackton] = useState([]);
-  const[parhackton,setparhackton] = useState([]);
+  const [parhackton, setparhackton] = useState([]);
+  const [data, setData] = useState({});
   const backendurl = import.meta.env.VITE_BACKEND_URL;
     
     
@@ -43,6 +44,33 @@ const AppProvider = (props) => {
       listhackton();
   }, []);
 
+
+
+  const getproile = async () => {
+    try {
+      const response = await axios.get(`${backendurl}/api/user/user-getprofile`, {
+        headers: {
+          token: token,
+        },
+      });
+
+      if (response.data.success) {
+        toast.success(response.data.message);
+        setData(response.data.data);
+      } else {
+        toast.error(response.data.message);
+      }
+    } catch (error) {
+      console.log(error);
+      toast.error(error.response?.data?.message || "Something went wrong");
+    }
+  };
+
+  useEffect(() => {
+    getproile();
+  }, []);
+
+
   const value = {
     Hackton,
     listhackton,
@@ -51,6 +79,7 @@ const AppProvider = (props) => {
     atoken,
     setatoken,
     settoken,
+    data
   };
 
   return (

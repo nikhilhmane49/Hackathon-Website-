@@ -1,6 +1,8 @@
 // Frontend - Profile.jsx
 import React, { useState } from "react";
 import axios from "axios";
+import { useContext } from "react";
+import { Appcontext } from "../context/contextpra";
 import {
   FaUser,
   FaEnvelope,
@@ -12,6 +14,13 @@ import {
 } from "react-icons/fa";
 
 const Profile = () => {
+
+
+  const { data } = useContext(Appcontext);
+  console.log(data);
+
+
+
   const [formData, setFormData] = useState({
     name: "",
     email: "",
@@ -30,7 +39,7 @@ const Profile = () => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
   const [success, setSuccess] = useState(false);
-
+  const [isEdit, setIsEdit] = useState(false);
   const handleChange = (e) => {
     const { id, value } = e.target;
     if (id in formData.education) {
@@ -189,13 +198,18 @@ const Profile = () => {
                 >
                   {icon} {label}
                 </label>
-                <input
-                  type={type}
-                  id={id}
-                  value={formData[id]}
-                  onChange={handleChange}
-                  className="w-full px-4 py-3 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-400 transition"
-                />
+
+                {isEdit ? (
+                  <input
+                    type={type}
+                    id={id}
+                    value={formData[id]}
+                    onChange={handleChange}
+                    className="w-full px-4 py-3 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-400 transition"
+                  />
+                ) : (
+                  <p className="text-gray-600">{data[id] || "Not provided."}</p>
+                )}
               </div>
             ))}
           </div>
@@ -208,14 +222,18 @@ const Profile = () => {
             >
               Bio
             </label>
-            <textarea
-              id="bio"
-              rows="4"
-              value={formData.bio}
-              onChange={handleChange}
-              placeholder="Tell us about yourself..."
-              className="w-full px-4 py-3 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-400 transition"
-            ></textarea>
+            {isEdit ? (
+              <textarea
+                id="bio"
+                rows="4"
+                value={formData.bio}
+                onChange={handleChange}
+                placeholder="Tell us about yourself..."
+                className="w-full px-4 py-3 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-400 transition"
+              ></textarea>
+            ) : (
+              <p className="text-gray-600">{data.bio || "No bio provided."}</p>
+            )}
           </div>
 
           {/* Education Section */}
@@ -224,39 +242,50 @@ const Profile = () => {
               Education
             </h2>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-              <div>
-                <label htmlFor="college" className="text-sm font-semibold text-gray-700 mb-1">College/University</label>
-                <input
-                  type="text"
-                  id="college"
-                  value={formData.education.college}
-                  onChange={handleChange}
-                  placeholder="College Name"
-                  className="w-full px-4 py-3 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-400 transition"
-                />
-              </div>
-              <div>
-                <label htmlFor="degree" className="text-sm font-semibold text-gray-700 mb-1">Degree</label>
-                <input
-                  type="text"
-                  id="degree"
-                  value={formData.education.degree}
-                  onChange={handleChange}
-                  placeholder="e.g. B.Tech, MBA"
-                  className="w-full px-4 py-3 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-400 transition"
-                />
-              </div>
-              <div>
-                <label htmlFor="year" className="text-sm font-semibold text-gray-700 mb-1">Graduation Year</label>
-                <input
-                  type="number"
-                  id="year"
-                  value={formData.education.year}
-                  onChange={handleChange}
-                  placeholder="Year"
-                  className="w-full px-4 py-3 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-400 transition"
-                />
-              </div>
+              {[
+                {
+                  id: "college",
+                  label: "College/University",
+                  placeholder: "College Name",
+                  type: "text",
+                },
+                {
+                  id: "degree",
+                  label: "Degree",
+                  placeholder: "e.g. B.Tech, MBA",
+                  type: "text",
+                },
+                {
+                  id: "year",
+                  label: "Graduation Year",
+                  placeholder: "Year",
+                  type: "number",
+                },
+              ].map(({ id, label, placeholder, type }) => (
+                <div key={id}>
+                  <label
+                    htmlFor={id}
+                    className="text-sm font-semibold text-gray-700 mb-1"
+                  >
+                    {label}
+                  </label>
+
+                  {isEdit ? (
+                    <input
+                      type={type}
+                      id={id}
+                      value={formData.education[id]}
+                      onChange={handleChange}
+                      placeholder={placeholder}
+                      className="w-full px-4 py-3 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-400 transition"
+                    />
+                  ) : (
+                    <p className="text-gray-600">
+                      {data.education?.[id] || "Not provided."}
+                    </p>
+                  )}
+                </div>
+              ))}
             </div>
           </div>
 
@@ -281,53 +310,100 @@ const Profile = () => {
                 >
                   {icon} {id === "githubLink" ? "GitHub" : "LinkedIn"}
                 </label>
-                <input
-                  type="url"
-                  id={id}
-                  value={formData[id]}
-                  onChange={handleChange}
-                  placeholder={placeholder}
-                  className="w-full px-4 py-3 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-400 transition"
-                />
+
+                {isEdit ? (
+                  <input
+                    type="url"
+                    id={id}
+                    value={formData[id]}
+                    onChange={handleChange}
+                    placeholder={placeholder}
+                    className="w-full px-4 py-3 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-400 transition"
+                  />
+                ) : (
+                  <p className="text-blue-600 underline break-words">
+                    {data[id] ? (
+                      <a
+                        href={data[id]}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                      >
+                        {data[id]}
+                      </a>
+                    ) : (
+                      "Not provided."
+                    )}
+                  </p>
+                )}
               </div>
             ))}
           </div>
 
           {/* Skills & Projects */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <div>
-              <label
-                htmlFor="technicalSkills"
-                className="text-sm font-semibold text-gray-700 mb-1"
-              >
-                Technical Skills (comma-separated)
-              </label>
-              <input
-                type="text"
-                id="technicalSkills"
-                value={formData.technicalSkills}
-                onChange={handleChange}
-                placeholder="React, Node.js, Tailwind, etc."
-                className="w-full px-4 py-3 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-400 transition"
-              />
-            </div>
+            {[
+              {
+                id: "technicalSkills",
+                label: "Technical Skills (comma-separated)",
+                placeholder: "React, Node.js, Tailwind, etc.",
+              },
+              {
+                id: "projectLinks",
+                label: "Project Links (comma-separated)",
+                placeholder: "https://project1.com, https://project2.com",
+              },
+            ].map(({ id, label, placeholder }) => {
+              const value = Array.isArray(data[id])
+                ? data[id]
+                : typeof data[id] === "string"
+                ? data[id].split(",")
+                : [];
 
-            <div>
-              <label
-                htmlFor="projectLinks"
-                className="text-sm font-semibold text-gray-700 mb-1"
-              >
-                Project Links (comma-separated)
-              </label>
-              <input
-                type="text"
-                id="projectLinks"
-                value={formData.projectLinks}
-                onChange={handleChange}
-                placeholder="https://project1.com, https://project2.com"
-                className="w-full px-4 py-3 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-400 transition"
-              />
-            </div>
+              return (
+                <div key={id}>
+                  <label
+                    htmlFor={id}
+                    className="text-sm font-semibold text-gray-700 mb-1"
+                  >
+                    {label}
+                  </label>
+
+                  {isEdit ? (
+                    <input
+                      type="text"
+                      id={id}
+                      value={formData[id]}
+                      onChange={handleChange}
+                      placeholder={placeholder}
+                      className="w-full px-4 py-3 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-400 transition"
+                    />
+                  ) : id === "projectLinks" ? (
+                    <ul className="list-disc list-inside text-blue-600">
+                      {value.length > 0 ? (
+                        value.map((link, i) => (
+                          <li key={i}>
+                            <a
+                              href={link.trim()}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              className="underline break-words"
+                            >
+                              {link.trim()}
+                            </a>
+                          </li>
+                        ))
+                      ) : (
+                        <li>Not provided.</li>
+                      )}
+                    </ul>
+                  ) : (
+                    <p className="text-gray-600">
+                      {value.length > 0 ? value.join(", ") : "Not provided."}
+                    </p>
+                  )}
+                </div>
+              );
+            })}
           </div>
 
           {/* Resume */}
@@ -335,16 +411,33 @@ const Profile = () => {
             <label className="text-sm font-semibold text-gray-700 mb-2 flex items-center gap-2">
               <FaFileAlt /> Upload Resume (PDF)
             </label>
-            <input
-              type="file"
-              id="resume"
-              accept=".pdf"
-              onChange={handleFileChange}
-              className="w-full px-4 py-3 border border-dashed border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-400 transition"
-            />
-            {resumeName && (
-              <p className="text-sm text-gray-600 mt-1">
-                File selected: <span className="font-medium">{resumeName}</span>
+
+            {isEdit ? (
+              <>
+                <input
+                  type="file"
+                  id="resume"
+                  accept=".pdf"
+                  onChange={handleFileChange}
+                  className="w-full px-4 py-3 border border-dashed border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-400 transition"
+                />
+                {resumeName && (
+                  <p className="text-sm text-gray-600 mt-1">
+                    File selected:{" "}
+                    <span className="font-medium">{resumeName}</span>
+                  </p>
+                )}
+              </>
+            ) : (
+              <p className="text-gray-600">
+                {data.resumeName ? (
+                  <>
+                    Resume Uploaded:{" "}
+                    <span className="font-medium">{data.resumeName}</span>
+                  </>
+                ) : (
+                  "No resume uploaded."
+                )}
               </p>
             )}
           </div>
