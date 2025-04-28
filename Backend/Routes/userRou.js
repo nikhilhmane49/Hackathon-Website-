@@ -1,6 +1,6 @@
 const express = require('express');
 
-const { regester, userlogin, updateProfile , applyToHackathon,getprofile,saveTeamReg } = require('../Contorell/Usercon.js');
+const { regester, userlogin, updateProfile , applyToHackathon,getprofile,saveTeamReg,getTeamReg } = require('../Contorell/Usercon.js');
 
 const authuser = require('../Midellware/Authuser.js');
 
@@ -14,5 +14,6 @@ userroutes.post('/user-update', upload.fields([{ name: 'resume', maxCount: 1 }])
 userroutes.post('/apply-hackathon', authuser, applyToHackathon);
 userroutes.get('/user-getprofile', authuser, getprofile);
 userroutes.post('/user-sreach', authuser, saveTeamReg);
+userroutes.get('/user-getteam', authuser, getTeamReg);
 
 module.exports = userroutes;

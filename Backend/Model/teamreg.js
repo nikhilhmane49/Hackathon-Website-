@@ -15,7 +15,11 @@ const teamschema = new mongoose.Schema({
       hackatonapllyid:[ {
              type: mongoose.Schema.Types.ObjectId,
              ref: 'hostevent'
-         }]
+     }],
+      useradminid: {
+             type: mongoose.Schema.Types.ObjectId,
+             ref: 'user'
+     },
      
 
       })

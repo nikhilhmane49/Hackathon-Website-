@@ -287,98 +287,14 @@ res.json({
 
 
 
-// const sreachforuser = async (req, res) => {
-//   try {
-//     const { email } = req.query; // ✅ Fetch email from query, not body
 
-//     if (!email) {
-//       return res.status(400).json({
-//         success: false,
-//         message: "Email is required", // ✅ fix the message too
-//       });
-//     }
-
-//     const user = await userModel.findOne({ email: email }).select('-password'); // ✅ use singular 'user'
-
-//     if (!user) { // ✅ findOne returns either object or null
-//       return res.status(404).json({
-//         success: false,
-//         message: "No user found",
-//       });
-//       }
-      
-
-//     res.json({
-//       success: true,
-//       data: user,
-//       message: "User fetched successfully",
-//     });
-//   } catch (error) {
-//     console.error(error);
-//     return res.status(500).json({
-//       success: false,
-//       message: "Internal server error",
-//     });
-//   }
-// };
-
-
-// const saveTeamReg = async (req, res) => {
-
-//     try {
-//         const { email, teamname } = req.body; // Assuming you send userId and hackathonId in the request body
-    
-//         if (!email || !teamname) {
-//         return res.status(400).json({
-//             success: false,
-//             message: "User ID and Hackathon ID are required",
-//         });
-//         }
-
-
-//          if (!email) {
-//       return res.status(400).json({
-//         success: false,
-//         message: "Email is required", // ✅ fix the message too
-//       });
-//     }
-
-//     const user = await userModel.findOne({ email: email }).select('-password'); // ✅ use singular 'user'
-
-//     if (!user) { // ✅ findOne returns either object or null
-//       return res.status(404).json({
-//         success: false,
-//         message: "No user found",
-//       });
-//       }
-          
-//         const newTeamReg = new teamModel({
-//             teamname: teamname,
-//             praticipante: [user.email],
-//             hackatonapllyid: user.hackatonapllyid,
-//         });
-    
-//         await newTeamReg.save();
-    
-//         res.status(201).json({
-//         success: true,
-//         message: "Team registration successful",
-//         data: newTeamReg,
-//         });
-//     } catch (error) {
-//         console.error(error);
-//         res.status(500).json({
-//         success: false,
-//         message: "Server Error",
-//         });
-//     }
-// }
 
 
 
 const saveTeamReg = async (req, res) => {
   try {
-    const { teamname, emails } = req.body; // ✅ get 'emails' as an array
+      const { teamname, emails } = req.body; // ✅ get 'emails' as an array
+      const userid = req.user.id
 
     if (!teamname || !emails) {
       return res.status(400).json({
@@ -405,6 +321,7 @@ const saveTeamReg = async (req, res) => {
       teamname: teamname,
       praticipante: users.map((user) => user.email), // ✅ store all participant emails
       hackatonapllyid: hackathonId,
+      useradminid:userid
     });
 
     await newTeamReg.save();
@@ -425,6 +342,26 @@ const saveTeamReg = async (req, res) => {
 };
 
 
+const getTeamReg = async (req, res) => { 
+    try {
+        const userId = req.user.id; // ✅ Now it will work
+        const teamRegs = await teamModel.find({ useradminid: userId }).select('-password');
+        if (!teamRegs || teamRegs.length === 0) {
+            return res.status(404).json({ message: 'No team registrations found' });
+        }
+    res.json({
+      success: true,
+      data: teamRegs,
+      message: "Team registrations fetched successfully",
+    });
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({
+      success: false,
+      message: "Internal server error",
+    });
+  }
+}
 
 
 
@@ -432,6 +369,5 @@ const saveTeamReg = async (req, res) => {
 
 
 
-
-module.exports={regester,userlogin,updateProfile ,applyToHackathon, getprofile,saveTeamReg};
+module.exports={regester,userlogin,updateProfile ,applyToHackathon, getprofile,saveTeamReg,getTeamReg};
 
