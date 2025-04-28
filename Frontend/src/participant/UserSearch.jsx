@@ -10,27 +10,52 @@ function UserSearch() {
 
   const handleSearch = async () => {
            try {
-               const token = localStorage.getItem("token"); // Assuming you store token in localStorage
+               const token = localStorage.getItem("token");
+               // Assuming you store token in localStorage
                if (!token) { 
                     console.log("Token not found in localStorage");
                     return;
                }
 
-             const response = await axios.get(
-               "http://localhost:3000/api/user/user-sreach",
-               { email }, // email goes inside body
-               {
-                 headers: {
-                   token: token,
-                 },
-               }
-             );
-             setUsers(response.data);
+               console.log("Token:", token); // Debugging line
+
+            //  const response = await axios.get(
+            //    "http://localhost:3000/api/user/user-sreach",
+            //    { email }, // email goes inside body
+            //    {
+            //      headers:{ 
+            //        token: token,
+            //      },
+            //    }
+            //  );
+            
+            
+           const response = await axios.get(
+             "http://localhost:3000/api/user/user-sreach",
+             {
+               params: {
+                 email: email,
+               },
+               headers: {
+                 token: token,
+               },
+             }
+           );
+            const userData = response.data.data; // 📢 get the data field (single user object)
+            if (userData) {
+              setUsers([userData]); // 📢 Wrap it in array because you want to map over users
+            } else {
+              setUsers([]);
+            }
            } catch (error) {
              console.error("Error fetching users", error);
            }
 
-  };
+    };
+    
+
+    console.log(users);
+    console.log(users.length);
 
   return (
     <div className="p-4 max-w-md mx-auto">

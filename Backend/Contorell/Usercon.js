@@ -288,38 +288,37 @@ res.json({
 
 
 const sreachforuser = async (req, res) => {
-    try {
-        const { email } = req.body;
+  try {
+    const { email } = req.query; // ✅ Fetch email from query, not body
 
-        if (!email) {
-            return res.status(400).json({
-                success: false,
-                message: "Name is required"
-            });
-        }
-
-      const users = await userModel.findOne({ email: email });
-
-
-        if (users.length === 0) {
-            return res.status(404).json({
-                success: false,
-                message: "No users found"
-            });
-        }
-
-        res.json({
-            success: true,
-            data: users,
-            message: "Users fetched successfully"
-        });
-    } catch (error) {
-        console.error(error);
-        return res.status(500).json({
-            success: false,
-            message: "Internal server error"
-        });
+    if (!email) {
+      return res.status(400).json({
+        success: false,
+        message: "Email is required", // ✅ fix the message too
+      });
     }
+
+    const user = await userModel.findOne({ email: email }); // ✅ use singular 'user'
+
+    if (!user) { // ✅ findOne returns either object or null
+      return res.status(404).json({
+        success: false,
+        message: "No user found",
+      });
+    }
+
+    res.json({
+      success: true,
+      data: user,
+      message: "User fetched successfully",
+    });
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({
+      success: false,
+      message: "Internal server error",
+    });
+  }
 };
 
 
