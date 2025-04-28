@@ -16,6 +16,7 @@ import OrganiserLogin from "./Organiser/OrganiserLogin";
 import HackathonInfo from "./components/HackthonInfo";
 import CandidateDetails from "./components/CandidateDetails";
 import UserSearch from "./participant/UserSearch";
+import TeamRegistrations from "./participant/Displayteampar";
 
 const router = createBrowserRouter([
   {
@@ -57,6 +58,10 @@ const router = createBrowserRouter([
       {
         path: "/search-participant",
         element: <UserSearch />,
+      },
+      {
+        path: "/display-team",
+        element: <TeamRegistrations />,
       },
     ],
   },
