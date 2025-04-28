@@ -287,36 +287,139 @@ res.json({
 
 
 
-const sreachforuser = async (req, res) => {
-  try {
-    const { email } = req.query; // ✅ Fetch email from query, not body
+// const sreachforuser = async (req, res) => {
+//   try {
+//     const { email } = req.query; // ✅ Fetch email from query, not body
 
-    if (!email) {
+//     if (!email) {
+//       return res.status(400).json({
+//         success: false,
+//         message: "Email is required", // ✅ fix the message too
+//       });
+//     }
+
+//     const user = await userModel.findOne({ email: email }).select('-password'); // ✅ use singular 'user'
+
+//     if (!user) { // ✅ findOne returns either object or null
+//       return res.status(404).json({
+//         success: false,
+//         message: "No user found",
+//       });
+//       }
+      
+
+//     res.json({
+//       success: true,
+//       data: user,
+//       message: "User fetched successfully",
+//     });
+//   } catch (error) {
+//     console.error(error);
+//     return res.status(500).json({
+//       success: false,
+//       message: "Internal server error",
+//     });
+//   }
+// };
+
+
+// const saveTeamReg = async (req, res) => {
+
+//     try {
+//         const { email, teamname } = req.body; // Assuming you send userId and hackathonId in the request body
+    
+//         if (!email || !teamname) {
+//         return res.status(400).json({
+//             success: false,
+//             message: "User ID and Hackathon ID are required",
+//         });
+//         }
+
+
+//          if (!email) {
+//       return res.status(400).json({
+//         success: false,
+//         message: "Email is required", // ✅ fix the message too
+//       });
+//     }
+
+//     const user = await userModel.findOne({ email: email }).select('-password'); // ✅ use singular 'user'
+
+//     if (!user) { // ✅ findOne returns either object or null
+//       return res.status(404).json({
+//         success: false,
+//         message: "No user found",
+//       });
+//       }
+          
+//         const newTeamReg = new teamModel({
+//             teamname: teamname,
+//             praticipante: [user.email],
+//             hackatonapllyid: user.hackatonapllyid,
+//         });
+    
+//         await newTeamReg.save();
+    
+//         res.status(201).json({
+//         success: true,
+//         message: "Team registration successful",
+//         data: newTeamReg,
+//         });
+//     } catch (error) {
+//         console.error(error);
+//         res.status(500).json({
+//         success: false,
+//         message: "Server Error",
+//         });
+//     }
+// }
+
+
+
+const saveTeamReg = async (req, res) => {
+  try {
+    const { teamname, emails } = req.body; // ✅ get 'emails' as an array
+
+    if (!teamname || !emails) {
       return res.status(400).json({
         success: false,
-        message: "Email is required", // ✅ fix the message too
+        message: "Team name and at least one participant email are required",
       });
     }
 
-    const user = await userModel.findOne({ email: email }); // ✅ use singular 'user'
+    // Fetch all users matching the given emails
+    const users = await userModel.find({ email: { $in: emails } }).select("-password");
 
-    if (!user) { // ✅ findOne returns either object or null
+    if (users.length !== emails.length) {
       return res.status(404).json({
         success: false,
-        message: "No user found",
+        message: "One or more users not found for the given emails",
       });
     }
 
-    res.json({
-      success: true,
-      data: user,
-      message: "User fetched successfully",
+    // Assuming all users belong to the same hackathon ID
+    // (you can adjust if needed per your database structure)
+    const hackathonId = users[0].hackatonapllyid;
+
+    const newTeamReg = new teamModel({
+      teamname: teamname,
+      praticipante: users.map((user) => user.email), // ✅ store all participant emails
+      hackatonapllyid: hackathonId,
     });
+
+    await newTeamReg.save();
+
+    res.status(201).json({
+      success: true,
+      message: "Team registration successful",
+      data: newTeamReg,
+    });
+
   } catch (error) {
-    console.error(error);
-    return res.status(500).json({
+    console.error("Error in saveTeamReg:", error);
+    res.status(500).json({
       success: false,
-      message: "Internal server error",
+      message: "Server Error",
     });
   }
 };
@@ -330,5 +433,5 @@ const sreachforuser = async (req, res) => {
 
 
 
-module.exports={regester,userlogin,updateProfile ,applyToHackathon, getprofile,sreachforuser};
+module.exports={regester,userlogin,updateProfile ,applyToHackathon, getprofile,saveTeamReg};
 
