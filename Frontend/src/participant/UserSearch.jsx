@@ -17,19 +17,7 @@ function UserSearch() {
                     return;
                }
 
-               console.log("Token:", token); // Debugging line
-
-            //  const response = await axios.get(
-            //    "http://localhost:3000/api/user/user-sreach",
-            //    { email }, // email goes inside body
-            //    {
-            //      headers:{ 
-            //        token: token,
-            //      },
-            //    }
-            //  );
-            
-            
+               console.log("Token:", token); // Debugging line    
            const response = await axios.get(
              "http://localhost:3000/api/user/user-sreach",
              {
