@@ -10,7 +10,14 @@ const teamschema = new mongoose.Schema({
         type: String,
          required: true,
        
-    }],
+     }],
+
+      hackatonapllyid:[ {
+             type: mongoose.Schema.Types.ObjectId,
+             ref: 'hostevent'
+         }]
+     
+
       })
       
       const teamsModel = mongoose.model('Teamreg',teamschema);

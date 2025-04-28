@@ -1,5 +1,6 @@
 const userModel = require('../Model/User');
 const Hackathon = require('../Model/hostevent');
+const teamModel = require('../Model/teamreg');
 const bcrypt = require('bcrypt');
 const cloudinary = require('cloudinary').v2;
 const jwt = require('jsonwebtoken');
@@ -235,7 +236,7 @@ const applyToHackathon = async (req, res) => {
         return res.status(404).json({ message: 'org id  not found' });
       }
       
-    const updatedUser = await userModel.findByIdAndUpdate(
+    const updatedUser = await teamModel.findByIdAndUpdate(
       userId,
       { hackatonapllyid: organizerId.hackatonorgid },
       { new: true }
@@ -286,6 +287,40 @@ res.json({
 
 
 
+const sreachforuser = async (req, res) => {
+    try {
+        const { email } = req.body;
+
+        if (!email) {
+            return res.status(400).json({
+                success: false,
+                message: "Name is required"
+            });
+        }
+
+      const users = await userModel.findOne({ email: email });
+
+
+        if (users.length === 0) {
+            return res.status(404).json({
+                success: false,
+                message: "No users found"
+            });
+        }
+
+        res.json({
+            success: true,
+            data: users,
+            message: "Users fetched successfully"
+        });
+    } catch (error) {
+        console.error(error);
+        return res.status(500).json({
+            success: false,
+            message: "Internal server error"
+        });
+    }
+};
 
 
 
@@ -294,5 +329,7 @@ res.json({
 
 
 
-module.exports={regester,userlogin,updateProfile ,applyToHackathon, getprofile};
+
+
+module.exports={regester,userlogin,updateProfile ,applyToHackathon, getprofile,sreachforuser};
 

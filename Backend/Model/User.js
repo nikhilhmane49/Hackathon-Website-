@@ -48,10 +48,10 @@ const userschema = new mongoose.Schema({
         type: String
     },
 
-    hackatonapllyid:[ {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: 'hostevent'
-    }]
+    // hackatonapllyid:[ {
+    //     type: mongoose.Schema.Types.ObjectId,
+    //     ref: 'hostevent'
+    // }]
 });
 
 const userModel = mongoose.model('user', userschema);

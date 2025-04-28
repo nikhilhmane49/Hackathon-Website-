@@ -15,6 +15,7 @@ import ParticipantLogin from "./participant/ParticipantLogin";
 import OrganiserLogin from "./Organiser/OrganiserLogin";
 import HackathonInfo from "./components/HackthonInfo";
 import CandidateDetails from "./components/CandidateDetails";
+import UserSearch from "./participant/UserSearch";
 
 const router = createBrowserRouter([
   {
@@ -51,7 +52,11 @@ const router = createBrowserRouter([
       },
       {
         path: "/partinfo",
-        element: <CandidateDetails/>,
+        element: <CandidateDetails />,
+      },
+      {
+        path: "/search-participant",
+        element: <UserSearch />,
       },
     ],
   },

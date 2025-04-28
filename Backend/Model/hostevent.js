@@ -140,9 +140,7 @@ hackatonorgid: {
     type: mongoose.Schema.Types.ObjectId,
     ref: 'Organizer',
     required: true
-       }
-
-
+}
 
 });
 
