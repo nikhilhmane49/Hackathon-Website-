@@ -1041,14 +1041,13 @@ const hackathonapplynow = async () => {
                 )}
               </div> */}
 
-            <div className="p-6">
+<div className="p-6">
   {teams.some((team) => team.userreg) ? (
     <button
-      disabled
-      className="w-full bg-gray-300 text-gray-700 font-bold py-3 px-4 rounded-xl shadow-md cursor-not-allowed"
       onClick={() => {
         navigate("/display-team");
       }}
+      className="w-full bg-gray-300 text-gray-700 font-bold py-3 px-4 rounded-xl shadow-md hover:shadow-lg transition-all transform hover:-translate-y-0.5"
     >
       Already Applied for Hackathon
     </button>
@@ -1064,6 +1063,7 @@ const hackathonapplynow = async () => {
     </button>
   )}
 </div>
+
 
 
 
