@@ -275,42 +275,49 @@
 
 import React, { useEffect, useState } from "react";
 import axios from "axios";
+import { Appcontext } from "../context/contextpra";
+import { useContext } from "react";
 
 function TeamRegistrations() {
-  const [teams, setTeams] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [refreshing, setRefreshing] = useState(false);
+    const { teams, loading, refreshing } = useContext(Appcontext);
+//   const [teams, setTeams] = useState([]);
+//   const [loading, setLoading] = useState(true);
+//   const [refreshing, setRefreshing] = useState(false);
 
-  const fetchTeams = async (showRefreshing = false) => {
-    try {
-      if (showRefreshing) setRefreshing(true);
+//   const fetchTeams = async (showRefreshing = false) => {
+//     try {
+//       if (showRefreshing) setRefreshing(true);
 
-      const token = localStorage.getItem("token");
-      if (!token) {
-        console.log("Token not found in localStorage");
-        return;
-      }
+//       const token = localStorage.getItem("token");
+//       if (!token) {
+//         console.log("Token not found in localStorage");
+//         return;
+//       }
 
-      const response = await axios.get(
-        "http://localhost:3000/api/user/user-getteam",
-        {
-          headers: { token },
-        }
-      );
+//       const response = await axios.get(
+//         "http://localhost:3000/api/user/user-getteam",
+//         {
+//           headers: { token },
+//         }
+//       );
 
-      setTeams(response.data.data);
-      setLoading(false);
-      if (showRefreshing) setRefreshing(false);
-    } catch (error) {
-      console.error("Error fetching team registrations:", error);
-      setLoading(false);
-      if (showRefreshing) setRefreshing(false);
-    }
-  };
+//       setTeams(response.data.data);
+//         setLoading(false);
+//         if (response.data.data.userreg==true) {
+//           setuserreg(true);
+//         }
+//         if (showRefreshing) setRefreshing(false);
+     
+//     } catch (error) {
+//       console.error("Error fetching team registrations:", error);
+//       setLoading(false);
+//       if (showRefreshing) setRefreshing(false);
+//     }
+//   };
 
-  useEffect(() => {
-    fetchTeams();
-  }, []);
+//   useEffect(() => {
+//     fetchTeams();
+//   }, []);
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 py-16 px-6 sm:px-8 lg:px-10">

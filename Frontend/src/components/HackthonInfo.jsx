@@ -2,12 +2,16 @@ import React,{ useState, useEffect, useContext } from 'react';
 import { motion } from 'framer-motion';
 import { Appcontext } from "../context/contextpra";
 import { useParams } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
+
+
 
 
 
 function HackathonInfo() {
 
-
+  const navigate = useNavigate();
+  
 const { hackathon_id } = useParams();
 
 const hackathonapplynow = async () => {
@@ -50,7 +54,7 @@ const hackathonapplynow = async () => {
   const [countdown, setCountdown] = useState({ days: 0, hours: 0, minutes: 0, seconds: 0 });
   const [showConfetti, setShowConfetti] = useState(false);
 
-   const { Hackton } = useContext(Appcontext);
+   const { Hackton, teams } = useContext(Appcontext);
   //  const { hackathon_id } = useParams();
 
   // useEffect(() => {
@@ -987,15 +991,82 @@ const hackathonapplynow = async () => {
                   Showcase your skills and win amazing prizes
                 </p>
               </div>
-
+              {/* 
               <div className="p-6">
                 <button
-                  onClick={handleRegisterClick && hackathonapplynow}
+                  onClick={() => {
+                    hackathonapplynow();
+                    navigate("/search-participant");
+                  }}
                   className="w-full bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700 text-white font-bold py-3 px-4 rounded-xl shadow-md hover:shadow-lg transition-all transform hover:-translate-y-0.5"
+                  naviga
                 >
                   Register Now
                 </button>
-              </div>
+              </div> */}
+              {/* <div className="p-6">
+                <button
+                 onClick={() => {
+                hackathonapplynow();
+                navigate("/search-participant");
+              }}
+                  className="w-full bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700 text-white font-bold py-3 px-4 rounded-xl shadow-md hover:shadow-lg transition-all transform hover:-translate-y-0.5"
+                  naviga
+                >
+                  Register Now
+                </button>
+              </div> */}
+
+              {/* <div className="p-6">
+                {teams.userreg ? (
+                  <button
+                    disabled
+                    className="w-full bg-gray-300 text-gray-700 font-bold py-3 px-4 rounded-xl shadow-md cursor-not-allowed"
+                    onClick={() => {
+                      navigate(" /display-team");
+                    }}
+                  >
+                    Already Applied for Hackathon
+                  </button>
+                ) : (
+                  <button
+                    onClick={() => {
+                      hackathonapplynow();
+                      navigate("/search-participant");
+                    }}
+                    className="w-full bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700 text-white font-bold py-3 px-4 rounded-xl shadow-md hover:shadow-lg transition-all transform hover:-translate-y-0.5"
+                  >
+                    Register Now
+                  </button>
+                )}
+              </div> */}
+
+            <div className="p-6">
+  {teams.some((team) => team.userreg) ? (
+    <button
+      disabled
+      className="w-full bg-gray-300 text-gray-700 font-bold py-3 px-4 rounded-xl shadow-md cursor-not-allowed"
+      onClick={() => {
+        navigate("/display-team");
+      }}
+    >
+      Already Applied for Hackathon
+    </button>
+  ) : (
+    <button
+      onClick={() => {
+        hackathonapplynow();
+        navigate("/search-participant");
+      }}
+      className="w-full bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700 text-white font-bold py-3 px-4 rounded-xl shadow-md hover:shadow-lg transition-all transform hover:-translate-y-0.5"
+    >
+      Register Now
+    </button>
+  )}
+</div>
+
+
+
             </div>
 
             <div className="bg-gradient-to-br from-indigo-900 to-purple-900 rounded-2xl shadow-lg p-6 text-white">

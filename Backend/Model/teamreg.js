@@ -18,8 +18,17 @@ const teamschema = new mongoose.Schema({
      }],
       useradminid: {
              type: mongoose.Schema.Types.ObjectId,
-             ref: 'user'
+             ref: 'user',
+          //    unique:true
      },
+      organizerid:[ {
+             type: mongoose.Schema.Types.ObjectId,
+             ref: 'Organizer'
+     }],
+        userreg: {
+        type: Boolean,
+        default: false
+    }
      
 
       })

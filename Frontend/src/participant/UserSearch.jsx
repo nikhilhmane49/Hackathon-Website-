@@ -481,8 +481,15 @@
 
 import React, { useState } from "react";
 import axios from "axios";
+import { useNavigate } from "react-router-dom";
+// import { Appcontext } from "../context/contextpra";
+// import { useContext } from "react";
+
 
 function UserSearch() {
+
+    const navigate = useNavigate();
+    //    const { setuserreg, userreg } = useContext(Appcontext);
   const [emails, setEmails] = useState([""]);
   const [teamname, setTeamname] = useState("");
 
@@ -627,8 +634,13 @@ function UserSearch() {
         </div>
 
         {/* Submit Button */}
-        <button
-          onClick={handleSubmitTeam}
+              <button
+                  
+                  onClick={() => {
+                      handleSubmitTeam();
+                      navigate("/display-team");
+                  }}
+        //   onClick={handleSubmitTeam}
           className="w-full inline-flex justify-center items-center px-8 py-4 border border-transparent text-2xl font-bold rounded-lg text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition duration-150 ease-in-out"
         >
           <svg

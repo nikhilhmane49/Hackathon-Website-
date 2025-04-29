@@ -16,7 +16,12 @@ const AppProvider = (props) => {
   const [Hackton, setHackton] = useState([]);
   const [parhackton, setparhackton] = useState([]);
   const [data, setData] = useState({});
+  // const[userreg ,setuserreg] = useState(false);
   const backendurl = import.meta.env.VITE_BACKEND_URL;
+
+   const [teams, setTeams] = useState([]);
+    const [loading, setLoading] = useState(true);
+    const [refreshing, setRefreshing] = useState(false);
     
     
 
@@ -71,6 +76,44 @@ const AppProvider = (props) => {
   }, []);
 
 
+
+  
+    const fetchTeams = async (showRefreshing = false) => {
+      try {
+        if (showRefreshing) setRefreshing(true);
+  
+        const token = localStorage.getItem("token");
+        if (!token) {
+          console.log("Token not found in localStorage");
+          return;
+        }
+  
+        const response = await axios.get(
+          "http://localhost:3000/api/user/user-getteam",
+          {
+            headers: { token },
+          }
+        );
+  
+        setTeams(response.data.data);
+          setLoading(false);
+          // if (response.data.data.userreg==true) {
+          //   setuserreg(true);
+          // }
+          if (showRefreshing) setRefreshing(false);
+       
+      } catch (error) {
+        console.error("Error fetching team registrations:", error);
+        setLoading(false);
+        if (showRefreshing) setRefreshing(false);
+      }
+    };
+  
+    useEffect(() => {
+      fetchTeams();
+    }, []);
+
+
   const value = {
     Hackton,
     listhackton,
@@ -79,7 +122,12 @@ const AppProvider = (props) => {
     atoken,
     setatoken,
     settoken,
-    data
+    data,
+    // userreg,
+    // setuserreg,
+    teams,
+    loading,
+    refreshing,
   };
 
   return (

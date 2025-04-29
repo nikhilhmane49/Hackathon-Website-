@@ -231,16 +231,20 @@ const applyToHackathon = async (req, res) => {
       return res.status(400).json({ message: 'Hackathon ID is required' });
     }
   
-      const organizerId = await Hackathon.findById(hackathonId);
-      if (!organizerId) {
+      const hackathondeital = await Hackathon.findById(hackathonId);
+      if (!hackathondeital) {
         return res.status(404).json({ message: 'org id  not found' });
       }
       
-    const updatedUser = await teamModel.findByIdAndUpdate(
-      userId,
-      { hackatonapllyid: organizerId.hackatonorgid },
-      { new: true }
-    );
+    const updatedUser = await userModel.findByIdAndUpdate(
+  userId,
+  {
+    hackatonapllyid: hackathondeital.hackatonorgid,
+    hackatonid: hackathonId
+  },
+  { new: true }
+);
+
 
     if (!updatedUser) {
       return res.status(404).json({ message: 'User not found' });
@@ -315,15 +319,30 @@ const saveTeamReg = async (req, res) => {
 
     // Assuming all users belong to the same hackathon ID
     // (you can adjust if needed per your database structure)
-    const hackathonId = users[0].hackatonapllyid;
+    // const hackathonId = users[0].hackatonapllyid;
 
-    const newTeamReg = new teamModel({
-      teamname: teamname,
-      praticipante: users.map((user) => user.email), // ✅ store all participant emails
-      hackatonapllyid: hackathonId,
-      useradminid:userid
-    });
+    // const newTeamReg = new teamModel({
+    //   teamname: teamname,
+    //   praticipante: users.map((user) => user.email), // ✅ store all participant emails
+    // //   hackatonapllyid: hackathonId,
+    //     useradminid: userid,
+    //     hackatonapllyid: users.map((user) => user.hackatonapllyid)[0],
+    //     organizerid: users.map((user) => user.hackatonid)[0],
+      
+    // });
 
+      const firstUser = users[0];
+
+const newTeamReg = new teamModel({
+  teamname,
+  praticipante: users.map((user) => user.email),
+  useradminid: userid,
+  hackatonapllyid: firstUser?.hackatonapllyid?.[0] || null,
+    organizerid: firstUser?.hackatonid?.[0] || null,
+  userreg: true,
+});
+
+      
     await newTeamReg.save();
 
     res.status(201).json({
