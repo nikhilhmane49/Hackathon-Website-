@@ -141,10 +141,89 @@ token,
 //######Api for update the profile
 
 
+// const updateProfile = async (req, res) => {
+//     try {
+//         const {
+//             userid,
+//             bio,
+//             githubLink,
+//             linkedinLink,
+//             technicalSkills,
+//             projectLinks,
+//             education,
+//             contactNumber
+//         } = req.body;
+
+//         // Expecting resume file: req.files.resume
+//         const resumeFile = req.files?.resume?.[0];
+
+//         if (!userid || !contactNumber) {
+//             return res.status(400).json({
+//                 success: false,
+//                 message: "Required data is missing"
+//             });
+//         }
+
+//         let resumeUrl;
+//         if (resumeFile) {
+//             const resumeUpload = await cloudinary.uploader.upload(resumeFile.path, {
+//                 resource_type: "raw"
+//             });
+//             resumeUrl = resumeUpload.secure_url;
+//         }
+
+//         let parsedEducation;
+//         try {
+//             parsedEducation = JSON.parse(education);
+//         } catch (e) {
+//             return res.status(400).json({
+//                 success: false,
+//                 message: "Invalid education format"
+//             });
+//         }
+
+//         const updateData = await userModel.findByIdAndUpdate(
+//             userid,
+//             {
+//                 ...(resumeUrl && { resume: resumeUrl }),
+//                 bio,
+//                 githubLink,
+//                 linkedinLink,
+//                 technicalSkills,
+//                 projectLinks,
+//                 education: parsedEducation,
+//                 education,
+//                 contactNumber
+//             },
+//             { new: true }
+//         );
+
+//         if (!updateData) {
+//             return res.status(404).json({
+//                 success: false,
+//                 message: "User not found"
+//             });
+//         }
+
+//         res.json({
+//             success: true,
+//             data: updateData,
+//             message: "The user profile is updated"
+//         });
+
+//     } catch (error) {
+//         console.error(error);
+//         return res.status(500).json({
+//             success: false,
+//             message: "Internal server error"
+//         });
+//     }
+// };
+
+
 const updateProfile = async (req, res) => {
     try {
         const {
-            userid,
             bio,
             githubLink,
             linkedinLink,
@@ -154,32 +233,77 @@ const updateProfile = async (req, res) => {
             contactNumber
         } = req.body;
 
+      console.log(bio,
+        githubLink,
+        linkedinLink,
+        technicalSkills,
+        projectLinks,
+        education,
+        contactNumber);
+
+      
+        const userid = req.user.id; // Assuming you have middleware that adds user info to the request
+
         // Expecting resume file: req.files.resume
         const resumeFile = req.files?.resume?.[0];
+        let resumeUrl;
 
         if (!userid || !contactNumber) {
             return res.status(400).json({
                 success: false,
-                message: "Required data is missing"
+                message: "Required data is missing (userid and contactNumber)"
             });
         }
 
-        let resumeUrl;
         if (resumeFile) {
-            const resumeUpload = await cloudinary.uploader.upload(resumeFile.path, {
-                resource_type: "raw"
-            });
-            resumeUrl = resumeUpload.secure_url;
+            try {
+                const resumeUpload = await cloudinary.uploader.upload(resumeFile.path, {
+                    resource_type: "raw"
+                });
+                resumeUrl = resumeUpload.secure_url;
+            } catch (cloudinaryError) {
+                console.error("Cloudinary error:", cloudinaryError);
+                return res.status(500).json({
+                    success: false,
+                    message: "Failed to upload resume"
+                });
+            }
+        }
+
+        let parsedTechnicalSkills;
+        if (technicalSkills) {
+            try {
+                parsedTechnicalSkills = JSON.parse(technicalSkills);
+                if (!Array.isArray(parsedTechnicalSkills)) {
+                    return res.status(400).json({ success: false, message: "Invalid technicalSkills format (must be a JSON array)" });
+                }
+            } catch (e) {
+                return res.status(400).json({ success: false, message: "Invalid technicalSkills format (JSON parse error)" });
+            }
+        }
+
+        let parsedProjectLinks;
+        if (projectLinks) {
+            try {
+                parsedProjectLinks = JSON.parse(projectLinks);
+                if (!Array.isArray(parsedProjectLinks)) {
+                    return res.status(400).json({ success: false, message: "Invalid projectLinks format (must be a JSON array)" });
+                }
+            } catch (e) {
+                return res.status(400).json({ success: false, message: "Invalid projectLinks format (JSON parse error)" });
+            }
         }
 
         let parsedEducation;
-        try {
-            parsedEducation = JSON.parse(education);
-        } catch (e) {
-            return res.status(400).json({
-                success: false,
-                message: "Invalid education format"
-            });
+        if (education) {
+            try {
+                parsedEducation = JSON.parse(education);
+                if (typeof parsedEducation !== 'object' || parsedEducation === null) {
+                    return res.status(400).json({ success: false, message: "Invalid education format (must be a JSON object)" });
+                }
+            } catch (e) {
+                return res.status(400).json({ success: false, message: "Invalid education format (JSON parse error)" });
+            }
         }
 
         const updateData = await userModel.findByIdAndUpdate(
@@ -189,10 +313,9 @@ const updateProfile = async (req, res) => {
                 bio,
                 githubLink,
                 linkedinLink,
-                technicalSkills,
-                projectLinks,
-                education: parsedEducation,
-                education,
+                ...(parsedTechnicalSkills && { technicalSkills: parsedTechnicalSkills }),
+                ...(parsedProjectLinks && { projectLinks: parsedProjectLinks }),
+                ...(parsedEducation && { education: parsedEducation }),
                 contactNumber
             },
             { new: true }
@@ -212,13 +335,15 @@ const updateProfile = async (req, res) => {
         });
 
     } catch (error) {
-        console.error(error);
+        console.error("Error updating profile:", error);
         return res.status(500).json({
             success: false,
-            message: "Internal server error"
+            message: "Internal server error while updating profile"
         });
     }
 };
+
+module.exports = { updateProfile };
 
 
 
