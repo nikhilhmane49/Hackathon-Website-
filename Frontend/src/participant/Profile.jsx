@@ -1694,6 +1694,464 @@
 
 
 
+// import React, { useState, useEffect, useContext } from "react";
+// import axios from "axios";
+// import {
+//   FaUser,
+//   FaEnvelope,
+//   FaLock,
+//   FaPhone,
+//   FaGithub,
+//   FaLinkedin,
+//   FaFileAlt,
+// } from "react-icons/fa";
+
+// import { Appcontext } from "../context/contextpra";
+
+// const Profile = () => {
+//   const { data } = useContext(Appcontext);
+//   const [formData, setFormData] = useState({
+//     name: "",
+//     email: "",
+//     password: "",
+//     bio: "",
+//     resume: "",
+//     githubLink: "",
+//     linkedinLink: "",
+//     technicalSkills: "",
+//     projectLinks: "",
+//     education: { college: "", degree: "", year: "" },
+//     contactNumber: "",
+//   });
+
+//   const [resumeName, setResumeName] = useState("");
+//   const [loading, setLoading] = useState(false);
+//   const [error, setError] = useState("");
+//   const [success, setSuccess] = useState(false);
+
+//   useEffect(() => {
+//     if (data) {
+//       setFormData({
+//         name: data.name || "",
+//         email: data.email || "",
+//         password: "",
+//         bio: data.bio || "",
+//         githubLink: data.githubLink || "",
+//         linkedinLink: data.linkedinLink || "",
+//         technicalSkills: Array.isArray(data.technicalSkills)
+//           ? data.technicalSkills.join(", ")
+//           : data.technicalSkills || "",
+//         projectLinks: Array.isArray(data.projectLinks)
+//           ? data.projectLinks.join(", ")
+//           : data.projectLinks || "",
+//         education: {
+//           college: data.education?.college || "",
+//           degree: data.education?.degree || "",
+//           year: data.education?.year ? String(data.education.year) : "",
+//         },
+//         contactNumber: data.contactNumber || "",
+//         resume: "",
+//       });
+//       setResumeName(data.resumeName || "");
+//     }
+//   }, [data]);
+
+//   const handleChange = (e) => {
+//     const { id, value } = e.target;
+//     if (id in formData.education) {
+//       setFormData({
+//         ...formData,
+//         education: { ...formData.education, [id]: value },
+//       });
+//     } else {
+//       setFormData({ ...formData, [id]: value });
+//     }
+//   };
+
+//   const handleFileChange = (e) => {
+//     const file = e.target.files[0];
+//     if (file && file.type === "application/pdf") {
+//       setFormData({ ...formData, resume: file });
+//       setResumeName(file.name);
+//     } else {
+//       alert("Please upload a valid PDF file.");
+//     }
+//   };
+
+//   const handleSubmit = async (e) => {
+//     e.preventDefault();
+//     setLoading(true);
+//     setError("");
+//     setSuccess(false);
+
+//     try {
+//       if (!formData.name || !formData.email) {
+//         throw new Error("Name and email are required fields");
+//       }
+
+//       const userData = new FormData();
+
+//       // Append all fields except education, resume, technicalSkills, projectLinks
+//       Object.keys(formData).forEach((key) => {
+//         if (
+//           key !== "education" &&
+//           key !== "resume" &&
+//           key !== "technicalSkills" &&
+//           key !== "projectLinks" &&
+//           formData[key]
+//         ) {
+//           userData.append(key, formData[key]);
+//         }
+//       });
+
+//       // Handle technicalSkills
+//       const skills = formData.technicalSkills
+//         .split(",")
+//         .map((skill) => skill.trim())
+//         .filter(Boolean);
+//       userData.append("technicalSkills", JSON.stringify(skills));
+
+//       // Handle projectLinks
+//       const links = formData.projectLinks
+//         .split(",")
+//         .map((link) => link.trim())
+//         .filter(Boolean);
+//       userData.append("projectLinks", JSON.stringify(links));
+
+//       // Handle education
+//       if (
+//         formData.education.college ||
+//         formData.education.degree ||
+//         formData.education.year
+//       ) {
+//         const education = {
+//           college: formData.education.college || "",
+//           degree: formData.education.degree || "",
+//           year: formData.education.year
+//             ? parseInt(formData.education.year)
+//             : null,
+//         };
+//         userData.append("education", JSON.stringify(education));
+//       }
+
+//       // Handle resume
+//       if (formData.resume instanceof File) {
+//         userData.append("resume", formData.resume);
+//       }
+
+//       const token = localStorage.getItem("token");
+//       if (!token) {
+//         throw new Error("Authentication token not found");
+//       }
+
+//       const response = await axios({
+//         method: "POST",
+//         url: `${import.meta.env.VITE_BACKEND_URL}/api/user/user-update`,
+//         data: userData,
+//         headers: {
+//           token: token,
+//         },
+//         validateStatus: function (status) {
+//           return status < 500;
+//         },
+//       });
+
+//       if (response.status === 200) {
+//         setSuccess(true);
+//       } else {
+//         throw new Error(response.data.message || "Failed to update profile");
+//       }
+//     } catch (err) {
+//       console.error("Error details:", err);
+//       setError(
+//         err.message || "Something went wrong while updating the profile"
+//       );
+//     } finally {
+//       setLoading(false);
+//     }
+//   };
+
+//   const handleReset = () => {
+//     setFormData({
+//       name: data?.name || "",
+//       email: data?.email || "",
+//       password: "",
+//       bio: data?.bio || "",
+//       resume: "",
+//       githubLink: data?.githubLink || "",
+//       linkedinLink: data?.linkedinLink || "",
+//       technicalSkills: Array.isArray(data?.technicalSkills)
+//         ? data.technicalSkills.join(", ")
+//         : data?.technicalSkills || "",
+//       projectLinks: Array.isArray(data?.projectLinks)
+//         ? data.projectLinks.join(", ")
+//         : data?.projectLinks || "",
+//       education: {
+//         college: data?.education?.college || "",
+//         degree: data?.education?.degree || "",
+//         year: data?.education?.year ? String(data.education.year) : "",
+//       },
+//       contactNumber: data?.contactNumber || "",
+//     });
+//     setResumeName(data?.resumeName || "");
+//     setError("");
+//     setSuccess(false);
+//   };
+
+
+
+//     const LoadingSpinner = () => (
+//       <div className="flex justify-center items-center">
+//         <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-blue-500"></div>
+//       </div>
+//     );
+
+//   return (
+//     <div className="min-h-screen bg-gradient-to-br from-blue-100 to-white flex items-center justify-center px-4 py-10">
+//       <div className="w-full max-w-4xl bg-white/70 backdrop-blur-md border border-gray-200 rounded-2xl shadow-xl p-10 transition-all duration-300 hover:shadow-2xl">
+//         <h1 className="text-4xl font-bold text-blue-600 mb-2">
+//           Edit Your Profile
+//         </h1>
+//         <p className="text-gray-600 mb-8 text-lg">
+//           Make changes to your profile information.
+//         </p>
+
+//         {error && (
+//           <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mb-4">
+//             {error}
+//           </div>
+//         )}
+
+//         {success && (
+//           <div className="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded mb-4">
+//             Profile updated successfully!
+//           </div>
+//         )}
+
+//         <form onSubmit={handleSubmit} className="space-y-10">
+//           {/* Basic Info */}
+//           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+//             {[
+//               {
+//                 id: "name",
+//                 icon: <FaUser />,
+//                 label: "Full Name",
+//                 type: "text",
+//               },
+//               {
+//                 id: "email",
+//                 icon: <FaEnvelope />,
+//                 label: "Email",
+//                 type: "email",
+//               },
+//               {
+//                 id: "contactNumber",
+//                 icon: <FaPhone />,
+//                 label: "Contact Number",
+//                 type: "tel",
+//               },
+//             ].map(({ id, icon, label, type }) => (
+//               <div key={id}>
+//                 <label
+//                   htmlFor={id}
+//                   className="text-sm font-semibold text-gray-700 mb-1 flex items-center gap-2"
+//                 >
+//                   {icon} {label}
+//                 </label>
+//                 <input
+//                   type={type}
+//                   id={id}
+//                   value={formData[id]}
+//                   onChange={handleChange}
+//                   className="w-full px-4 py-3 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-400 transition"
+//                 />
+//               </div>
+//             ))}
+
+//             <div>
+//               <label
+//                 htmlFor="password"
+//                 className="text-sm font-semibold text-gray-700 mb-1 flex items-center gap-2"
+//               >
+//                 <FaLock /> Password
+//               </label>
+//               <input
+//                 type="password"
+//                 id="password"
+//                 value={formData.password}
+//                 onChange={handleChange}
+//                 placeholder="Leave blank to keep current password"
+//                 className="w-full px-4 py-3 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-400 transition"
+//               />
+//             </div>
+//           </div>
+
+//           {/* Bio */}
+
+//           {/* Bio */}
+//           <div>
+//             <label
+//               htmlFor="bio"
+//               className="block text-sm font-semibold text-gray-700 mb-2"
+//             >
+//               Bio
+//             </label>
+//             <textarea
+//               id="bio"
+//               rows="4"
+//               value={formData.bio}
+//               onChange={handleChange}
+//               placeholder="Tell us about yourself..."
+//               className="w-full px-4 py-3 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-400 transition"
+//             ></textarea>
+//           </div>
+
+//           {/* Education Section */}
+//           <div>
+//             <h2 className="text-xl font-bold text-gray-800 border-b pb-1 mb-4">
+//               Education
+//             </h2>
+//             <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+//               {[
+//                 {
+//                   id: "college",
+//                   label: "College/University",
+//                   placeholder: "College Name",
+//                   type: "text",
+//                 },
+//                 {
+//                   id: "degree",
+//                   label: "Degree",
+//                   placeholder: "e.g. B.Tech, MBA",
+//                   type: "text",
+//                 },
+//                 {
+//                   id: "year",
+//                   label: "Graduation Year",
+//                   placeholder: "Year",
+//                   type: "number",
+//                 },
+//               ].map(({ id, label, placeholder, type }) => (
+//                 <div key={id}>
+//                   <label
+//                     htmlFor={id}
+//                     className="text-sm font-semibold text-gray-700 mb-1"
+//                   >
+//                     {label}
+//                   </label>
+//                   <input
+//                     type={type}
+//                     id={id}
+//                     value={formData.education[id]}
+//                     onChange={handleChange}
+//                     placeholder={placeholder}
+//                     className="w-full px-4 py-3 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-400 transition"
+//                   />
+//                 </div>
+//               ))}
+//             </div>
+//           </div>
+
+//           {/* Social Links and Skills */}
+//           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+//             {[
+//               {
+//                 id: "githubLink",
+//                 icon: <FaGithub />,
+//                 label: "GitHub Profile",
+//                 type: "url",
+//               },
+//               {
+//                 id: "linkedinLink",
+//                 icon: <FaLinkedin />,
+//                 label: "LinkedIn Profile",
+//                 type: "url",
+//               },
+//               {
+//                 id: "technicalSkills",
+//                 icon: <FaFileAlt />,
+//                 label: "Technical Skills (comma separated)",
+//                 type: "text",
+//               },
+//               {
+//                 id: "projectLinks",
+//                 icon: <FaFileAlt />,
+//                 label: "Project Links (comma separated)",
+//                 type: "text",
+//               },
+//             ].map(({ id, icon, label, type }) => (
+//               <div key={id}>
+//                 <label
+//                   htmlFor={id}
+//                   className="text-sm font-semibold text-gray-700 mb-1 flex items-center gap-2"
+//                 >
+//                   {icon} {label}
+//                 </label>
+//                 <input
+//                   type={type}
+//                   id={id}
+//                   value={formData[id]}
+//                   onChange={handleChange}
+//                   className="w-full px-4 py-3 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-400 transition"
+//                 />
+//               </div>
+//             ))}
+//           </div>
+
+//           {/* Resume Upload */}
+//           <div>
+//             <label
+//               htmlFor="resume"
+//               className="text-sm font-semibold text-gray-700 mb-1 flex items-center gap-2"
+//             >
+//               <FaFileAlt /> Upload Resume (PDF)
+//             </label>
+//             <input
+//               type="file"
+//               id="resume"
+//               accept="application/pdf"
+//               onChange={handleFileChange}
+//               className="w-full px-4 py-2 border border-gray-300 rounded-lg bg-white shadow-sm"
+//             />
+//             {resumeName && (
+//               <p className="text-sm text-gray-600 mt-2">
+//                 Uploaded: {resumeName}
+//               </p>
+//             )}
+//           </div>
+
+//           {/* Submit & Reset Buttons */}
+//           <div className="flex justify-end gap-4 pt-4">
+//             <button
+//               type="button"
+//               onClick={handleReset}
+//               className="bg-gray-200 hover:bg-gray-300 text-gray-700 font-semibold px-6 py-3 rounded-lg transition"
+//             >
+//               Cancel
+//             </button>
+//             <button
+//               type="submit"
+//               disabled={loading}
+//               className="bg-blue-600 hover:bg-blue-700 text-white font-semibold px-6 py-3 rounded-lg transition flex items-center gap-2"
+//             >
+//               {loading ? <LoadingSpinner /> : "Save Changes"}
+//             </button>
+//           </div>
+//         </form>
+//       </div>
+//     </div>
+//   );
+// };
+
+// export default Profile;
+
+
+
+
+
+
+
+
 import React, { useState, useEffect, useContext } from "react";
 import axios from "axios";
 import {
@@ -1704,12 +2162,16 @@ import {
   FaGithub,
   FaLinkedin,
   FaFileAlt,
+  FaEdit,
+  FaSave,
+  FaTimes,
 } from "react-icons/fa";
 
 import { Appcontext } from "../context/contextpra";
 
 const Profile = () => {
   const { data } = useContext(Appcontext);
+
   const [formData, setFormData] = useState({
     name: "",
     email: "",
@@ -1728,6 +2190,7 @@ const Profile = () => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
   const [success, setSuccess] = useState(false);
+  const [isEdit, setIsEdit] = useState(false); // 🆕 Edit toggle
 
   useEffect(() => {
     if (data) {
@@ -1791,7 +2254,6 @@ const Profile = () => {
 
       const userData = new FormData();
 
-      // Append all fields except education, resume, technicalSkills, projectLinks
       Object.keys(formData).forEach((key) => {
         if (
           key !== "education" &&
@@ -1804,21 +2266,18 @@ const Profile = () => {
         }
       });
 
-      // Handle technicalSkills
       const skills = formData.technicalSkills
         .split(",")
         .map((skill) => skill.trim())
         .filter(Boolean);
       userData.append("technicalSkills", JSON.stringify(skills));
 
-      // Handle projectLinks
       const links = formData.projectLinks
         .split(",")
         .map((link) => link.trim())
         .filter(Boolean);
       userData.append("projectLinks", JSON.stringify(links));
 
-      // Handle education
       if (
         formData.education.college ||
         formData.education.degree ||
@@ -1834,7 +2293,6 @@ const Profile = () => {
         userData.append("education", JSON.stringify(education));
       }
 
-      // Handle resume
       if (formData.resume instanceof File) {
         userData.append("resume", formData.resume);
       }
@@ -1844,28 +2302,20 @@ const Profile = () => {
         throw new Error("Authentication token not found");
       }
 
-      const response = await axios({
-        method: "POST",
-        url: `${import.meta.env.VITE_BACKEND_URL}/api/user/user-update`,
-        data: userData,
-        headers: {
-          token: token,
-        },
-        validateStatus: function (status) {
-          return status < 500;
-        },
-      });
+      const response = await axios.post(
+        `${import.meta.env.VITE_BACKEND_URL}/api/user/user-update`,
+        userData,
+        { headers: { token } }
+      );
 
       if (response.status === 200) {
         setSuccess(true);
+        setIsEdit(false); // Exit edit mode
       } else {
         throw new Error(response.data.message || "Failed to update profile");
       }
     } catch (err) {
-      console.error("Error details:", err);
-      setError(
-        err.message || "Something went wrong while updating the profile"
-      );
+      setError(err.message || "Something went wrong while updating the profile");
     } finally {
       setLoading(false);
     }
@@ -1896,25 +2346,32 @@ const Profile = () => {
     setResumeName(data?.resumeName || "");
     setError("");
     setSuccess(false);
+    setIsEdit(false);
   };
 
-
-
-    const LoadingSpinner = () => (
-      <div className="flex justify-center items-center">
-        <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-blue-500"></div>
-      </div>
-    );
+  const LoadingSpinner = () => (
+    <div className="flex justify-center items-center">
+      <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-blue-500"></div>
+    </div>
+  );
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-100 to-white flex items-center justify-center px-4 py-10">
       <div className="w-full max-w-4xl bg-white/70 backdrop-blur-md border border-gray-200 rounded-2xl shadow-xl p-10 transition-all duration-300 hover:shadow-2xl">
-        <h1 className="text-4xl font-bold text-blue-600 mb-2">
-          Edit Your Profile
-        </h1>
-        <p className="text-gray-600 mb-8 text-lg">
-          Make changes to your profile information.
-        </p>
+        <div className="flex justify-between items-center mb-6">
+          <h1 className="text-4xl font-bold text-blue-600">Profile</h1>
+          <button
+            onClick={() => setIsEdit(!isEdit)}
+            className={`flex items-center gap-2 px-4 py-2 rounded-lg font-semibold transition ${
+              isEdit
+                ? "bg-yellow-500 text-white hover:bg-yellow-600"
+                : "bg-blue-600 text-white hover:bg-blue-700"
+            }`}
+          >
+            <FaEdit />
+            {isEdit ? "Editing..." : "Edit Profile"}
+          </button>
+        </div>
 
         {error && (
           <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mb-4">
@@ -1932,30 +2389,12 @@ const Profile = () => {
           {/* Basic Info */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             {[
-              {
-                id: "name",
-                icon: <FaUser />,
-                label: "Full Name",
-                type: "text",
-              },
-              {
-                id: "email",
-                icon: <FaEnvelope />,
-                label: "Email",
-                type: "email",
-              },
-              {
-                id: "contactNumber",
-                icon: <FaPhone />,
-                label: "Contact Number",
-                type: "tel",
-              },
+              { id: "name", icon: <FaUser />, label: "Full Name", type: "text" },
+              { id: "email", icon: <FaEnvelope />, label: "Email", type: "email" },
+              { id: "contactNumber", icon: <FaPhone />, label: "Contact Number", type: "tel" },
             ].map(({ id, icon, label, type }) => (
               <div key={id}>
-                <label
-                  htmlFor={id}
-                  className="text-sm font-semibold text-gray-700 mb-1 flex items-center gap-2"
-                >
+                <label htmlFor={id} className="text-sm font-semibold text-gray-700 mb-1 flex items-center gap-2">
                   {icon} {label}
                 </label>
                 <input
@@ -1963,16 +2402,13 @@ const Profile = () => {
                   id={id}
                   value={formData[id]}
                   onChange={handleChange}
-                  className="w-full px-4 py-3 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-400 transition"
+                  disabled={!isEdit}
+                  className="w-full px-4 py-3 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-400 transition disabled:bg-gray-100"
                 />
               </div>
             ))}
-
             <div>
-              <label
-                htmlFor="password"
-                className="text-sm font-semibold text-gray-700 mb-1 flex items-center gap-2"
-              >
+              <label htmlFor="password" className="text-sm font-semibold text-gray-700 mb-1 flex items-center gap-2">
                 <FaLock /> Password
               </label>
               <input
@@ -1980,20 +2416,16 @@ const Profile = () => {
                 id="password"
                 value={formData.password}
                 onChange={handleChange}
+                disabled={!isEdit}
                 placeholder="Leave blank to keep current password"
-                className="w-full px-4 py-3 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-400 transition"
+                className="w-full px-4 py-3 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-400 transition disabled:bg-gray-100"
               />
             </div>
           </div>
 
           {/* Bio */}
-
-          {/* Bio */}
           <div>
-            <label
-              htmlFor="bio"
-              className="block text-sm font-semibold text-gray-700 mb-2"
-            >
+            <label htmlFor="bio" className="block text-sm font-semibold text-gray-700 mb-2">
               Bio
             </label>
             <textarea
@@ -2001,90 +2433,45 @@ const Profile = () => {
               rows="4"
               value={formData.bio}
               onChange={handleChange}
-              placeholder="Tell us about yourself..."
-              className="w-full px-4 py-3 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-400 transition"
+              disabled={!isEdit}
+              className="w-full px-4 py-3 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-400 transition disabled:bg-gray-100"
             ></textarea>
           </div>
 
-          {/* Education Section */}
+          {/* Education */}
           <div>
-            <h2 className="text-xl font-bold text-gray-800 border-b pb-1 mb-4">
-              Education
-            </h2>
+            <h2 className="text-xl font-bold text-gray-800 border-b pb-1 mb-4">Education</h2>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
               {[
-                {
-                  id: "college",
-                  label: "College/University",
-                  placeholder: "College Name",
-                  type: "text",
-                },
-                {
-                  id: "degree",
-                  label: "Degree",
-                  placeholder: "e.g. B.Tech, MBA",
-                  type: "text",
-                },
-                {
-                  id: "year",
-                  label: "Graduation Year",
-                  placeholder: "Year",
-                  type: "number",
-                },
-              ].map(({ id, label, placeholder, type }) => (
+                { id: "college", label: "College/University", type: "text" },
+                { id: "degree", label: "Degree", type: "text" },
+                { id: "year", label: "Graduation Year", type: "number" },
+              ].map(({ id, label, type }) => (
                 <div key={id}>
-                  <label
-                    htmlFor={id}
-                    className="text-sm font-semibold text-gray-700 mb-1"
-                  >
-                    {label}
-                  </label>
+                  <label htmlFor={id} className="text-sm font-semibold text-gray-700 mb-1">{label}</label>
                   <input
                     type={type}
                     id={id}
                     value={formData.education[id]}
                     onChange={handleChange}
-                    placeholder={placeholder}
-                    className="w-full px-4 py-3 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-400 transition"
+                    disabled={!isEdit}
+                    className="w-full px-4 py-3 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-400 transition disabled:bg-gray-100"
                   />
                 </div>
               ))}
             </div>
           </div>
 
-          {/* Social Links and Skills */}
+          {/* Links & Skills */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             {[
-              {
-                id: "githubLink",
-                icon: <FaGithub />,
-                label: "GitHub Profile",
-                type: "url",
-              },
-              {
-                id: "linkedinLink",
-                icon: <FaLinkedin />,
-                label: "LinkedIn Profile",
-                type: "url",
-              },
-              {
-                id: "technicalSkills",
-                icon: <FaFileAlt />,
-                label: "Technical Skills (comma separated)",
-                type: "text",
-              },
-              {
-                id: "projectLinks",
-                icon: <FaFileAlt />,
-                label: "Project Links (comma separated)",
-                type: "text",
-              },
+              { id: "githubLink", icon: <FaGithub />, label: "GitHub Profile", type: "url" },
+              { id: "linkedinLink", icon: <FaLinkedin />, label: "LinkedIn Profile", type: "url" },
+              { id: "technicalSkills", icon: <FaFileAlt />, label: "Technical Skills (comma separated)", type: "text" },
+              { id: "projectLinks", icon: <FaFileAlt />, label: "Project Links (comma separated)", type: "text" },
             ].map(({ id, icon, label, type }) => (
               <div key={id}>
-                <label
-                  htmlFor={id}
-                  className="text-sm font-semibold text-gray-700 mb-1 flex items-center gap-2"
-                >
+                <label htmlFor={id} className="text-sm font-semibold text-gray-700 mb-1 flex items-center gap-2">
                   {icon} {label}
                 </label>
                 <input
@@ -2092,7 +2479,8 @@ const Profile = () => {
                   id={id}
                   value={formData[id]}
                   onChange={handleChange}
-                  className="w-full px-4 py-3 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-400 transition"
+                  disabled={!isEdit}
+                  className="w-full px-4 py-3 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-400 transition disabled:bg-gray-100"
                 />
               </div>
             ))}
@@ -2100,10 +2488,7 @@ const Profile = () => {
 
           {/* Resume Upload */}
           <div>
-            <label
-              htmlFor="resume"
-              className="text-sm font-semibold text-gray-700 mb-1 flex items-center gap-2"
-            >
+            <label htmlFor="resume" className="text-sm font-semibold text-gray-700 mb-1 flex items-center gap-2">
               <FaFileAlt /> Upload Resume (PDF)
             </label>
             <input
@@ -2111,36 +2496,347 @@ const Profile = () => {
               id="resume"
               accept="application/pdf"
               onChange={handleFileChange}
-              className="w-full px-4 py-2 border border-gray-300 rounded-lg bg-white shadow-sm"
+              disabled={!isEdit}
+              className="w-full px-4 py-2 border border-gray-300 rounded-lg bg-white shadow-sm disabled:bg-gray-100"
             />
             {resumeName && (
-              <p className="text-sm text-gray-600 mt-2">
-                Uploaded: {resumeName}
-              </p>
+              <p className="text-sm text-gray-600 mt-2">Uploaded: {resumeName}</p>
             )}
           </div>
 
-          {/* Submit & Reset Buttons */}
-          <div className="flex justify-end gap-4 pt-4">
-            <button
-              type="button"
-              onClick={handleReset}
-              className="bg-gray-200 hover:bg-gray-300 text-gray-700 font-semibold px-6 py-3 rounded-lg transition"
-            >
-              Cancel
-            </button>
-            <button
-              type="submit"
-              disabled={loading}
-              className="bg-blue-600 hover:bg-blue-700 text-white font-semibold px-6 py-3 rounded-lg transition flex items-center gap-2"
-            >
-              {loading ? <LoadingSpinner /> : "Save Changes"}
-            </button>
-          </div>
+          {/* Action Buttons */}
+          {isEdit && (
+            <div className="flex justify-end gap-4 pt-4">
+              <button
+                type="button"
+                onClick={handleReset}
+                className="bg-gray-200 hover:bg-gray-300 text-gray-700 font-semibold px-6 py-3 rounded-lg transition flex items-center gap-2"
+              >
+                <FaTimes /> Cancel
+              </button>
+              <button
+                type="submit"
+                disabled={loading}
+                className="bg-green-600 hover:bg-green-700 text-white font-semibold px-6 py-3 rounded-lg transition flex items-center gap-2"
+              >
+                {loading ? <LoadingSpinner /> : <><FaSave /> Save Changes</>}
+              </button>
+            </div>
+          )}
         </form>
       </div>
     </div>
   );
 };
 
-export default Profile; 
+export default Profile;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+// import React, { useState, useEffect, useContext } from "react";
+// import axios from "axios";
+// import {
+//   FaUser,
+//   FaEnvelope,
+//   FaLock,
+//   FaPhone,
+//   FaGithub,
+//   FaLinkedin,
+//   FaFileAlt,
+//     FaEdit,
+//   FaSave,
+// } from "react-icons/fa";
+
+
+// import { Appcontext } from "../context/contextpra";
+
+// const Profile = () => {
+//   const { data } = useContext(Appcontext);
+//   const [isEditable, setIsEditable] = useState(false);
+//   const [formData, setFormData] = useState({
+//     name: "",
+//     email: "",
+//     password: "",
+//     bio: "",
+//     resume: "",
+//     githubLink: "",
+//     linkedinLink: "",
+//     technicalSkills: "",
+//     projectLinks: "",
+//     education: { college: "", degree: "", year: "" },
+//     contactNumber: "",
+//   });
+
+//   const [resumeName, setResumeName] = useState("");
+//   const [loading, setLoading] = useState(false);
+//   const [error, setError] = useState("");
+//   const [success, setSuccess] = useState(false);
+
+//   useEffect(() => {
+//     if (data) {
+//       setFormData({
+//         name: data.name || "",
+//         email: data.email || "",
+//         password: "",
+//         bio: data.bio || "",
+//         githubLink: data.githubLink || "",
+//         linkedinLink: data.linkedinLink || "",
+//         technicalSkills: Array.isArray(data.technicalSkills)
+//           ? data.technicalSkills.join(", ")
+//           : data.technicalSkills || "",
+//         projectLinks: Array.isArray(data.projectLinks)
+//           ? data.projectLinks.join(", ")
+//           : data.projectLinks || "",
+//         education: {
+//           college: data.education?.college || "",
+//           degree: data.education?.degree || "",
+//           year: data.education?.year ? String(data.education.year) : "",
+//         },
+//         contactNumber: data.contactNumber || "",
+//         resume: "",
+//       });
+//       setResumeName(data.resumeName || "");
+//     }
+//   }, [data]);
+
+//   const handleChange = (e) => {
+//     const { id, value } = e.target;
+//     if (id in formData.education) {
+//       setFormData({
+//         ...formData,
+//         education: { ...formData.education, [id]: value },
+//       });
+//     } else {
+//       setFormData({ ...formData, [id]: value });
+//     }
+//   };
+
+//   const handleFileChange = (e) => {
+//     const file = e.target.files[0];
+//     if (file && file.type === "application/pdf") {
+//       setFormData({ ...formData, resume: file });
+//       setResumeName(file.name);
+//     } else {
+//       alert("Please upload a valid PDF file.");
+//     }
+//   };
+
+//   const handleSubmit = async (e) => {
+//     e.preventDefault();
+//     setLoading(true);
+//     setError("");
+//     setSuccess(false);
+
+//     try {
+//       if (!formData.name || !formData.email) {
+//         throw new Error("Name and email are required fields");
+//       }
+
+//       const userData = new FormData();
+
+//       Object.keys(formData).forEach((key) => {
+//         if (
+//           key !== "education" &&
+//           key !== "resume" &&
+//           key !== "technicalSkills" &&
+//           key !== "projectLinks" &&
+//           formData[key]
+//         ) {
+//           userData.append(key, formData[key]);
+//         }
+//       });
+
+//       const skills = formData.technicalSkills
+//         .split(",")
+//         .map((skill) => skill.trim())
+//         .filter(Boolean);
+//       userData.append("technicalSkills", JSON.stringify(skills));
+
+//       const links = formData.projectLinks
+//         .split(",")
+//         .map((link) => link.trim())
+//         .filter(Boolean);
+//       userData.append("projectLinks", JSON.stringify(links));
+
+//       if (
+//         formData.education.college ||
+//         formData.education.degree ||
+//         formData.education.year
+//       ) {
+//         const education = {
+//           college: formData.education.college || "",
+//           degree: formData.education.degree || "",
+//           year: formData.education.year
+//             ? parseInt(formData.education.year)
+//             : null,
+//         };
+//         userData.append("education", JSON.stringify(education));
+//       }
+
+//       if (formData.resume instanceof File) {
+//         userData.append("resume", formData.resume);
+//       }
+
+//       const token = localStorage.getItem("token");
+//       if (!token) {
+//         throw new Error("Authentication token not found");
+//       }
+
+//       const response = await axios.post(
+//         `${import.meta.env.VITE_BACKEND_URL}/api/user/user-update`,
+//         userData,
+//         {
+//           headers: { token },
+//           validateStatus: (status) => status < 500,
+//         }
+//       );
+
+//       if (response.status === 200) {
+//         setSuccess(true);
+//         setIsEditable(false);
+//       } else {
+//         throw new Error(response.data.message || "Failed to update profile");
+//       }
+//     } catch (err) {
+//       console.error("Error details:", err);
+//       setError(err.message || "Something went wrong");
+//     } finally {
+//       setLoading(false);
+//     }
+//   };
+
+//   const handleReset = () => {
+//     setIsEditable(false);
+//     setFormData({
+//       name: data?.name || "",
+//       email: data?.email || "",
+//       password: "",
+//       bio: data?.bio || "",
+//       resume: "",
+//       githubLink: data?.githubLink || "",
+//       linkedinLink: data?.linkedinLink || "",
+//       technicalSkills: Array.isArray(data?.technicalSkills)
+//         ? data.technicalSkills.join(", ")
+//         : data?.technicalSkills || "",
+//       projectLinks: Array.isArray(data?.projectLinks)
+//         ? data.projectLinks.join(", ")
+//         : data?.projectLinks || "",
+//       education: {
+//         college: data?.education?.college || "",
+//         degree: data?.education?.degree || "",
+//         year: data?.education?.year ? String(data.education.year) : "",
+//       },
+//       contactNumber: data?.contactNumber || "",
+//     });
+//     setResumeName(data?.resumeName || "");
+//     setError("");
+//     setSuccess(false);
+//   };
+
+//   const LoadingSpinner = () => (
+//     <div className="flex justify-center items-center">
+//       <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-blue-500"></div>
+//     </div>
+//   );
+
+//   return (
+//     <div className="min-h-screen bg-gradient-to-br from-blue-100 to-white flex items-center justify-center px-4 py-10">
+//       <div className="w-full max-w-4xl bg-white/70 backdrop-blur-md border border-gray-200 rounded-2xl shadow-xl p-10">
+//         <div className="flex justify-between items-center mb-6">
+//           <div>
+//             <h1 className="text-4xl font-bold text-blue-600">
+//               {isEditable ? "Edit" : "View"} Profile
+//             </h1>
+//             <p className="text-gray-600 text-lg">
+//               {isEditable ? "Make changes to your profile." : "Profile details"}
+//             </p>
+//           </div>
+//           <button
+//             onClick={() => setIsEditable(!isEditable)}
+//             className={`flex items-center gap-2 px-4 py-2 rounded-lg font-semibold ${
+//               isEditable
+//                 ? "bg-green-600 text-white hover:bg-green-700"
+//                 : "bg-blue-600 text-white hover:bg-blue-700"
+//             } transition`}
+//           >
+//             {isEditable ? <FaSave /> : <FaEdit />}{" "}
+//             {isEditable ? "Save Mode" : "Edit Mode"}
+//           </button>
+//         </div>
+
+//         {error && (
+//           <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mb-4">
+//             {error}
+//           </div>
+//         )}
+//         {success && (
+//           <div className="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded mb-4">
+//             Profile updated successfully!
+//           </div>
+//         )}
+
+//         <form onSubmit={handleSubmit} className="space-y-10">
+//           {/* Map your inputs here just like before, but apply readOnly={!isEditable} */}
+//           {/* Same structure as before — for brevity, keep using your current field mappings */}
+//           {/* Add readOnly={!isEditable} and disabled={!isEditable} to inputs/selects/files */}
+
+//           {/* Example of one field: */}
+//           <div>
+//             <label
+//               htmlFor="name"
+//               className="text-sm font-semibold text-gray-700 mb-1"
+//             >
+//               Full Name
+//             </label>
+//             <input
+//               type="text"
+//               id="name"
+//               value={formData.name}
+//               onChange={handleChange}
+//               readOnly={!isEditable}
+//               className={`w-full px-4 py-3 border ${
+//                 isEditable ? "bg-white" : "bg-gray-100"
+//               } border-gray-300 rounded-lg shadow-sm`}
+//             />
+//           </div>
+
+//           {/* Repeat the pattern for other fields... */}
+
+//           {isEditable && (
+//             <div className="flex justify-end gap-4 pt-4">
+//               <button
+//                 type="button"
+//                 onClick={handleReset}
+//                 className="bg-gray-200 hover:bg-gray-300 text-gray-700 font-semibold px-6 py-3 rounded-lg transition"
+//               >
+//                 Cancel
+//               </button>
+//               <button
+//                 type="submit"
+//                 disabled={loading}
+//                 className="bg-blue-600 hover:bg-blue-700 text-white font-semibold px-6 py-3 rounded-lg transition flex items-center gap-2"
+//               >
+//                 {loading ? <LoadingSpinner /> : "Save Changes"}
+//               </button>
+//             </div>
+//           )}
+//         </form>
+//       </div>
+//     </div>
+//   );
+// };
+
+// export default Profile;
