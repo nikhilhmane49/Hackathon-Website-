@@ -463,7 +463,7 @@ const newTeamReg = new teamModel({
   praticipante: users.map((user) => user.email),
   useradminid: userid,
   hackatonapllyid: firstUser?.hackatonapllyid?.[0] || null,
-    organizerid: firstUser?.hackatonid?.[0] || null,
+  organizerid: firstUser?.hackatonid?.[0] || null,
   userreg: true,
 });
 
