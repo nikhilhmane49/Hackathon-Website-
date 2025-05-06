@@ -8,6 +8,7 @@ const { organizerregester, organizerlogin, createHackathon ,gethackton,getprofil
 
 
 const authadmin = require('../Midellware/Authorg');
+const verifyTokenQuery = require('../Midellware/verifyTokenQuery');
 
 const orgnizerroutes = express.Router();
 
@@ -27,7 +28,7 @@ orgnizerroutes.post('/orgnizer-hackathon', authadmin,  upload.fields([
     , createHackathon);
 
 orgnizerroutes.get('/orgnizer-gethackathon',gethackton );
-orgnizerroutes.get('/orgnizer-teamcount',authadmin,streamTeamcount );
+orgnizerroutes.get('/orgnizer-teamcount',verifyTokenQuery,streamTeamcount );
 
 
 module.exports = orgnizerroutes;

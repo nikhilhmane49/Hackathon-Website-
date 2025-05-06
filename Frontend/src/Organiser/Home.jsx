@@ -13,18 +13,19 @@ const Home = () => {
 
   useEffect(() => {
     const eventSource = new EventSource(
-      `http://localhost:3000/api/orgnizer/orgnizer-teamcount`, {
-      headers: {
-        atoken: atoken,
-      }
-    });
-    
-
+      `http://localhost:3000/api/orgnizer/orgnizer-teamcount?atoken=${atoken}`
+    );
 
     eventSource.onmessage = (event) => {
       const data = JSON.parse(event.data);
+       console.log("Received:", event.data);
       setCount(data.count);
     };
+
+
+   
+
+
 
     eventSource.onerror = (err) => {
       console.error("SSE error:", err);
@@ -32,7 +33,7 @@ const Home = () => {
     };
 
     return () => eventSource.close();
-  }, [setCount]);
+  }, [atoken]);
 
   return (
     <div>

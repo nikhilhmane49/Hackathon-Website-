@@ -2,6 +2,7 @@ const organizerModel = require('../Model/organizer');
 const userModel = require('../Model/User');
 const teamsModel = require('../Model/teamreg');
 const bcrypt = require('bcrypt');
+const mongoose = require('mongoose');
 const cloudinary = require('cloudinary').v2;
 const jwt = require('jsonwebtoken');
 require('dotenv').config();
@@ -490,17 +491,46 @@ const getprofileforhack = async (req, res) => {
 const clients = [];
 
 
-teamsModel.on('change', async (change) => {
+
+//   console.log('Database change detected:', change);
+
+//   // Find all unique organizer IDs
+//   const organizerIds = [...new Set(clients.map(c => c.id))];
+
+//   for (const orgId of organizerIds) {
+//     // Count how many teams are registered for this organizer
+//     const count = await teamsModel.countDocuments({ hackathonid: orgId });
+
+//     // Send the updated count to all connected clients of this organizer
+//     clients
+//       .filter(c => c.id === orgId)
+//       .forEach(c => {
+//         c.res.write(`data: ${JSON.stringify({ count })}\n\n`);
+//       });
+//   }
+// });
+
+
+
+
+teamsModel.watch().on('change', async (change) => {
   console.log('Database change detected:', change);
 
-  // Find all unique organizer IDs
   const organizerIds = [...new Set(clients.map(c => c.id))];
 
   for (const orgId of organizerIds) {
-    // Count how many teams are registered for this organizer
-    const count = await teamsModel.countDocuments({ hackathonid: orgId });
+    // const count = await teamsModel.countDocuments({ hackathonid: orgId });
 
-    // Send the updated count to all connected clients of this organizer
+    console.log(typeof orgId, orgId);
+
+
+    const count = await teamsModel.countDocuments({
+      organizerid: { $in: [new mongoose.Types.ObjectId(orgId)] }
+ // 💡 match array field
+  });
+
+    console.log("count", count); // Debugging line
+
     clients
       .filter(c => c.id === orgId)
       .forEach(c => {
@@ -533,6 +563,15 @@ const streamTeamcount = async (req, res) => {
       const index = clients.indexOf(client);
       if (index !== -1) clients.splice(index, 1);
     });
+
+
+      const initialCount = await teamsModel.countDocuments({
+      organizerid: { $in: [new mongoose.Types.ObjectId(organizerId)] },
+    });
+
+    res.write(`data: ${JSON.stringify({ count: initialCount })}\n\n`);
+
+
   }catch (error) {
     console.log(error);
     res.status(500).json({
