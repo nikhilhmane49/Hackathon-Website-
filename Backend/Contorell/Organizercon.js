@@ -1,5 +1,6 @@
 const organizerModel = require('../Model/organizer');
 const userModel = require('../Model/User');
+const teamsModel = require('../Model/teamreg');
 const bcrypt = require('bcrypt');
 const cloudinary = require('cloudinary').v2;
 const jwt = require('jsonwebtoken');
@@ -437,4 +438,109 @@ const getprofileforhack = async (req, res) => {
 };
 
 
-module.exports={organizerregester,organizerlogin , createHackathon ,gethackton ,getprofileforhack};
+
+// const updatethenoofteam = async (req, res) => {
+//     try {
+//       const authId = req.auth.id;
+//       const clients = [];
+
+//       res.setHeader('content-type', 'text/event-stream');
+//       res.setHeader('Cache-Control', 'no-cache');
+//       res.setHeader('Connection', 'keep-alive');
+//       res.flushHeaders();
+      
+//       const client = { id: organizerId, res }
+//       clients.push(client);
+
+//       res.on('close', () => {
+//          const index = clients.indexOf(client);
+//     if (index !== -1) clients.splice(index, 1);
+//       });
+
+
+//       Team.watch().on('change', async (change) => {
+//     console.log('Database change detected:', change);
+
+//     // Find all unique organizer IDs
+//     const organizerIds = [...new Set(clients.map(c => c.id))];
+
+//     for (const orgId of organizerIds) {
+//       // Count how many teams are registered for this organizer
+//       const count = await Team.countDocuments({ organizerid: orgId });
+
+//       // Send the updated count to all connected clients of this organizer
+//       clients
+//         .filter(c => c.id === orgId)
+//         .forEach(c => {
+//           c.res.write(`data: ${JSON.stringify({ count })}\n\n`);
+//         });
+//     }
+      
+//      }
+//     catch (error) {
+//         console.log(error);
+//         res.status(500).json({
+//             success: false,
+//             message: "Internal server error",
+//         });
+//     }
+// }
+
+
+const clients = [];
+
+
+teamsModel.on('change', async (change) => {
+  console.log('Database change detected:', change);
+
+  // Find all unique organizer IDs
+  const organizerIds = [...new Set(clients.map(c => c.id))];
+
+  for (const orgId of organizerIds) {
+    // Count how many teams are registered for this organizer
+    const count = await teamsModel.countDocuments({ hackathonid: orgId });
+
+    // Send the updated count to all connected clients of this organizer
+    clients
+      .filter(c => c.id === orgId)
+      .forEach(c => {
+        c.res.write(`data: ${JSON.stringify({ count })}\n\n`);
+      });
+  }
+});
+
+
+const streamTeamcount = async (req, res) => { 
+
+  try {
+    const organizerId = req.auth.id;
+    console.log("Organizer ID:", organizerId); // Debugging line
+    if(!organizerId) {
+      return res.status(400).json({
+        success: false,
+        message: "Organizer ID is required",
+      });
+    }
+
+    res.setHeader('Content-Type', 'text/event-stream');
+    res.setHeader('Cache-Control', 'no-cache');
+    res.setHeader('Connection', 'keep-alive');
+
+    const client = { id: organizerId, res };
+    clients.push(client);
+
+    res.on('close', () => {
+      const index = clients.indexOf(client);
+      if (index !== -1) clients.splice(index, 1);
+    });
+  }catch (error) {
+    console.log(error);
+    res.status(500).json({
+      success: false,
+      message: "Internal server error",
+    });
+  }
+}
+
+
+module.exports={organizerregester,organizerlogin , createHackathon ,gethackton ,getprofileforhack,streamTeamcount};

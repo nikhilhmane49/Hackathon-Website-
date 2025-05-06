@@ -513,5 +513,9 @@ const getTeamReg = async (req, res) => {
 
 
 
+
+
+
+
 module.exports={regester,userlogin,updateProfile ,applyToHackathon, getprofile,saveTeamReg,getTeamReg};
 
