@@ -503,7 +503,7 @@ teamsModel.watch().on("change", async (change) => {
 
     // ✅ Corrected query using $in operator
     const count = await teamsModel.countDocuments({
-      organizerid: { $in: [new mongoose.Types.ObjectId(orgId)] }
+      hackatonapllyid: { $in: [new mongoose.Types.ObjectId(orgId)] }
     });
 
     console.log(`Sending count ${count} to organizer ${orgId}`);
@@ -538,7 +538,7 @@ const streamTeamcount = async (req, res) => {
 
     // ✅ Corrected initial count query
     const initialCount = await teamsModel.countDocuments({
-      organizerid: { $in: [new mongoose.Types.ObjectId(organizerId)] }
+      hackatonapllyid: { $in: [new mongoose.Types.ObjectId(organizerId)] }
     });
 
     res.write(`data: ${JSON.stringify({ count: initialCount })}\n\n`);

@@ -1,3 +1,8 @@
+import React, { useState, useContext , useEffect} from "react";
+
+import { Appcontext } from "../context/contextpra";
+
+
 const Home = () => {
   const { atoken } = useContext(Appcontext);
   const [count, setCount] = useState(0);
@@ -10,7 +15,7 @@ const Home = () => {
     }
 
     const eventSource = new EventSource(
-      `http://localhost:3000/api/organizer/organizer-teamcount?atoken=${atoken}`
+      `http://localhost:3000/api/orgnizer/orgnizer-teamcount?atoken=${atoken}`
     );
 
     eventSource.onopen = () => {
