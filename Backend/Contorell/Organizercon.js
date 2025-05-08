@@ -491,95 +491,87 @@ const getprofileforhack = async (req, res) => {
 const clients = [];
 
 
+// 🔄 MongoDB Change Stream
+// 🔄 Updated MongoDB Query with $in operator for arrays
+teamsModel.watch().on("change", async (change) => {
+  console.log("Database change detected:", change);
 
-//   console.log('Database change detected:', change);
-
-//   // Find all unique organizer IDs
-//   const organizerIds = [...new Set(clients.map(c => c.id))];
-
-//   for (const orgId of organizerIds) {
-//     // Count how many teams are registered for this organizer
-//     const count = await teamsModel.countDocuments({ hackathonid: orgId });
-
-//     // Send the updated count to all connected clients of this organizer
-//     clients
-//       .filter(c => c.id === orgId)
-//       .forEach(c => {
-//         c.res.write(`data: ${JSON.stringify({ count })}\n\n`);
-//       });
-//   }
-// });
-
-
-
-
-teamsModel.watch().on('change', async (change) => {
-  console.log('Database change detected:', change);
-
-  const organizerIds = [...new Set(clients.map(c => c.id))];
+  const organizerIds = [...new Set(clients.map((c) => c.id))];
 
   for (const orgId of organizerIds) {
-    // const count = await teamsModel.countDocuments({ hackathonid: orgId });
+    if (!mongoose.Types.ObjectId.isValid(orgId)) continue;
 
-    console.log(typeof orgId, orgId);
-
-
+    // ✅ Corrected query using $in operator
     const count = await teamsModel.countDocuments({
       organizerid: { $in: [new mongoose.Types.ObjectId(orgId)] }
- // 💡 match array field
-  });
+    });
 
-    console.log("count", count); // Debugging line
+    console.log(`Sending count ${count} to organizer ${orgId}`);
 
     clients
-      .filter(c => c.id === orgId)
-      .forEach(c => {
+      .filter((c) => c.id === orgId)
+      .forEach((c) => {
         c.res.write(`data: ${JSON.stringify({ count })}\n\n`);
       });
   }
 });
 
-
-const streamTeamcount = async (req, res) => { 
-
+// 🌐 Updated SSE Endpoint
+const streamTeamcount = async (req, res) => {
   try {
     const organizerId = req.auth.id;
-    console.log("Organizer ID:", organizerId); // Debugging line
-    if(!organizerId) {
-      return res.status(400).json({
-        success: false,
-        message: "Organizer ID is required",
+
+    if (!organizerId || !mongoose.Types.ObjectId.isValid(organizerId)) {
+      return res.status(400).json({ 
+        success: false, 
+        message: "Invalid Organizer ID" 
       });
     }
 
-    res.setHeader('Content-Type', 'text/event-stream');
-    res.setHeader('Cache-Control', 'no-cache');
-    res.setHeader('Connection', 'keep-alive');
+    res.setHeader("Content-Type", "text/event-stream");
+    res.setHeader("Cache-Control", "no-cache");
+    res.setHeader("Connection", "keep-alive");
+    res.flushHeaders();
 
     const client = { id: organizerId, res };
     clients.push(client);
 
-    res.on('close', () => {
-      const index = clients.indexOf(client);
-      if (index !== -1) clients.splice(index, 1);
-    });
-
-
-      const initialCount = await teamsModel.countDocuments({
-      organizerid: { $in: [new mongoose.Types.ObjectId(organizerId)] },
+    // ✅ Corrected initial count query
+    const initialCount = await teamsModel.countDocuments({
+      organizerid: { $in: [new mongoose.Types.ObjectId(organizerId)] }
     });
 
     res.write(`data: ${JSON.stringify({ count: initialCount })}\n\n`);
 
+    // ... rest remains the same
 
-  }catch (error) {
-    console.log(error);
-    res.status(500).json({
-      success: false,
-      message: "Internal server error",
+    // 🔄 Keep-alive ping
+    const keepAliveInterval = setInterval(() => {
+      res.write(":\n\n"); // comment line to keep the connection alive
+    }, 20 * 1000);
+
+    // Cleanup on disconnect
+    req.on("close", () => {
+      console.log(`Client disconnected: ${organizerId}`);
+      clearInterval(keepAliveInterval);
+      const index = clients.indexOf(client);
+      if (index !== -1) clients.splice(index, 1);
+      res.end();
     });
+  } catch (error) {
+    console.error("SSE endpoint error:", error);
+    if (!res.headersSent) {
+      res
+        .status(500)
+        .json({ success: false, message: "Internal server error" });
+    } else {
+      res.end();
+    }
   }
-}
+};
+
+
+
 
 
 module.exports={organizerregester,organizerlogin , createHackathon ,gethackton ,getprofileforhack,streamTeamcount};

@@ -1,39 +1,54 @@
-import React, { useEffect, useState, useContext } from "react";
-import { Appcontext } from "../context/contextpra";
-
-
 const Home = () => {
-
-
   const { atoken } = useContext(Appcontext);
-  
-  // console.log("atoken"+ atoken);
-
   const [count, setCount] = useState(0);
+  const [error, setError] = useState('');
 
   useEffect(() => {
+    if (!atoken) {
+      setError('Missing authentication token');
+      return;
+    }
+
     const eventSource = new EventSource(
-      `http://localhost:3000/api/orgnizer/orgnizer-teamcount?atoken=${atoken}`
+      `http://localhost:3000/api/organizer/organizer-teamcount?atoken=${atoken}`
     );
 
-    eventSource.onmessage = (event) => {
-      const data = JSON.parse(event.data);
-       console.log("Received:", event.data);
-      setCount(data.count);
+    eventSource.onopen = () => {
+      console.log('SSE connection established');
+      setError('');
     };
 
-
-   
-
-
+    eventSource.onmessage = (event) => {
+      try {
+        const data = JSON.parse(event.data);
+        console.log("Received update:", data);
+        setCount(data.count);
+        setError('');
+      } catch (err) {
+        console.error('Parsing error:', err);
+        setError('Invalid data format received');
+      }
+    };
 
     eventSource.onerror = (err) => {
       console.error("SSE error:", err);
+      setError('Connection error - retrying...');
       eventSource.close();
+      
+      // Optional: Add reconnect logic here
+      setTimeout(() => {
+        setError('Reconnecting...');
+        // You might want to re-run the useEffect here
+      }, 5000);
     };
 
-    return () => eventSource.close();
+    return () => {
+      console.log('Cleaning up SSE connection');
+      eventSource.close();
+    };
   }, [atoken]);
+
+
 
   return (
     <div>
