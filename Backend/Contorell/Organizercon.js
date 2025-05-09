@@ -490,9 +490,6 @@ const getprofileforhack = async (req, res) => {
 
 const clients = [];
 
-
-// 🔄 MongoDB Change Stream
-// 🔄 Updated MongoDB Query with $in operator for arrays
 teamsModel.watch().on("change", async (change) => {
   console.log("Database change detected:", change);
 
@@ -506,12 +503,19 @@ teamsModel.watch().on("change", async (change) => {
       hackatonapllyid: { $in: [new mongoose.Types.ObjectId(orgId)] }
     });
 
+    const initialParticipantCount = await teamsModel.aggregate([
+  { $project: { count: { $size: "$praticipante" } } },
+  { $group: { _id: null, total: { $sum: "$count" } } }
+]);
+
+const totalInitialParticipants = initialParticipantCount[0]?.total || 0;
+
     console.log(`Sending count ${count} to organizer ${orgId}`);
 
     clients
       .filter((c) => c.id === orgId)
       .forEach((c) => {
-        c.res.write(`data: ${JSON.stringify({ count })}\n\n`);
+        c.res.write(`data: ${JSON.stringify({ count ,totalInitialParticipants })}\n\n`);
       });
   }
 });
@@ -541,7 +545,16 @@ const streamTeamcount = async (req, res) => {
       hackatonapllyid: { $in: [new mongoose.Types.ObjectId(organizerId)] }
     });
 
-    res.write(`data: ${JSON.stringify({ count: initialCount })}\n\n`);
+    const initialParticipantCount = await teamsModel.aggregate([
+  { $project: { count: { $size: "$praticipante" } } },
+  { $group: { _id: null, total: { $sum: "$count" } } }
+]);
+
+const totalInitialParticipants = initialParticipantCount[0]?.total || 0;
+
+
+
+    res.write(`data: ${JSON.stringify({ count: initialCount,participants: totalInitialParticipants })}\n\n`);
 
     // ... rest remains the same
 

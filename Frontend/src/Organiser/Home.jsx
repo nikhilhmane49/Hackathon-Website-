@@ -6,6 +6,7 @@ import { Appcontext } from "../context/contextpra";
 const Home = () => {
   const { atoken } = useContext(Appcontext);
   const [count, setCount] = useState(0);
+  const [totaluser,settotaluser] = useState(0);
   const [error, setError] = useState('');
 
   useEffect(() => {
@@ -28,6 +29,7 @@ const Home = () => {
         const data = JSON.parse(event.data);
         console.log("Received update:", data);
         setCount(data.count);
+        settotaluser(data.participants);
         setError('');
       } catch (err) {
         console.error('Parsing error:', err);
@@ -67,7 +69,7 @@ const Home = () => {
           <div className="flex justify-between items-start">
             <div>
               <p className="text-purple-200 text-sm font-medium">Total Users</p>
-              <h3 className="text-3xl font-bold mt-1">8,249</h3>
+              <h3 className="text-3xl font-bold mt-1">{totaluser}</h3>
               <p className="text-purple-200 text-sm mt-2 flex items-center">
                 <span className="inline-block mr-1">↑</span> 12.5% from last
                 month
