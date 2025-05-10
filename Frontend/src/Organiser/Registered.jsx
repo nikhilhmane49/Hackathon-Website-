@@ -1,121 +1,165 @@
 import React, { useState, useEffect } from 'react';
+import axios from 'axios';
 import {
   FaBookmark, FaPlus, FaSearch, FaSort, FaStar, FaEllipsisV
 } from 'react-icons/fa';
 import { motion, AnimatePresence } from 'framer-motion';
 
 function ParticipantList() {
-  const [activeTab, setActiveTab] = useState("in-progress");
-  const [searchTerm, setSearchTerm] = useState("");
-  const [isFilterOpen, setIsFilterOpen] = useState(false);
-  const [selectedParticipants, setSelectedParticipants] = useState([]);
+  // const [activeTab, setActiveTab] = useState("in-progress");
+  // const [searchTerm, setSearchTerm] = useState("");
+  // const [isFilterOpen, setIsFilterOpen] = useState(false);
+  // const [selectedParticipants, setSelectedParticipants] = useState([]);
   const [isDarkMode, setIsDarkMode] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
 
-  const [participants, setParticipants] = useState([
-    {
-      id: 1,
-      teamName: "Ding_ding",
-      playerCount: 2,
-      leadName: "Aneesh Kulkarni",
-      college: "RV University, Bangalore",
-      status: "Not Submitted",
-      score: "--",
-      bookmarked: false,
-      avatarColor: "bg-gradient-to-r from-red-500 to-pink-500",
-      lastActive: "2 hours ago",
-      shortlisted: false,
-      rejected: false,
-    },
-    {
-      id: 2,
-      teamName: "Tech Titans",
-      playerCount: 4,
-      leadName: "Deepika Bunga",
-      college: "Shri Vishnu Engineering College",
-      status: "Not Submitted",
-      score: "--",
-      bookmarked: false,
-      avatarColor: "bg-gradient-to-r from-blue-500 to-purple-500",
-      lastActive: "5 hours ago",
-      shortlisted: true,
-      rejected: false,
-    },
-    {
-      id: 3,
-      teamName: "Tech-Runs",
-      playerCount: 3,
-      leadName: "Prasanthkumar Bhumula",
-      college: "Gayatri Vidya Parishad College",
-      status: "Submitted",
-      submissionTime: "22 Mar 23, 10:45 PM IST",
-      score: "--",
-      bookmarked: true,
-      avatarColor: "bg-gradient-to-r from-green-500 to-teal-500",
-      lastActive: "1 day ago",
-      shortlisted: true,
-      rejected: false,
-    },
-    {
-      id: 4,
-      teamName: "EcoChampions",
-      playerCount: 2,
-      leadName: "Ritika Rathour",
-      college: "National Institute of Securities",
-      status: "Not Submitted",
-      score: "--",
-      bookmarked: false,
-      avatarColor: "bg-gradient-to-r from-gray-500 to-blue-gray-500",
-      lastActive: "3 days ago",
-      shortlisted: false,
-      rejected: true,
-    },
-    {
-      id: 5,
-      teamName: "Venture Vaults",
-      playerCount: 2,
-      leadName: "Manas Singh",
-      college: "Delhi Technical University",
-      status: "Not Submitted",
-      score: "--",
-      bookmarked: false,
-      avatarColor: "bg-gradient-to-r from-amber-500 to-orange-500",
-      lastActive: "Just now",
-      shortlisted: false,
-      rejected: false,
-    },
-  ]);
+  // const [participants, setParticipants] = useState([
+  //   {
+  //     id: 1,
+  //     teamName: "Ding_ding",
+  //     playerCount: 2,
+  //     leadName: "Aneesh Kulkarni",
+  //     college: "RV University, Bangalore",
+  //     status: "Not Submitted",
+  //     score: "--",
+  //     bookmarked: false,
+  //     avatarColor: "bg-gradient-to-r from-red-500 to-pink-500",
+  //     lastActive: "2 hours ago",
+  //     shortlisted: false,
+  //     rejected: false,
+  //   },
+  //   {
+  //     id: 2,
+  //     teamName: "Tech Titans",
+  //     playerCount: 4,
+  //     leadName: "Deepika Bunga",
+  //     college: "Shri Vishnu Engineering College",
+  //     status: "Not Submitted",
+  //     score: "--",
+  //     bookmarked: false,
+  //     avatarColor: "bg-gradient-to-r from-blue-500 to-purple-500",
+  //     lastActive: "5 hours ago",
+  //     shortlisted: true,
+  //     rejected: false,
+  //   },
+  //   {
+  //     id: 3,
+  //     teamName: "Tech-Runs",
+  //     playerCount: 3,
+  //     leadName: "Prasanthkumar Bhumula",
+  //     college: "Gayatri Vidya Parishad College",
+  //     status: "Submitted",
+  //     submissionTime: "22 Mar 23, 10:45 PM IST",
+  //     score: "--",
+  //     bookmarked: true,
+  //     avatarColor: "bg-gradient-to-r from-green-500 to-teal-500",
+  //     lastActive: "1 day ago",
+  //     shortlisted: true,
+  //     rejected: false,
+  //   },
+  //   {
+  //     id: 4,
+  //     teamName: "EcoChampions",
+  //     playerCount: 2,
+  //     leadName: "Ritika Rathour",
+  //     college: "National Institute of Securities",
+  //     status: "Not Submitted",
+  //     score: "--",
+  //     bookmarked: false,
+  //     avatarColor: "bg-gradient-to-r from-gray-500 to-blue-gray-500",
+  //     lastActive: "3 days ago",
+  //     shortlisted: false,
+  //     rejected: true,
+  //   },
+  //   {
+  //     id: 5,
+  //     teamName: "Venture Vaults",
+  //     playerCount: 2,
+  //     leadName: "Manas Singh",
+  //     college: "Delhi Technical University",
+  //     status: "Not Submitted",
+  //     score: "--",
+  //     bookmarked: false,
+  //     avatarColor: "bg-gradient-to-r from-amber-500 to-orange-500",
+  //     lastActive: "Just now",
+  //     shortlisted: false,
+  //     rejected: false,
+  //   },
+  // ]);
+
+
+
+
+
+  const [teamdata, setteamdata] = useState([]);
+  // const navigate = useNavigate();
+  const atoken = localStorage.getItem("atoken");
+  useEffect(() => {
+   
+    if (!atoken) {
+      console.error("No token found");
+      return;
+    }
+    const fetchData = async () => {
+      // setLoading(true);
+      try {
+        const response = await axios.get(
+          "http://localhost:3000/api/orgnizer/orgnizer-hacktonteam",
+          {
+            headers: {
+             atoken: atoken,
+            },
+          }
+        );
+        setteamdata(response.data.data);
+        console.log(response.data.data);
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      } finally {
+        // setLoading(false);
+      }
+    };
+
+    fetchData();
+  }, [atoken]);
+
+
+
+
+
+
+
 
   useEffect(() => {
     const timer = setTimeout(() => setIsLoading(false), 800);
     return () => clearTimeout(timer);
   }, []);
 
-  const toggleSelect = (id) => {
-    setSelectedParticipants((prev) =>
-      prev.includes(id) ? prev.filter((p) => p !== id) : [...prev, id]
-    );
-  };
+  // const toggleSelect = (id) => {
+  //   setSelectedParticipants((prev) =>
+  //     prev.includes(id) ? prev.filter((p) => p !== id) : [...prev, id]
+  //   );
+  // };
 
-  const toggleBookmark = (id) => {
-    setParticipants((prev) =>
-      prev.map((p) => (p.id === id ? { ...p, bookmarked: !p.bookmarked } : p))
-    );
-  };
+  // const toggleBookmark = (id) => {
+  //   setParticipants((prev) =>
+  //     prev.map((p) => (p.id === id ? { ...p, bookmarked: !p.bookmarked } : p))
+  //   );
+  // };
 
-  const tabFilteredParticipants = participants.filter((p) => {
-    if (activeTab === "all") return true;
-    if (activeTab === "in-progress") return p.status === "Not Submitted";
-    if (activeTab === "shortlisted") return p.shortlisted;
-    if (activeTab === "rejected") return p.rejected;
-    return true;
-  });
+  // const tabFilteredParticipants = participants.filter((p) => {
+  //   if (activeTab === "all") return true;
+  //   if (activeTab === "in-progress") return p.status === "Not Submitted";
+  //   if (activeTab === "shortlisted") return p.shortlisted;
+  //   if (activeTab === "rejected") return p.rejected;
+  //   return true;
+  // });
 
-  const filteredParticipants = tabFilteredParticipants.filter((p) =>
-    [p.teamName, p.leadName, p.college].some((field) =>
-      field.toLowerCase().includes(searchTerm.toLowerCase())
-    )
-  );
+  // const filteredParticipants = tabFilteredParticipants.filter((p) =>
+  //   [p.teamName, p.leadName, p.college].some((field) =>
+  //     field.toLowerCase().includes(searchTerm.toLowerCase())
+  //   )
+  // );
 
   return (
     <div
@@ -148,7 +192,7 @@ function ParticipantList() {
         </div>
 
         {/* Tabs */}
-        <div className="flex space-x-6 border-b mb-4">
+        {/* <div className="flex space-x-6 border-b mb-4">
           {["all", "in-progress", "shortlisted", "rejected"].map((tab) => (
             <button
               key={tab}
@@ -174,10 +218,10 @@ function ParticipantList() {
               )}
             </button>
           ))}
-        </div>
+        </div> */}
 
         {/* Search & Filter */}
-        <div className="flex justify-between items-center mb-4">
+        {/* <div className="flex justify-between items-center mb-4">
           <div className="relative w-1/2">
             <input
               type="text"
@@ -253,7 +297,7 @@ function ParticipantList() {
               )}
             </AnimatePresence>
           </div>
-        </div>
+        </div> */}
 
         {/* Participant List */}
         <div className="mt-6">
@@ -266,46 +310,50 @@ function ParticipantList() {
               className="divide-y transition-colors duration-300"
               style={{ borderColor: isDarkMode ? "#374151" : "#e5e7eb" }}
             >
-              {filteredParticipants.map((participant) => (
-                <li
-                  key={participant.id}
-                  className={`flex items-center justify-between py-4 px-2 hover:bg-opacity-20 transition-colors duration-200 ${
-                    isDarkMode ? "hover:bg-gray-700" : "hover:bg-gray-100"
-                  }`}
-                >
-                  <div className="flex items-center gap-4">
-                    <input
+              {Array.isArray(teamdata) &&
+                teamdata.map((participant) => (
+                  <li
+                    key={participant._id}
+                    className={`flex items-center justify-between py-4 px-2 hover:bg-opacity-20 transition-colors duration-200 ${
+                      isDarkMode ? "hover:bg-gray-700" : "hover:bg-gray-100"
+                    }`}
+                  >
+                    <div className="flex items-center gap-4">
+                      {/* <input
                       type="checkbox"
-                      checked={selectedParticipants.includes(participant.id)}
-                      onChange={() => toggleSelect(participant.id)}
+                      // checked={selectedParticipants.includes(participant._id)}
+                      // onChange={() => toggleSelect(participant._id)}
                       className="form-checkbox h-5 w-5 text-blue-600"
-                    />
-                    <div
-                      className={`w-10 h-10 rounded-full flex items-center justify-center text-white font-bold ${participant.avatarColor}`}
-                    >
-                      {participant.teamName.charAt(0)}
+                    /> */}
+                      <div
+                        className={`w-10 h-10 rounded-full flex items-center justify-center text-black font-bold ${participant.avatarColor}`}
+                      >
+                        {participant.teamname.charAt(0)}
+                      </div>
+                      <div>
+                        <h4 className="font-semibold">
+                          {participant.teamname}
+                        </h4>
+                        <p className="text-sm text-gray-500">
+                          {participant.leadName || null} •{" "}
+                          {participant.college || null}
+                        </p>
+                      </div>
                     </div>
-                    <div>
-                      <h4 className="font-semibold">{participant.teamName}</h4>
-                      <p className="text-sm text-gray-500">
-                        {participant.leadName} • {participant.college}
-                      </p>
-                    </div>
-                  </div>
-                  <div className="flex items-center gap-4 text-sm">
-                    <span
-                      className={`px-2 py-1 rounded-full text-xs font-medium ${
-                        participant.status === "Submitted"
-                          ? "bg-green-100 text-green-800"
-                          : "bg-yellow-100 text-yellow-800"
-                      }`}
-                    >
-                      {participant.status}
-                    </span>
-                    <span className="text-xs text-gray-400">
-                      {participant.lastActive}
-                    </span>
-                    <button onClick={() => toggleBookmark(participant.id)}>
+                    <div className="flex items-center gap-4 text-sm">
+                      <span
+                        className={`px-2 py-1 rounded-full text-xs font-medium ${
+                          participant.status === "Submitted"
+                            ? "bg-green-100 text-green-800"
+                            : "bg-yellow-100 text-yellow-800"
+                        }`}
+                      >
+                        {participant.status || null}
+                      </span>
+                      <span className="text-xs text-gray-400">
+                        {participant.lastActive || null}
+                      </span>
+                      {/* <button onClick={() => toggleBookmark(participant._id)}>
                       <FaBookmark
                         className={`w-4 h-4 ${
                           participant.bookmarked
@@ -313,10 +361,10 @@ function ParticipantList() {
                             : "text-gray-400"
                         }`}
                       />
-                    </button>
-                  </div>
-                </li>
-              ))}
+                    </button> */}
+                    </div>
+                  </li>
+                ))}
             </ul>
           )}
         </div>

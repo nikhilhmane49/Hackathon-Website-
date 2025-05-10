@@ -412,7 +412,7 @@ const gethackton = async (req, res) => {
 };
 
 
-const getprofileforhack = async (req, res) => { 
+const getteamforhack = async (req, res) => { 
 
   const authId = req.auth.id;
 
@@ -421,7 +421,7 @@ const getprofileforhack = async (req, res) => {
   try { 
 
    
-   const user = await userModel.find({ hackatonapllyid: authId }).select('-password');
+   const user = await teamsModel.find({ hackatonapllyid: authId }).select('-password');
     res.json({
       success: true,
       data: user,
@@ -587,4 +587,4 @@ const totalInitialParticipants = initialParticipantCount[0]?.total || 0;
 
 
 
-module.exports={organizerregester,organizerlogin , createHackathon ,gethackton ,getprofileforhack,streamTeamcount};
+module.exports={organizerregester,organizerlogin , createHackathon ,gethackton ,getteamforhack,streamTeamcount};

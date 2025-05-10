@@ -9,7 +9,37 @@ import React from 'react';
 
 const CandidateDetails = () => {
   const [loading, setLoading] = useState(false);
-  const navigate = useNavigate();
+  // const[teamdata,setteamdata]=useState([]);
+   const navigate = useNavigate();
+
+  // useeffect(() => {
+
+  //   const atoken = localStorage.getItem('atoken');
+  //   if (!atoken) {
+  //     console.error('No token found');
+  //     return;
+  //   }
+  //   const fetchData = async () => {
+  //     setLoading(true);
+  //     try {
+  //       const response = await axios.get(
+  //         "http://localhost:3000/api/orgnizer/orgnizer-hacktonteam",
+  //         {
+  //           atoken: atoken, 
+  //         }
+         
+  //       ); // Replace with your API endpoint
+  //       setteamdata(response.data);
+  //       console.log(response.data);
+  //     } catch (error) {
+  //       console.error('Error fetching data:', error);
+  //     } finally {
+  //       setLoading(false);
+  //     }
+  //   };
+
+  //   fetchData();
+  //  }, []);
 
   const TeamMemberCard = ({ isLeader, name, university, phone, email, education, year, branch, degree }) => (
     <div className="bg-white rounded-xl shadow-sm overflow-hidden transition-all duration-300 hover:shadow-md">

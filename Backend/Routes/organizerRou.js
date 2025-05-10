@@ -3,7 +3,7 @@ const express = require('express');
 const upload = require('../Midellware/Multer');
 
 // const upload = require('../midellware/Multer');
-const { organizerregester, organizerlogin, createHackathon ,gethackton,getprofileforhack,streamTeamcount } = require('../Contorell/Organizercon');
+const { organizerregester, organizerlogin, createHackathon ,gethackton,getteamforhack,streamTeamcount } = require('../Contorell/Organizercon');
 
 
 
@@ -18,7 +18,7 @@ const orgnizerroutes = express.Router();
 
 orgnizerroutes.post('/orgnizer-resgretration', organizerregester);
 orgnizerroutes.post('/orgnizer-login', organizerlogin);
-orgnizerroutes.get('/hackaton-profile',authadmin, getprofileforhack);
+orgnizerroutes.get('/orgnizer-hacktonteam',authadmin, getteamforhack);
 orgnizerroutes.post('/orgnizer-hackathon', authadmin,  upload.fields([
   { name: 'brochure', maxCount: 1 },
   { name: 'logo', maxCount: 1 },
