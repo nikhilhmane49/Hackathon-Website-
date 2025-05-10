@@ -556,7 +556,7 @@ const totalInitialParticipants = initialParticipantCount[0]?.total || 0;
 
     res.write(`data: ${JSON.stringify({ count: initialCount,participants: totalInitialParticipants })}\n\n`);
 
-    // ... rest remains the same
+   
 
     // 🔄 Keep-alive ping
     const keepAliveInterval = setInterval(() => {
