@@ -585,6 +585,27 @@ const totalInitialParticipants = initialParticipantCount[0]?.total || 0;
 
 
 
+const gethacktonoforz = async (req, res) => { 
+
+  const authId = req.auth.id;
+
+  try { 
+    const user = await HackathonModel.find({ hackatonorgid: authId }).select('-password');
+    res.json({
+      success: true,
+      data: user,
+      message: "User profile fetched successfully",
+    });
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({
+      success: false,
+      message: "Internal server error",
+    });
+  }
+}
 
 
-module.exports={organizerregester,organizerlogin , createHackathon ,gethackton ,getteamforhack,streamTeamcount};
+
+
+module.exports={organizerregester,organizerlogin , createHackathon ,gethackton ,getteamforhack,streamTeamcount,gethacktonoforz};
