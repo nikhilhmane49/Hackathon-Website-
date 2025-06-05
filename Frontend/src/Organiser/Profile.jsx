@@ -1963,233 +1963,327 @@ const Profile = () => {
   }, [hacktondata]);
 
 
-  // const Onclickhandeler = async (e) => {
-  //   e.preventDefault();
 
+
+  
+  const uploadFile = async (file) => {
+    const data = new FormData();
+    data.append("file", file);
+
+    const res = await axios.post(`${backendurl}/api/upload`, data);
+    return res.data.url; // the uploaded image/brochure URL
+  };
+  
+
+
+
+
+  // const Onclickhandeler = async (e) => {
+  //   if (e) e.preventDefault();
+  //   // if (!validateForm()) return;
+  
   //   try {
   //     const form = new FormData();
-
+  //     const isEditMode = hacktondata && hacktondata._id;
+  
+  //     // Append regular fields
   //     form.append("hackathonName", formData.hackathonName);
   //     form.append("collegeName", formData.collegeName);
   //     form.append("collegeAddress", formData.collegeAddress);
   //     form.append("mode", formData.mode);
   //     form.append("prizePool", formData.prizePool);
-
   //     form.append("teamSize", JSON.stringify(formData.teamSize));
   //     form.append("registration", JSON.stringify(formData.registration));
   //     form.append("stages", JSON.stringify(formData.stages));
   //     form.append("contactDetails", JSON.stringify(formData.contactDetails));
   //     form.append("rules", JSON.stringify(formData.rules));
-  //     form.append("brochure", formData.brochure);
-  //     form.append("logo", formData.logo);
-  //     form.append("banner", formData.banner);
-  //     form.append("sponsors", JSON.stringify(formData.sponsors));
 
-  //     // Append each sponsor logo as a file
-  //     formData.sponsors.forEach((sponsor, index) => {
+
+
+  //     console.log("brochure:", formData.brochure);
+  //     console.log("logo:", formData.logo);
+  //     console.log("banner:", formData.banner);
+  //     console.log(
+  //       "brochure instanceof File:",
+  //       formData.brochure instanceof File
+  //     );
+  //     console.log("logo instanceof File:", formData.logo instanceof File);
+  //     console.log("banner instanceof File:", formData.banner instanceof File);
+
+  
+  //     // ✅ Require files only in Create mode
+  //     if (
+  //       (!isEditMode && !(formData.brochure instanceof File)) ||
+  //       (!isEditMode && !(formData.logo instanceof File)) ||
+  //       (!isEditMode && !(formData.banner instanceof File))
+  //     ) {
+  //       toast.error("Brochure, logo, and banner files are required.");
+  //       return;
+  //     }
+  
+  //     // ✅ Append brochure
+  //     if (formData.brochure instanceof File) {
+  //       form.append("brochure", formData.brochure);
+  //     } else if (typeof formData.brochure === "string") {
+  //       form.append("brochure", formData.brochure);
+  //     }
+  
+  //     // ✅ Append logo
+  //     if (formData.logo instanceof File) {
+  //       form.append("logo", formData.logo);
+  //     } else if (typeof formData.logo === "string") {
+  //       form.append("logo", formData.logo);
+  //     }
+  
+  //     // ✅ Append banner
+  //     if (formData.banner instanceof File) {
+  //       form.append("banner", formData.banner);
+  //     } else if (typeof formData.banner === "string") {
+  //       form.append("banner", formData.banner);
+  //     }
+  
+  //     // Sponsors (stringified for text data)
+  //     form.append(
+  //       "sponsors",
+  //       JSON.stringify(
+  //         formData.sponsors.map((s) => ({
+  //           name: s.name,
+  //           tier: s.tier,
+  //           logo: typeof s.logo === "string" ? s.logo : "",
+  //         }))
+  //       )
+  //     );
+  
+  //     // Sponsor logos (actual file objects)
+  //     formData.sponsors.forEach((sponsor) => {
   //       if (sponsor.logo && typeof sponsor.logo === "object") {
-  //         form.append("sponsorsLogo", sponsor.logo); // name matches multer config
+  //         form.append("sponsorsLogo", sponsor.logo);
   //       }
   //     });
-
-  //     //   if (hacktondata) {
-  //     //     setFormData({
-  //     //       hackathonName: hacktondata.hackathonName || "",
-  //     //       collegeName: hacktondata.collegeName || "",
-  //     //       collegeAddress: hacktondata.collegeAddress || "",
-  //     //       mode: hacktondata.mode || "online",
-  //     //       prizePool: hacktondata.prizePool || "",
-  //     //       teamSize: {
-  //     //         min: hacktondata.teamSize?.min || "",
-  //     //         max: hacktondata.teamSize?.max || "",
-  //     //       },
-  //     //       registration: {
-  //     //         startDate: hacktondata.registration?.startDate || null,
-  //     //         endDate: hacktondata.registration?.endDate || null,
-  //     //       },
-  //     //       stages: [
-  //     //         {
-  //     //           roundTitle: hacktondata.stages?.roundTitle || "",
-  //     //           description: hacktondata.stages?.description || "",
-  //     //           participantTask: hacktondata.stages?.participantTask || "",
-  //     //           impact: hacktondata.stages?.impact || "",
-  //     //           timeline: {
-  //     //             stageStartDate:
-  //     //               hacktondata.stages?.timeline?.stageStartDate || null,
-  //     //             stageEndDate:
-  //     //               hacktondata.stages?.timeline?.stageEndDate || null,
-  //     //           },
-  //     //         },
-  //     //       ],
-  //     //       contactDetails: {
-  //     //         name: hacktondata.contactDetails?.name || "",
-  //     //         email: hacktondata.contactDetails?.email || "",
-  //     //         phone: hacktondata.contactDetails?.phone || "",
-  //     //       },
-  //     //       rules: hacktondata.rules || [""],
-  //     //       brochure: hacktondata.brochure || null,
-  //     //       logo: hacktondata.logo || null,
-  //     //       banner: hacktondata.banner || null,
-
-  //     //       sponsors: [
-  //     //         {
-  //     //           name: hacktondata.sponsors?.[0]?.name || "",
-  //     //           tier: hacktondata.sponsors?.[0]?.tier || "gold",
-  //     //           logo: hacktondata.sponsors?.[0]?.logo || "",
-  //     //         },
-  //     //       ],
-  //     //     });
-  //     //   }
-  //     // }, [hacktondata]);
-
-  //     const response = await axios.post(
-  //       `${backendurl}/api/orgnizer/orgnizer-hackathon`,
-  //       form,
-  //       {
-  //         headers: {
-  //           atoken: atoken,
-  //         },
-  //       }
-  //     );
-
+  
+  //     // Determine URL and method
+  //     let url = `${backendurl}/api/orgnizer/orgnizer-hackathon`;
+  //     let method = "post";
+  //     if (isEditMode) {
+  //       url = `${backendurl}/api/orgnizer/orgnizer-hackathon/${hacktondata._id}`;
+  //       method = "put";
+  //     }
+  
+  //     // API request
+  //     const response = await axios({
+  //       method,
+  //       url,
+  //       data: form,
+  //       headers: { atoken },
+  //     });
+  
+  //     // Response handling
   //     if (response.data.success) {
-  //       toast.success("Hackathon created successfully!");
-
-  //       // 🧹 Reset the form state
-  //       setFormData({
-  //         hackathonName: "",
-  //         collegeName: "",
-  //         collegeAddress: "",
-  //         mode: "online",
-  //         prizePool: "",
-  //         teamSize: {
-  //           min: "",
-  //           max: "",
-  //         },
-  //         registration: {
-  //           startDate: null,
-  //           endDate: null,
-  //         },
-  //         stages: [
-  //           {
-  //             roundTitle: "",
-  //             description: "",
-  //             participantTask: "",
-  //             impact: "",
-  //             timeline: {
-  //               stageStartDate: null,
-  //               stageEndDate: null,
-  //             },
-  //           },
-  //         ],
-  //         contactDetails: {
-  //           name: "",
-  //           email: "",
-  //           phone: "",
-  //         },
-  //         rules: [""],
-  //         brochure: null,
-  //         logo: null,
-  //         banner: null,
-
-  //         sponsors: [
-  //           {
-  //             name: "",
-  //             tier: "gold",
-  //             logo: "",
-  //           },
-  //         ],
-  //       });
-
-  //       // Optional: Reset stepper if using one
+  //       toast.success(
+  //         isEditMode
+  //           ? "Hackathon updated successfully!"
+  //           : "Hackathon created successfully!"
+  //       );
+  //       setIsEdit(false);
   //       setActiveStep(0);
   //     } else {
   //       toast.error(response.data.message);
   //     }
   //   } catch (error) {
-  //     console.error(error);
-  //     toast.error(error.response?.data?.message || "Something went wrong");
+  //     toast.error(error?.response?.data?.message || "Something went wrong");
+  //   }
+  // };
+  
+
+  // const Onclickhandeler = async (e) => {
+  //   if (e) e.preventDefault();
+  
+  //   try {
+  //     const isEditMode = hacktondata && hacktondata._id;
+  
+  //     // 1. Upload files and get URLs
+  //     let brochureUrl = formData.brochure;
+  //     let logoUrl = formData.logo;
+  //     let bannerUrl = formData.banner;
+  
+  //     if (formData.brochure instanceof File) {
+  //       brochureUrl = await uploadFile(formData.brochure);
+  //     }
+  
+  //     if (formData.logo instanceof File) {
+  //       logoUrl = await uploadFile(formData.logo);
+  //     }
+  
+  //     if (formData.banner instanceof File) {
+  //       bannerUrl = await uploadFile(formData.banner);
+  //     }
+  
+  //     // 2. Upload sponsor logos and replace with URLs
+  //     const sponsors = await Promise.all(
+  //       formData.sponsors.map(async (s) => {
+  //         let logoUrl = s.logo;
+  //         if (s.logo instanceof File) {
+  //           logoUrl = await uploadFile(s.logo);
+  //         }
+  //         return {
+  //           name: s.name,
+  //           tier: s.tier,
+  //           logo: logoUrl,
+  //         };
+  //       })
+  //     );
+  
+  //     // 3. Construct data as JSON
+  //     const payload = {
+  //       hackathonName: formData.hackathonName,
+  //       collegeName: formData.collegeName,
+  //       collegeAddress: formData.collegeAddress,
+  //       mode: formData.mode,
+  //       prizePool: formData.prizePool,
+  //       teamSize: formData.teamSize,
+  //       registration: formData.registration,
+  //       stages: formData.stages,
+  //       contactDetails: formData.contactDetails,
+  //       rules: formData.rules,
+  //       brochure: brochureUrl,
+  //       logo: logoUrl,
+  //       banner: bannerUrl,
+  //       sponsors,
+  //     };
+  
+  //     // 4. Send JSON to backend
+  //     const url = isEditMode
+  //       ? `${backendurl}/api/orgnizer/orgnizer-hackathon/${hacktondata._id}`
+  //       : `${backendurl}/api/orgnizer/orgnizer-hackathon`;
+  
+  //     const method = isEditMode ? "put" : "post";
+  
+  //     const response = await axios({
+  //       method,
+  //       url,
+  //       data: payload,
+  //       headers: { atoken },
+  //     });
+  
+  //     if (response.data.success) {
+  //       toast.success(
+  //         isEditMode
+  //           ? "Hackathon updated successfully!"
+  //           : "Hackathon created successfully!"
+  //       );
+  //       setIsEdit(false);
+  //       setActiveStep(0);
+  //     } else {
+  //       toast.error(response.data.message);
+  //     }
+  //   } catch (error) {
+  //     toast.error(error?.response?.data?.message || "Something went wrong");
   //   }
   // };
 
+
   const Onclickhandeler = async (e) => {
     if (e) e.preventDefault();
-    if (!validateForm()) return;
 
     try {
-      const form = new FormData();
-      form.append("hackathonName", formData.hackathonName);
-      form.append("collegeName", formData.collegeName);
-      form.append("collegeAddress", formData.collegeAddress);
-      form.append("mode", formData.mode);
-      form.append("prizePool", formData.prizePool);
-      form.append("teamSize", JSON.stringify(formData.teamSize));
-      form.append("registration", JSON.stringify(formData.registration));
-      form.append("stages", JSON.stringify(formData.stages));
-      form.append("contactDetails", JSON.stringify(formData.contactDetails));
-      form.append("rules", JSON.stringify(formData.rules));
+      const isEditMode = hacktondata && hacktondata._id;
+
+      // 1. Upload brochure, logo, banner and get URLs if they're Files
+      let brochureUrl = formData.brochure;
+      let logoUrl = formData.logo;
+      let bannerUrl = formData.banner;
+
       if (formData.brochure instanceof File) {
-        form.append("brochure", formData.brochure);
-      } else {
-        form.append("brochure", formData.brochure || "");
+        brochureUrl = await uploadFile(formData.brochure);
       }
+
       if (formData.logo instanceof File) {
-        form.append("logo", formData.logo);
-      } else {
-        form.append("logo", formData.logo || "");
+        logoUrl = await uploadFile(formData.logo);
       }
+
       if (formData.banner instanceof File) {
-        form.append("banner", formData.banner);
-      } else {
-        form.append("banner", formData.banner || "");
+        bannerUrl = await uploadFile(formData.banner);
       }
-      form.append(
-        "sponsors",
-        JSON.stringify(
-          formData.sponsors.map((s) => ({
+
+      // ✅ Validation: make sure they're strings (URLs)
+      if (
+        !brochureUrl ||
+        typeof brochureUrl !== "string" ||
+        !logoUrl ||
+        typeof logoUrl !== "string" ||
+        !bannerUrl ||
+        typeof bannerUrl !== "string"
+      ) {
+        toast.error("Brochure, logo, and banner URLs are required.");
+        return;
+      }
+
+      // 2. Upload sponsor logos and return with updated URL if necessary
+      const sponsors = await Promise.all(
+        formData.sponsors.map(async (s) => {
+          let sponsorLogoUrl = s.logo;
+          if (s.logo instanceof File) {
+            sponsorLogoUrl = await uploadFile(s.logo);
+          }
+          return {
             name: s.name,
             tier: s.tier,
-            logo: typeof s.logo === "string" ? s.logo : "",
-          }))
-        )
+            logo: sponsorLogoUrl,
+          };
+        })
       );
-      // Append each sponsor logo as a file
-      formData.sponsors.forEach((sponsor, index) => {
-        if (sponsor.logo && typeof sponsor.logo === "object") {
-          form.append("sponsorsLogo", sponsor.logo);
-        }
-      });
 
-      let url = `${backendurl}/api/orgnizer/orgnizer-hackathon`;
-      let method = "post";
-      if (hacktondata && hacktondata._id) {
-        url = `${backendurl}/api/orgnizer/orgnizer-hackathon/${hacktondata._id}`;
-        method = "put";
-      }
+      // 3. Prepare final payload (JSON)
+      const payload = {
+        hackathonName: formData.hackathonName,
+        collegeName: formData.collegeName,
+        collegeAddress: formData.collegeAddress,
+        mode: formData.mode,
+        prizePool: formData.prizePool,
+        teamSize: formData.teamSize,
+        registration: formData.registration,
+        stages: formData.stages,
+        contactDetails: formData.contactDetails,
+        rules: formData.rules,
+        brochure: brochureUrl,
+        logo: logoUrl,
+        banner: bannerUrl,
+        sponsors,
+      };
+
+      // 4. API call
+      const url = isEditMode
+        ? `${backendurl}/api/orgnizer/orgnizer-hackathon/${hacktondata._id}`
+        : `${backendurl}/api/orgnizer/orgnizer-hackathon`;
+
+      const method = isEditMode ? "put" : "post";
 
       const response = await axios({
         method,
         url,
-        data: form,
+        data: payload,
         headers: { atoken },
       });
 
+      // 5. Handle response
       if (response.data.success) {
         toast.success(
-          hacktondata
+          isEditMode
             ? "Hackathon updated successfully!"
             : "Hackathon created successfully!"
         );
         setIsEdit(false);
         setActiveStep(0);
-        // Optionally, you can refresh data here
       } else {
         toast.error(response.data.message);
       }
     } catch (error) {
-      toast.error(error.response?.data?.message || "Something went wrong");
+      toast.error(error?.response?.data?.message || "Something went wrong");
     }
   };
+  
+  
+
 
   const [errors, setErrors] = useState({});
   const [preview, setPreview] = useState({
@@ -2369,7 +2463,9 @@ const Profile = () => {
     }
   };
 
-  // Handle file uploads
+ 
+
+
   const handleFileChange = (field, file) => {
     if (file) {
       const imageUrl = URL.createObjectURL(file);
@@ -2378,14 +2474,13 @@ const Profile = () => {
         [field]: imageUrl,
       }));
 
-      // In a real app, you'd upload to a server and get a URL
-      // For now, just store the file object reference
       setFormData((prev) => ({
         ...prev,
         [field]: file,
       }));
     }
   };
+  
 
   const validateForm = () => {
     const newErrors = {};
@@ -3155,6 +3250,7 @@ const Profile = () => {
                     <button
                       type="button"
                       className="inline-flex items-center px-3 py-1.5 border border-gray-300 text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition-colors"
+                      disabled={!isEdit}
                       onClick={addRule}
                     >
                       <svg
@@ -3445,47 +3541,7 @@ const Profile = () => {
                   </div>
                 </div>
 
-                {/* <div className="mb-6">
-                  <label
-                    htmlFor="brochure"
-                    className="block text-sm font-medium text-gray-700 mb-1"
-                  >
-                    Brochure PDF URL (or upload PDF)
-                  </label>
-                  <div className="mt-1 flex rounded-md shadow-sm">
-                    <input
-                      type="text"
-                      name="brochure"
-                      id="brochure"
-                      className="focus:ring-indigo-500 focus:border-indigo-500 flex-1 block w-full rounded-none rounded-l-md sm:text-sm border-gray-300 py-3"
-                      placeholder="https://example.com/your-brochure.pdf"
-                      value={formData.brochure}
-                      onChange={handleChange}
-                    />
-                    <label className="inline-flex items-center px-4 rounded-r-md border border-l-0 border-gray-300 bg-gray-50 text-gray-700 text-sm">
-                      <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        className="h-5 w-5 mr-2 text-gray-400"
-                        fill="none"
-                        viewBox="0 0 24 24"
-                        stroke="currentColor"
-                      >
-                        <path
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          strokeWidth={2}
-                          d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"
-                        />
-                      </svg>
-                      Upload PDF
-                      <input
-                        type="file"
-                        className="sr-only"
-                        accept="application/pdf"
-                      />
-                    </label>
-                  </div>
-                </div> */}
+            
 
                 <div className="mb-6">
                   <label
@@ -3495,7 +3551,8 @@ const Profile = () => {
                     Brochure PDF URL (or upload PDF)
                   </label>
                   <div className="mt-1 flex rounded-md shadow-sm">
-                    {/* Text input for brochure URL (optional) */}
+                    
+
                     <input
                       type="text"
                       name="brochure"
@@ -3509,7 +3566,10 @@ const Profile = () => {
                           : ""
                       }
                       onChange={(e) =>
-                        setFormData({ ...formData, brochure: e.target.value })
+                        setFormData((prev) => ({
+                          ...prev,
+                          brochure: e.target.value, // ✅ set string value here
+                        }))
                       }
                     />
 
@@ -3641,93 +3701,7 @@ const Profile = () => {
               </div>
             )}
 
-            {/* {activeStep === 4 && (
-              <div>
-                <h2 className="text-2xl font-bold text-gray-800 mb-6 flex items-center">
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    className="h-6 w-6 mr-2 text-indigo-600"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    stroke="currentColor"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth={2}
-                      d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"
-                    />
-                  </svg>
-                  Add Sponsors
-                </h2>
-                <div className="bg-white p-4 rounded-lg shadow-sm space-y-4">
-                  <h3 className="text-lg font-semibold text-gray-800">
-                    Sponsors
-                  </h3>
-
-                  {formData.sponsors.map((sponsor, index) => (
-                    <div
-                      key={index}
-                      className="grid grid-cols-1 md:grid-cols-3 gap-4 items-end border p-4 rounded-lg"
-                    >
-                      <div>
-                        <label className="block text-sm font-medium text-gray-700">
-                          Sponsor Name
-                        </label>
-                        <input
-                          type="text"
-                          value={sponsor.name}
-                          onChange={(e) =>
-                            handleSponsorChange(index, "name", e.target.value)
-                          }
-                          className="mt-1 w-full border border-gray-300 rounded-md px-3 py-2"
-                          required
-                        />
-                      </div>
-
-                      <div>
-                        <label className="block text-sm font-medium text-gray-700">
-                          Tier
-                        </label>
-                        <select
-                          value={sponsor.tier}
-                          onChange={(e) =>
-                            handleSponsorChange(index, "tier", e.target.value)
-                          }
-                          className="mt-1 w-full border border-gray-300 rounded-md px-3 py-2"
-                        >
-                          <option value="platinum">Platinum</option>
-                          <option value="gold">Gold</option>
-                          <option value="silver">Silver</option>
-                        </select>
-                      </div>
-
-                      <div>
-                        <label className="block text-sm font-medium text-gray-700">
-                          Logo URL
-                        </label>
-                        <input
-                          type="text"
-                          value={sponsor.logo}
-                          onChange={(e) =>
-                            handleSponsorChange(index, "logo", e.target.value)
-                          }
-                          className="mt-1 w-full border border-gray-300 rounded-md px-3 py-2"
-                        />
-                      </div>
-                    </div>
-                  ))}
-
-                  <button
-                    type="button"
-                    onClick={addSponsorField}
-                    className="mt-2 text-indigo-600 hover:underline text-sm"
-                  >
-                    + Add another sponsor
-                  </button>
-                </div>
-              </div>
-            )} */}
+           
 
             {activeStep === 4 && (
               <div>
@@ -3861,66 +3835,7 @@ const Profile = () => {
               </div>
             )}
 
-            {/* <div className="flex justify-between mt-8 pt-6 border-t border-gray-200">
-              <button
-                type="button"
-                onClick={handleBack}
-                className={`px-4 py-2 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 ${
-                  activeStep === 0 ? "opacity-50 cursor-not-allowed" : ""
-                }`}
-                disabled={activeStep === 0}
-              >
-                Back
-              </button>
-
-              {activeStep < steps.length - 1 ? (
-                <button
-                  type="button"
-                  onClick={handleNext}
-                  className="inline-flex items-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
-                >
-                  Next
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    className="ml-2 h-4 w-4"
-                    viewBox="0 0 20 20"
-                    fill="currentColor"
-                  >
-                    <path
-                      fillRule="evenodd"
-                      d="M10.293 15.707a1 1 0 010-1.414L14.586 10l-4.293-4.293a1 1 0 111.414-1.414l5 5a1 1 0 010 1.414l-5 5a1 1 0 01-1.414 0z"
-                      clipRule="evenodd"
-                    />
-                    <path
-                      fillRule="evenodd"
-                      d="M4.293 15.707a1 1 0 010-1.414L8.586 10 4.293 5.707a1 1 0 011.414-1.414l5 5a1 1 0 010 1.414l-5 5a1 1 0 01-1.414 0z"
-                      clipRule="evenodd"
-                    />
-                  </svg>
-                </button>
-              ) : (
-                <button
-                  type="button"
-                  onClick={Onclickhandeler}
-                  className="inline-flex items-center px-5 py-3 border border-transparent text-base font-medium rounded-md shadow-sm text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transform transition-transform hover:scale-105"
-                >
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    className="mr-2 h-5 w-5"
-                    viewBox="0 0 20 20"
-                    fill="currentColor"
-                  >
-                    <path
-                      fillRule="evenodd"
-                      d="M3 3a1 1 0 000 2h10a1 1 0 100-2H3zm0 4a1 1 0 000 2h10a1 1 0 100-2H3zm0 4a1 1 0 100 2h10a1 1 0 100-2H3z"
-                      clipRule="evenodd"
-                    />
-                    <path d="M15 8a1 1 0 10-2 0v5.586l-1.293-1.293a1 1 0 00-1.414 1.414l3 3a1 1 0 001.414 0l3-3a1 1 0 00-1.414-1.414L15 13.586V8z" />
-                  </svg>
-                  Create Hackathon
-                </button>
-              )}
-            </div> */}
+           
 
             {/* Step navigation */}
             <div className="flex justify-between mt-8 pt-6 border-t border-gray-200">
