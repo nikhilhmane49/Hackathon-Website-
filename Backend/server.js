@@ -15,9 +15,25 @@ const app = express();
 
 //midleware
 app.use(express.json());
-app.use(cors({
-    origin:process.env.FORNT_END
-}))
+
+
+const allowedOrigins = [
+    'http://localhost:5173', // for dev
+    'https://hackathon-website-hazel.vercel.app',
+    'https://hackathon-website-git-main-nikhil-manes-projects.vercel.app'
+  ];
+  
+  app.use(cors({
+    origin: function (origin, callback) {
+      if (!origin || allowedOrigins.includes(origin)) {
+        callback(null, true);
+      } else {
+        callback(new Error('Not allowed by CORS'));
+      }
+    },
+    credentials: true,
+  }));
+  
 
 
 const port = process.env.PORT || 4000;
@@ -27,9 +43,7 @@ mongoDB();
 //*cloudinary
 connectcloudinary();
 
-app.use(cors({
-    origin: '*', // Allows requests from any origin
-}));
+
 
 //APi end point
 app.use('/api/user',userroutes);
